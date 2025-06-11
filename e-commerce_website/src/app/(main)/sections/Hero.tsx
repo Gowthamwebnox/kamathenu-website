@@ -15,7 +15,8 @@ import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   return (
-    <div className="md:relative w-[1905px] h-[950px]  ">
+    <>
+    <div className="md:relative top-0 w-[1905px] h-[945px]  ">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -96,7 +97,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      <div className="absolute top-115 left-275">
+      <div className=" md:absolute top-115 left-275">
         <div className="bg-gray-300 w-[278px] h-[326px] opacity-40 border rounded-2xl" >
           
         </div>
@@ -107,5 +108,7 @@ export default function Hero() {
           />
       </div>
     </div>
+    
+    </>
   );
 }
