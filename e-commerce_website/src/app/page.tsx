@@ -6,9 +6,11 @@ import ShopwithConfidence from "./(main)/sections/ShopwithConfidence";
 export default function Home() {
   return (
     <> 
-    <Header />
+    <div className="relative">
+    <Header  />
     <Hero />
     <ShopwithConfidence/>
+    </div>
     </>
   );
 }

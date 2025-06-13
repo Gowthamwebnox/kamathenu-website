@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 export default function Hero() {
   return (
     <>
-    <div className="md:relative top-0 w-[1905px] h-[945px]  ">
+    <div className="md:relative top-0 w-full h-[945px]  ">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
