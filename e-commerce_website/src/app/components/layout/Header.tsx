@@ -9,14 +9,18 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import Landingbgimg_1 from '../../../public/assets/kamathenu Images/Land_bg_1.jpg';
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { color } from "framer-motion";
+type HeaderProps = {
+  headerColor?: [string, string,string]; // [backgroundColor, textColor]
+};
 
 
-
-export default function Header() {
+export default function Header({ headerColor = ['none', 'none'] }: HeaderProps) {
   
   return (
    
-    <header className="fixed top-0 left-0 w-[99%] z-50 text-white backdrop-blur-md opacity-90">
+    <header className="fixed top-0 left-0 w-[99%] z-50 text-white backdrop-blur-md border-1 border-b-gray-300 opacity-90"
+    style={{ backgroundColor:`${headerColor[0]}`,color:`${headerColor[1]}`}}>
       <div className="flex items-center justify-between p-4">
         <div>
           <Image

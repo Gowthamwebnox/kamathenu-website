@@ -81,7 +81,7 @@ function TabsList({ children, className, ...props }: TabsListProps) {
     <div className="relative w-full mb-8">
       <div 
         className={cn(
-          "flex flex-nowrap overflow-x-auto scrollbar-none py-2 px-6",
+          "flex ml-33 flex-nowrap overflow-x-auto scrollbar-none py-2 px-6",
           "justify-start gap-4 scroll-smooth",
           className
         )} 
