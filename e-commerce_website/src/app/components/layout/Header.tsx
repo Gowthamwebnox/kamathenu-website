@@ -1,26 +1,47 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState, useEffect, useRef } from "react"
-// kamathenu start
-import kamathenuLogo from '../../../../public/assets/kamathenu Images/kamathenuLogo.png'
+import React, { useState, useEffect } from "react";
+import kamathenuLogo from "../../../../public/assets/kamathenu Images/kamathenuLogo.png";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import Landingbgimg_1 from '../../../public/assets/kamathenu Images/Land_bg_1.jpg';
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import { color } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 type HeaderProps = {
-  headerColor?: [string, string,string]; // [backgroundColor, textColor]
+  headerColor?: [string, string, string]; // [backgroundColor, textColor]
 };
 
+export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-export default function Header({ headerColor = ['none', 'none'] }: HeaderProps) {
-  
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setShowHeader(false); // Scrolling down
+      } else {
+        setShowHeader(true); // Scrolling up
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-   
-    <header className="fixed top-0 left-0 w-[99%] z-50 text-white backdrop-blur-md border-1 border-b-gray-300 opacity-90"
-    style={{ backgroundColor:`${headerColor[0]}`,color:`${headerColor[1]}`}}>
+    <header
+      className={`transition-transform duration-500 ease-in-out w-full z-50 text-white backdrop-blur-md opacity-90 ${
+        showHeader ? "translate-y-0" : "-translate-y-full"
+      }`}
+      style={{
+        backgroundColor: headerColor[0],
+        color: headerColor[1],
+        position: "fixed",
+        top: 0,
+        left: 0,
+      }}
+    >
       <div className="flex items-center justify-between p-4">
         <div>
           <Image
@@ -39,10 +60,16 @@ export default function Header({ headerColor = ['none', 'none'] }: HeaderProps) 
           <h2>Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">
-          <Button className="bg-white text-[#D8A526] border hover:bg-[#D8A526] hover:text-white" style={{ borderColor: '#D8A526' }}>
+          <Button
+            className="bg-white text-[#D8A526] border hover:bg-[#D8A526] hover:text-white"
+            style={{ borderColor: "#D8A526" }}
+          >
             Log in
           </Button>
-          <Button className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]" style={{ borderColor: '#D8A526' }}>
+          <Button
+            className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
+            style={{ borderColor: "#D8A526" }}
+          >
             Sign in
           </Button>
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
@@ -50,6 +77,5 @@ export default function Header({ headerColor = ['none', 'none'] }: HeaderProps) 
         </div>
       </div>
     </header>
-  )
+  );
 }
-
