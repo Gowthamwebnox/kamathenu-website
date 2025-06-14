@@ -114,6 +114,16 @@ const BecomeSeller = () => {
             </div>
           </div>
         </div>
+
+        {/* upload your design start */}
+
+        <div>
+            <div>
+                <div>
+                    <img src="" alt="" />
+                </div>
+            </div>
+        </div>
       </div>
     </>
   );
