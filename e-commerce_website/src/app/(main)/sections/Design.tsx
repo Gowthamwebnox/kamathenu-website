@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { IoIosStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
-
-import logo from "../../../../public/assets/kamathenu Images/Design/design_home_1.jpg";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 
@@ -18,24 +16,10 @@ const categories = [
   "Infrastructure Plan",
 ];
 
-type Product = {
-  id: string;
-  name: string;
-  description: string;
-  price: string;
-  stockQuantity: number;
-  images: {
-    id: string;
-    imageUrl: string;
-    isPrimary: boolean;
-  }[];
-  discounts?: any[];
-};
+
 
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
   const router = useRouter();
 
   return (
@@ -63,7 +47,7 @@ export default function FeaturedProducts() {
           {categories.map((category) => (
             <TabsContent key={category} value={category}>
               <div className="flex flex-row items-center gap-12 mb-8">
-                <div className="flex flex-col border border-gray-300 rounded-t-[15px] gap-4 ">
+                <div className="flex flex-col border border-gray-300 rounded-t-[15px] gap-4 hover:cursor-pointer " onClick={()=>{router.push(`/sections/product/${1}`)}}>
                   <img
                     src="/assets/kamathenu Images/Design/design_home_1.jpg"
                     alt="design_home_1"
@@ -106,7 +90,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* second */}
@@ -153,7 +137,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* third */}
@@ -200,7 +184,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* fouth */}
@@ -247,7 +231,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
               </div>
@@ -295,7 +279,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* second */}
@@ -342,7 +326,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* third */}
@@ -389,7 +373,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* fouth */}
@@ -436,7 +420,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
               </div>
@@ -484,7 +468,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* second */}
@@ -531,7 +515,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* third */}
@@ -578,7 +562,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
                 {/* fouth */}
@@ -625,7 +609,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-60"/>
+                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
                   </div>
                 </div>
               </div>

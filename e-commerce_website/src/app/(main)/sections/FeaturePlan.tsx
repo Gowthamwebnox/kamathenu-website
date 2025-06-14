@@ -1,10 +1,11 @@
+'use client'
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import React from "react";
 import { FaHeart } from "react-icons/fa";
 import { IoIosStar, IoIosArrowRoundForward } from "react-icons/io";
 
 const FeaturePlan = () => {
+  // const route=useRouter();
   return (
     <div className="bg-white text-black py-8 px-4 md:px-8 my-[2rem] mb-0">
       <div className="container mx-auto">
@@ -14,8 +15,8 @@ const FeaturePlan = () => {
           </h2>
         </div>
 
-        <div className="flex flex-row items-center gap-12 mb-8">
-          <div className="flex flex-col border border-gray-300 rounded-t-[15px] gap-4 ">
+        <div className="flex flex-row items-center gap-12 mb-8" >
+          <div className="flex flex-col border border-gray-300 rounded-t-[15px] gap-4 hover:cursor-pointer">
             <img
               src="/assets/kamathenu Images/Design/design_home_1.jpg"
               alt="design_home_1"
@@ -65,7 +66,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-70" />
             </div>
           </div>
           {/* second */}

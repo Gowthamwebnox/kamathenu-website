@@ -3,10 +3,7 @@ import {
   MapPin,
   Phone,
   Smartphone,
-  Truck,
-  Award,
-  RotateCcw,
-  Headphones,
+  
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

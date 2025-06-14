@@ -1,8 +1,6 @@
 "use client";
 
-import Landingbgimg_1 from "D:kamathenukamathenu-websitee-commerce_websitepublicassetskamathenu ImagesLand_bg_1.jpg";
-
-
+import "../../Style/anite/headerBgImage.css"
 import { IoSearch } from "react-icons/io5";
 import {
   Select,
@@ -18,10 +16,8 @@ export default function Hero() {
     <>
     <div className="md:relative top-0 w-full h-[945px]  ">
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('/assets/kamathenu Images/Land_bg_1.jpg')",
-        }}
+        className="absolute inset-0 bg-cover bg-center bg-hero-slider transition-bg duration-1000"
+        
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>

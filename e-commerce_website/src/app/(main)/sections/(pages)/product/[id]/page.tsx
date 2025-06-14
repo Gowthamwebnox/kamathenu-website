@@ -10,13 +10,12 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import { FaHeart } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-const headerColor: [string, string] = ["white", "black"];
+
 
 const ProductDetails = () => {
   const tabs = [
@@ -27,7 +26,7 @@ const ProductDetails = () => {
     "Reviews",
   ];
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [similarProducts, setSimilarProducts] = useState([
+  const similarProducts = [
     {
       id: 1,
       img: "/assets/kamathenu Images/Design/design_home_1.jpg",
@@ -106,7 +105,7 @@ const ProductDetails = () => {
       discountPrice: "₹ 4599.00",
       buySymbol: "/assets/kamathenu Images/Design/shopNow.png",
     },
-  ]);
+  ];
 
   return (
     <>
@@ -204,15 +203,15 @@ const ProductDetails = () => {
         </div>
 
           {/* Product Details */}
-        <div className="bg-white rounded-lg shadow  border-1 border-gray-400 m-12">
+        <div className="bg-white rounded-lg shadow w-[83%] border-1 border-gray-400 ml-29 h-[523px] ">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="border-b border-gray-300 mb-6">
+        <TabsList  className="border-b border-gray-300 mb-6">
           {tabs.map((t) => (
             <TabsTrigger
               key={t}
               value={t}
               className={`text-gray-500 px-4 py-2 font-medium ${
-                activeTab === t ? "text-yellow-600 border-b-2 border-yellow-600 " : ""
+                activeTab === t ? " " : ""
               }`}
             >
               {t}
@@ -418,7 +417,7 @@ const ProductDetails = () => {
 
         {/* ✅ SIMILAR PRODUCTS CAROUSEL */}
 
-        <div className="overflow-x-hidden">
+        <div className="overflow-x-hidden mt-11">
             <h1 className="font-semibold ml-29 text-[#1A1A1A] text-[30px] mb-4">
           You Might be Interested in these Designs
           {similarProducts.length > 0 ? (

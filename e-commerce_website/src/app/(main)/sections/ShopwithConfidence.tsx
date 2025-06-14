@@ -1,7 +1,4 @@
 import React from "react";
-import securelogo_1 from "../../../../public/assets/kamathenu Images/shopWithConfidence/secureTop.png";
-import securelogo_2 from "../../../../public/assets/kamathenu Images//Categories/Home/Home_1.png";
-import logo from "../../../../public/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png";
 import { Button } from "@/components/ui/button";
 import Design from "./Design";
 import FeaturePlan from "./FeaturePlan";

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 type HeaderProps = {
-  headerColor?: [string, string, string]; // [backgroundColor, textColor]
+  headerColor?: [string, string]; // [backgroundColor, textColor]
 };
 
 export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
