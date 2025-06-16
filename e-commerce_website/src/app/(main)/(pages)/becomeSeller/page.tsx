@@ -4,6 +4,7 @@ import DesignUploading from './sections/designUploading'
 import SellWithUs from './sections/sellWithUs'
 import Header from '@/app/components/layout/Header'
 import Works from './sections/workingPrincple'
+import Footer from '@/app/components/layout/Footer'
 
 const BecomeSeller = () => {
   return (
@@ -17,6 +18,7 @@ const BecomeSeller = () => {
 
         <DesignUploading/>
         <Works/>
+        <Footer/>
     </div>
   )
 }

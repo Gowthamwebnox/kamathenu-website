@@ -8,9 +8,11 @@ const scrollbarHideStyles = `
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
+    
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+    
   }
 `;
 
@@ -65,7 +67,7 @@ function Tabs({ defaultValue, value, onValueChange, children, className, ...prop
   return (
     <TabsContext.Provider value={contextValue}>
       <ScrollbarStyles />
-      <div className={cn("w-full", className)} {...props}>
+      <div className={cn("w-full ", className)} {...props}>
         {children}
       </div>
     </TabsContext.Provider>
@@ -81,7 +83,7 @@ function TabsList({ children, className, ...props }: TabsListProps) {
     <div className="relative w-full mb-8">
       <div 
         className={cn(
-          "flex ml-33 flex-nowrap overflow-x-auto scrollbar-none py-2 px-6",
+          "flex  w-full flex-nowrap overflow-x-auto scrollbar-none py-4 px-46",
           "justify-start gap-4 scroll-smooth",
           className
         )} 
@@ -90,7 +92,7 @@ function TabsList({ children, className, ...props }: TabsListProps) {
         {children}
         <motion.div
           layoutId="tab-indicator"
-          className="absolute bottom-0 h-[2px] bg-[#b01116] rounded-full"
+          className="absolute bottom-0 h-[14px] bg-[#b01116] rounded-full"
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
         />
       </div>
@@ -121,7 +123,7 @@ function TabsTrigger({ value, children, className, ...props }: TabsTriggerProps)
       {children}
       {isActive && (
         <motion.div
-          className="absolute bottom-0 left w-[85%] h-0.5 bg-[#D8A526]"
+          className="absolute -bottom-4 left-3 w-[90%] h-1 bg-[#D8A526]"
           layoutId="tab-indicator"
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
         />

@@ -14,6 +14,7 @@ import {
 
 import { FaHeart } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { getPackedSettings } from "http2";
 
 
 
@@ -106,6 +107,33 @@ const ProductDetails = () => {
       buySymbol: "/assets/kamathenu Images/Design/shopNow.png",
     },
   ];
+  const [mainPhoto, setMainPhoto]=useState('/assets/kamathenu Images/Design/design_home_1.jpg')
+  const [img1,setImg1]=useState("/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png")
+  
+  const [img2,setImg2]=useState("/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png")
+  
+  const [img3,setImg3]=useState("/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png")
+  
+  const changePhoto=(event:any)=>{
+    console.log(event.target.alt)
+    const getMainPhoto=mainPhoto
+    if(event.target.alt==='img1'){
+      
+    setMainPhoto(img1)
+    setImg1(getMainPhoto)
+
+    }
+    if(event.target.alt==='img2'){
+      
+      setMainPhoto(img2)
+    setImg2(getMainPhoto)
+    }
+    if(event.target.alt==='img3'){
+      
+      setMainPhoto(img3)
+    setImg3(getMainPhoto)
+    }
+  }
 
   return (
     <>
@@ -117,30 +145,33 @@ const ProductDetails = () => {
           <div className="w-fit col-span-1 flex flex-col gap-5">
             <div className="w-[35%] border rounded-[3px]">
               <img
-                src="/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png"
-                alt=""
+                src={img1}
+                alt="img1"
                 className="border rounded-[3px]"
+                onClick={(e)=>{changePhoto(e)}}
               />
             </div>
             <div className="w-[35%] border rounded-[3px]">
               <img
-                src="/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png"
-                alt=""
+                src={img2}
+                alt="img2"
                 className="border rounded-[3px]"
+                 onClick={(e)=>{changePhoto(e)}}
               />
             </div>
             <div className="w-[35%] border rounded-[3px]">
               <img
-                src="/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png"
-                alt=""
+                src={img3}
+                alt="img3"
                 className="border rounded-[3px]"
+                onClick={(e)=>{changePhoto(e)}}
               />
             </div>
           </div>
 
           <div className="w-full col-span-2 relative right-[29%]">
             <img
-              src="/assets/kamathenu Images/Design/design_home_1.jpg"
+              src={mainPhoto}
               alt="design_home_1"
               className="h-[504px] border rounded-[11px]"
             />
@@ -210,7 +241,7 @@ const ProductDetails = () => {
             <TabsTrigger
               key={t}
               value={t}
-              className={`text-gray-500 px-4 py-2 font-medium ${
+              className={`text-gray-500 px-4 py-2 font-medium  ${
                 activeTab === t ? " " : ""
               }`}
             >
@@ -221,7 +252,7 @@ const ProductDetails = () => {
 
         {tabs.map((t) => (
           <TabsContent key={t} value={t}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-11 pt-3 pb-11">
+            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8 px-11 pt-3 pb-11">
               {/* Left Column */}
               <div className="ml-15">
                 {t === "Design Information" && (
@@ -311,10 +342,10 @@ const ProductDetails = () => {
                         <div className="h-2 flex-1 bg-gray-200 rounded mx-2 overflow-hidden">
                           <div
                             className={`h-full bg-yellow-400`}
-                            style={{ width: score === "5" ? "78%" : score === "4" ? "46%" : score === "3" ? "35%" : score === "2" ? "20%" : "10%" }}
+                            style={{ width: score === "5" ? "98%" : score === "4" ? "46%" : score === "3" ? "35%" : score === "2" ? "20%" : "10%" }}
                           />
                         </div>
-                        <span>{score === "5" ? "78%" : score === "4" ? "46%" : score === "3" ? "35%" : score === "2" ? "20%" : "10%"}</span>
+                        <span>{score === "5" ? "98%" : score === "4" ? "46%" : score === "3" ? "35%" : score === "2" ? "20%" : "10%"}</span>
                       </div>
                     ))}
                     <button className="mt-4 px-4 py-2 border border-gray-800 rounded text-gray-800">Add to Your Review</button>
@@ -434,7 +465,7 @@ const ProductDetails = () => {
                   key={item.id}
                   className="md:basis-1/2 lg:basis-1/4 flex items-stretch"
                 >
-                  <div className="flex flex-col rounded-t-[15px] border border-gray-400 gap-4 relative">
+                  <div className="flex flex-col  rounded-t-[15px] border border-gray-400 gap-4 relative">
                     <img
                       src={item.img}
                       alt={item.alterName}
@@ -455,7 +486,7 @@ const ProductDetails = () => {
                       </h2>
                     </div>
                     <div className="flex px-2 gap-1 items-center">
-                      {[...Array(4)].map((_, i) => (
+                      {[...Array(5)].map((_, i) => (
                         <IoIosStar key={i} className="text-[#EACD3C] size-4" />
                       ))}
                       <h1 className="ml-1 text-gray-400 text-[15px]">(4.8)</h1>

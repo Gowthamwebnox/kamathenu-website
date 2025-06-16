@@ -27,7 +27,7 @@ const Works = () => {
           </p>
         </div>
       </div>
-      <div className="flex p-12 gap-19 p-4">
+      <div className="flex p-12 gap-19 ">
         {/* first logo */}
         <div className="flex">
           <div className="flex flex-col gap-5 items-center pr-9">

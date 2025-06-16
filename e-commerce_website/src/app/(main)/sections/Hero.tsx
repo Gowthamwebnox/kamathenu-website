@@ -97,11 +97,11 @@ export default function Hero() {
         <div className="bg-gray-300 w-[278px] h-[326px] opacity-40 border rounded-2xl" >
           
         </div>
-        <img
-            src="/assets/kamathenu Images/Landing_page_Scroll/scroll_2.png"
-            alt="Scroll Design"
-            className="absolute top-14  rotate-[-90deg] w-[700px] h-[263px]  "
-          />
+          <img
+              src="/assets/kamathenu Images/Landing_page_Scroll/scroll_2.png"
+              alt="Scroll Design"
+              className="absolute top-14  rotate-[-90deg] w-[700px] h-[263px]  "
+            />
       </div>
     </div>
     

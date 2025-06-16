@@ -21,6 +21,15 @@ const categories = [
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const router = useRouter();
+  const [favs,setFavs]=useState(
+    {productId:'',
+      favsStatus:false
+    }
+  )
+  const [favsProducts, setFavsProducts]=useState([])
+  const handleFavs=()=>{
+
+  }
 
   return (
     <div className="bg-white text-black py-8 px-4 md:px-8 my-[2rem] mb-0">
@@ -90,7 +99,7 @@ export default function FeaturedProducts() {
                     </div>
                   </div>
                   <div className="absolute">
-                    <FaHeart   className="relative top-5 size-5 text-white left-74"/>
+                    <FaHeart className="relative top-5 size-5 text-[#D8A526]  left-74" />
                   </div>
                 </div>
                 {/* second */}

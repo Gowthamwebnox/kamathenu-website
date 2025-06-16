@@ -23,7 +23,7 @@ export default function ShopwithConfidence() {
           </div>
           <div>
             <h1 className="text-[19px] font-semibold">Secure Payment</h1>
-            <p className="text-[16px] text-gray-400 font-normal mt-2 text-[17px]">
+            <p className="] text-gray-400 font-normal mt-2 text-[17px]">
               Safe and encrypted transactions for worry-free checkout.
             </p>
           </div>
@@ -38,7 +38,7 @@ export default function ShopwithConfidence() {
           </div>
           <div>
             <h1 className="text-[19px] font-semibold">Instant Download</h1>
-            <p className="text-[16px] text-gray-400 font-normal mt-2 text-[17px]">
+            <p className=" text-gray-400 font-normal mt-2 text-[17px]">
               Safe and encrypted transactions for worry-free checkout.
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function ShopwithConfidence() {
           </div>
           <div>
             <h1 className="text-[19px] font-semibold">Customer Support</h1>
-            <p className="text-[16px] text-gray-400 font-normal mt-2 text-[17px]">
+            <p className=" text-gray-400 font-normal mt-2 text-[17px]">
               Safe and encrypted transactions for worry-free checkout.
             </p>
           </div>
@@ -68,7 +68,7 @@ export default function ShopwithConfidence() {
           </div>
           <div>
             <h1 className="text-[18px] font-semibold">Trusted by Thousands</h1>
-            <p className="text-[16px] text-gray-400 font-normal mt-2 text-[17px]">
+            <p className="text-gray-400 font-normal mt-2 text-[17px]">
               Safe and encrypted transactions for worry-free checkout.
             </p>
           </div>
