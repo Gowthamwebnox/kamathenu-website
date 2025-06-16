@@ -66,7 +66,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-70" />
+              <FaHeart className="relative top-5 size-5 text-white left-76" />
             </div>
           </div>
           {/* second */}
@@ -120,7 +120,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
           {/* third */}
@@ -174,7 +174,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
           {/* fouth */}
@@ -228,7 +228,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
         </div>
@@ -283,7 +283,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
           {/* second */}
@@ -337,7 +337,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
           {/* third */}
@@ -391,7 +391,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
           {/* fouth */}
@@ -445,7 +445,7 @@ const FeaturePlan = () => {
               </div>
             </div>
             <div className="absolute">
-              <FaHeart className="relative top-5 size-5 text-white left-60" />
+              <FaHeart className="relative top-5 size-5 text-white left-77" />
             </div>
           </div>
         </div>

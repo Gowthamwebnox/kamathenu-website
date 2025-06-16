@@ -5,6 +5,7 @@ import kamathenuLogo from "../../../../public/assets/kamathenu Images/kamathenuL
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type HeaderProps = {
   headerColor?: [string, string]; // [backgroundColor, textColor]
@@ -13,6 +14,12 @@ type HeaderProps = {
 export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  
+    const routers=useRouter()
+
+     const handleBecomeSellerPage=async()=>{
+     routers.push('/becomeSeller')
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,9 +32,14 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
       setLastScrollY(currentScrollY);
     };
 
+   
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  
+
+  
 
   return (
     <header
@@ -57,7 +69,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           <h2>Gallery</h2>
           <h2>FAQs</h2>
           <h2>Contact Us</h2>
-          <h2>Become a Seller</h2>
+          <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">
           <Button

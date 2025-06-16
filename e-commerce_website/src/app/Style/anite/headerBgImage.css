@@ -16,8 +16,33 @@
   }
 }
 
+
 .bg-hero-slider {
   animation: backgroundSlideshow 20s ease-in-out infinite;
   background-size: cover;
   background-position: center;
+}
+
+@keyframes upDown {
+  0%, 100% {
+    transform: translateY(472px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+@keyframes downUp {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(472px);
+  }
+}
+
+.up-down-slider {
+  animation: upDown 12s ease-in-out infinite;
+}
+.down-up-slider {
+  animation: downUp 12s ease-in-out infinite;
 }
