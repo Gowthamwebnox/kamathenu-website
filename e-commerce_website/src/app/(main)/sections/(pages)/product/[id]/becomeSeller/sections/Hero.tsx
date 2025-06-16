@@ -1,9 +1,32 @@
+"use client";
+
+import React, { useState } from "react";
 import Header from "@/app/components/layout/Header";
 import { Button } from "@/components/ui/button";
-
-import React from "react";
+import add from "../../../../../../../../../public/assets/kamathenu Images/BAS/img_1.jpg";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@radix-ui/react-accordion";
+import { TiArrowRight } from "react-icons/ti";
 
 const BecomeSeller = () => {
+  const [activeTab, setActiveTab] = useState("overview");
+  const tabItems = [
+    {
+      id: "overview",
+      title: "Overview",
+      content: "This is the Overview content.",
+    },
+    { id: "features", title: "Features", content: "Here are the Features." },
+    {
+      id: "specs",
+      title: "Specifications",
+      content: "These are the Specifications.",
+    },
+  ];
   return (
     <>
       <Header headerColor={["black", "white"]} />
@@ -59,7 +82,9 @@ const BecomeSeller = () => {
             </h1>
             <div className="flex items-center gap-44">
               <div className="flex ml-12 mt-32 py-12 gap-4 items-center">
-                <h1 className=" text-[21px] group-hover:text-[#D8A526]">VIEW MORE </h1>
+                <h1 className=" text-[21px] group-hover:text-[#D8A526]">
+                  VIEW MORE{" "}
+                </h1>
                 <img
                   src="/assets/kamathenu Images/toparrow.png"
                   alt="toparrow"
@@ -67,7 +92,11 @@ const BecomeSeller = () => {
                 />
               </div>
               <div className=" relative top-4 border-1  bg-black w-[22%] h-[115px] py-7 px-6  group-hover:bg-[#D8A526]">
-                <img src="/assets/kamathenu Images/vector.png" alt="" className="  group-hover:brightness-0 " />
+                <img
+                  src="/assets/kamathenu Images/vector.png"
+                  alt=""
+                  className="  group-hover:brightness-0 "
+                />
               </div>
             </div>
           </div>
@@ -76,11 +105,14 @@ const BecomeSeller = () => {
               Reach a Wider Audience
             </h1>
             <h1 className="ml-12 mt-5 text-[20px] w-[80%] font-normal text-[#767676] ">
-              Tap into builders, homeowners, and contractors looking for ready-made plans.
+              Tap into builders, homeowners, and contractors looking for
+              ready-made plans.
             </h1>
             <div className="flex items-center gap-44">
               <div className="flex ml-12 mt-32 py-12 gap-4 items-center">
-                <h1 className=" text-[21px] group-hover:text-[#D8A526]">VIEW MORE </h1>
+                <h1 className=" text-[21px] group-hover:text-[#D8A526]">
+                  VIEW MORE{" "}
+                </h1>
                 <img
                   src="/assets/kamathenu Images/toparrow.png"
                   alt="toparrow"
@@ -88,7 +120,11 @@ const BecomeSeller = () => {
                 />
               </div>
               <div className=" relative top-4 border-1  bg-black w-[22%] h-[115px] py-7 px-6  group-hover:bg-[#D8A526]">
-                <img src="/assets/kamathenu Images/vecto_2.png" alt="" className="  group-hover:brightness-0 " />
+                <img
+                  src="/assets/kamathenu Images/vecto_2.png"
+                  alt=""
+                  className="  group-hover:brightness-0 "
+                />
               </div>
             </div>
           </div>
@@ -101,7 +137,9 @@ const BecomeSeller = () => {
             </h1>
             <div className="flex items-center gap-44">
               <div className="flex ml-12 mt-38 py-12 gap-4 items-center">
-                <h1 className=" text-[21px] group-hover:text-[#D8A526]">VIEW MORE </h1>
+                <h1 className=" text-[21px] group-hover:text-[#D8A526]">
+                  VIEW MORE{" "}
+                </h1>
                 <img
                   src="/assets/kamathenu Images/toparrow.png"
                   alt="toparrow"
@@ -109,7 +147,11 @@ const BecomeSeller = () => {
                 />
               </div>
               <div className=" relative top-9 border-1  bg-black w-[22%] h-[115px] py-7 px-6  group-hover:bg-[#D8A526]">
-                <img src="/assets/kamathenu Images/vecto_3.png" alt="" className="  group-hover:brightness-0 " />
+                <img
+                  src="/assets/kamathenu Images/vecto_3.png"
+                  alt=""
+                  className="  group-hover:brightness-0 "
+                />
               </div>
             </div>
           </div>
@@ -117,12 +159,72 @@ const BecomeSeller = () => {
 
         {/* upload your design start */}
 
-        <div>
-            <div>
-                <div>
-                    <img src="" alt="" />
-                </div>
+        <div className="mt-[13%] flex items-center   ">
+          <div className="relative left-[5%]  flex justify-center items-center ">
+            {/* Background Image */}
+            <img
+              src="/assets/kamathenu Images/BAS/img_2.jpg"
+              alt="background"
+              className="w-[45%] h-auto   "
+            />
+
+            {/* Foreground Overlapping Image */}
+            <div className="absolute left-[7%] top-[-25%] ">
+              <img
+                src="/assets/kamathenu Images/BAS/img_1.jpg"
+                alt="foreground"
+                className="w-[100%] h-[450px] border-[8px]  border-white shadow-2xl rounded-sm"
+              />
             </div>
+          </div>
+          <div className="relative bottom-[20%] w-[150%] flex flex-col items-start gap-7">
+            <div>
+              <p className="text-[24px] font-light ">Frequently asked question</p>
+            </div>
+            <div>
+              <h1 className="text-[#D8A526] text-[25px] font-semibold w-[90%]  border-b-2 pb-3 ">We Have Become The Best In What We Do</h1>
+            </div>
+            <div >
+              <Accordion
+              type="single"
+              collapsible
+              className="w-full mt-8"
+              defaultValue="item-1"
+            >
+              <AccordionItem value="item-1 ">
+                <AccordionTrigger><div className="flex items-start"><TiArrowRight color="#D8A526" size={38}/><span className="text-[21px] text-[#505050] ">What kind of files can I upload?</span></div></AccordionTrigger>
+                <AccordionContent className="flex flex-col gap-4 border-b-2 border-gray-400 pb-5 w-[80%] ">
+                  <p className="text-[21px] text-gray-400 ml-10 w-[100%]  ">
+                    PDF, CAD (.dwg), images, 3D renders-according to our plan upload guide.</p>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-2 ">
+                <AccordionTrigger><div className="flex items-start mt-8"><TiArrowRight color="#D8A526" size={38}/><span className="text-[21px] text-[#505050] ">Do I retain ownership of my designs?</span></div></AccordionTrigger>
+                <AccordionContent className="flex flex-col gap-4 border-b-2 border-gray-400 pb-5 ">
+                  <p className="text-[21px] text-gray-400 ml-10 w-[80%]  ">
+                    Yes, You retain full ownership and license them for sale.</p>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-3">
+                <AccordionTrigger><div className="flex items-start mt-8"><TiArrowRight color="#D8A526" size={38}/><span className="text-[21px] text-[#505050] ">How to payouts work?</span></div></AccordionTrigger>
+                <AccordionContent className="flex flex-col gap-4 border-b-2 border-gray-400 pb-5 ">
+                  <p className="text-[21px] text-gray-400 ml-10 w-[80%]  ">
+                    You'll be paid directly to your bank account or UPI every week/month.</p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            </div>
+            <div>
+              <Button
+                          className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] text-[19px] font-normal py-5"
+                          style={{ borderColor: "#D8A526" }}
+                        >
+                          Upload your design
+                        </Button>
+            </div>
+            
+          </div>
         </div>
       </div>
     </>
