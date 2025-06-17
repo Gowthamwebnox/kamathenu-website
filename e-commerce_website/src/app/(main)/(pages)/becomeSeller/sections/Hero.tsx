@@ -1,24 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 
 const BecomeSellerHero = () => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const tabItems = [
-    {
-      id: "overview",
-      title: "Overview",
-      content: "This is the Overview content.",
-    },
-    { id: "features", title: "Features", content: "Here are the Features." },
-    {
-      id: "specs",
-      title: "Specifications",
-      content: "These are the Specifications.",
-    },
-  ];
+  // const [activeTab, setActiveTab] = useState("overview");
+  // const tabItems = [
+  //   {
+  //     id: "overview",
+  //     title: "Overview",
+  //     content: "This is the Overview content.",
+  //   },
+  //   { id: "features", title: "Features", content: "Here are the Features." },
+  //   {
+  //     id: "specs",
+  //     title: "Specifications",
+  //     content: "These are the Specifications.",
+  //   },
+  // ];
   return (
     <>
       

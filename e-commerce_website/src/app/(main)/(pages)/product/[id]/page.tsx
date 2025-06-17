@@ -14,7 +14,7 @@ import {
 
 import { FaHeart } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { getPackedSettings } from "http2";
+
 
 
 
@@ -114,21 +114,21 @@ const ProductDetails = () => {
   
   const [img3,setImg3]=useState("/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png")
   
-  const changePhoto=(event:any)=>{
-    console.log(event.target.alt)
+  const changePhoto=(alt:string)=>{
+    
     const getMainPhoto=mainPhoto
-    if(event.target.alt==='img1'){
+    if(alt==='img1'){
       
     setMainPhoto(img1)
     setImg1(getMainPhoto)
 
     }
-    if(event.target.alt==='img2'){
+    if(alt==='img2'){
       
       setMainPhoto(img2)
     setImg2(getMainPhoto)
     }
-    if(event.target.alt==='img3'){
+    if(alt==='img3'){
       
       setMainPhoto(img3)
     setImg3(getMainPhoto)
@@ -148,7 +148,7 @@ const ProductDetails = () => {
                 src={img1}
                 alt="img1"
                 className="border rounded-[3px]"
-                onClick={(e)=>{changePhoto(e)}}
+                onClick={()=>{changePhoto('img1')}}
               />
             </div>
             <div className="w-[35%] border rounded-[3px]">
@@ -156,7 +156,7 @@ const ProductDetails = () => {
                 src={img2}
                 alt="img2"
                 className="border rounded-[3px]"
-                 onClick={(e)=>{changePhoto(e)}}
+                 onClick={()=>{changePhoto('img2')}}
               />
             </div>
             <div className="w-[35%] border rounded-[3px]">
@@ -164,7 +164,7 @@ const ProductDetails = () => {
                 src={img3}
                 alt="img3"
                 className="border rounded-[3px]"
-                onClick={(e)=>{changePhoto(e)}}
+                onClick={()=>{changePhoto('img3')}}
               />
             </div>
           </div>

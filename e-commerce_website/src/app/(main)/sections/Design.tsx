@@ -21,15 +21,15 @@ const categories = [
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const router = useRouter();
-  const [favs,setFavs]=useState(
-    {productId:'',
-      favsStatus:false
-    }
-  )
-  const [favsProducts, setFavsProducts]=useState([])
-  const handleFavs=()=>{
+  // const [favs,setFavs]=useState(
+  //   {productId:'',
+  //     favsStatus:false
+  //   }
+  // )
+  // const [favsProducts, setFavsProducts]=useState([])
+  // const handleFavs=()=>{
 
-  }
+  // }
 
   return (
     <div className="bg-white text-black py-8 px-4 md:px-8 my-[2rem] mb-0">

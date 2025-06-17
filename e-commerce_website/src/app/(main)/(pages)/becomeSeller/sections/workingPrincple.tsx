@@ -1,5 +1,4 @@
 import React from "react";
-import work from "../../../../../../public/assets/kamathenu Images/BAS/workigLogo.png";
 import "../../../../Style/anite/headerBgImage.css"
 const Works = () => {
   return (
