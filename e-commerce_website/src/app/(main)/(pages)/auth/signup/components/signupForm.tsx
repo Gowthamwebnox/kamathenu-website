@@ -37,7 +37,7 @@ const SignupForm = () => {
   const optGenerate=async()=>{
     const payload={
         method:'post',
-        url:'http://localhost:8000/email/verification',
+        url:'http://localhost:8000/api/verifyOTP',
         data:{name:signupDetails.name,
             email:signupDetails.email}
     }
@@ -100,7 +100,8 @@ const SignupForm = () => {
             </InputOTPGroup>
           </InputOTP>
 
-          <Button name="otp" onClick={(e)=>{setData(e); optGenerate()}} className="border-2 border-black">Click To Get OTP</Button>
+          <Button name="otp" onClick={(e)=>{setData(e); optGenerate()}} className="sm:block 
+          md:border-2 border-black">Click To Get OTP</Button>
         </div>
       
 
