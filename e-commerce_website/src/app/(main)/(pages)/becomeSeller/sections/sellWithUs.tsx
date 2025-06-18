@@ -3,8 +3,8 @@ import React from 'react'
 const SellWithUs = () => {
   return (
     <div className='mt-35'>
-        <div className="flex gap-10 py-15 px-22">
-          <div className="border-1 group border-gray-400 w-[33%] rounded-[4px]">
+        <div className="flex sm:flex-col md:flex-row gap-10 py-15 px-22">
+          <div className="border-1 group border-gray-400 rounded-[4px]">
             <h1 className="ml-12 mt-13 text-[26px] font-semibold ">
               Earn Passive Income
             </h1>
