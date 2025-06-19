@@ -20,6 +20,9 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
      const handleBecomeSellerPage=async()=>{
      routers.push('/becomeSeller')
   }
+  const handleAboutPage=async()=>{
+    routers.push('/about')
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,7 +67,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
         </div>
         <div className="hidden md:flex gap-[50px]">
           <h2>Home</h2>
-          <h2>About Us</h2>
+          <h2 onClick={handleAboutPage} className="cursor-pointer ">About Us</h2>
           <h2>Shop Plans</h2>
           <h2>Gallery</h2>
           <h2>FAQs</h2>
