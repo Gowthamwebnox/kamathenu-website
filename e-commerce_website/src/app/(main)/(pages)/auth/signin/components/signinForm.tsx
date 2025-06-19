@@ -27,6 +27,8 @@ const SigninForm = () => {
 
      }
      const response= await ApiService(payload)
+     console.log(response.data)
+     localStorage.setItem('jwtToken',response.data)
 
   }
 
