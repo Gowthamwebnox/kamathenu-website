@@ -83,7 +83,7 @@ function TabsList({ children, className, ...props }: TabsListProps) {
     <div className="relative w-full mb-8">
       <div 
         className={cn(
-          "flex  w-full flex-nowrap overflow-x-auto scrollbar-none py-4 px-46",
+          "flex  w-full flex-nowrap overflow-x-auto scrollbar-none py-4 ",
           "justify-start gap-4 scroll-smooth",
           className
         )} 
@@ -112,7 +112,7 @@ function TabsTrigger({ value, children, className, ...props }: TabsTriggerProps)
   return (
     <button
       className={cn(
-        "relative ml-15 px-1 pb-2 text-sm md:text-[1.1rem] tracking-wide transition-colors cursor-pointer font-semibold",
+        "relative  px-1 pb-2 text-sm md:text-[1.1rem] tracking-wide transition-colors cursor-pointer font-semibold",
         "whitespace-nowrap flex-shrink-0",
         isActive ? "text-[#D8A526]" : "text-gray-600",
         className,

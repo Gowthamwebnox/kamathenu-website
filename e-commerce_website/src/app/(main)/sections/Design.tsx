@@ -40,12 +40,12 @@ export default function FeaturedProducts() {
           </h2>
         </div>
 
-        <Tabs
+        <Tabs className=""
           value={activeCategory}
           onValueChange={setActiveCategory}
           defaultValue={categories[0]}
         >
-          <TabsList>
+          <TabsList className="px-60 ml-20 gap-12" >
             {categories.map((category) => (
               <TabsTrigger key={category} value={category}>
                 {category}

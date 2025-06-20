@@ -22,6 +22,7 @@ const BecomeSeller = () => {
         <Works/>
         <Seller/>
         <RegistrationPage/>
+        
         <Footer/>
     </div>
   )

@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
-import fad from '../../../../../../public/assets/kamathenu Images/About/HeroLanding_Imag.png'
 
 const AboutHero = () => {
   // const [activeTab, setActiveTab] = useState("overview");

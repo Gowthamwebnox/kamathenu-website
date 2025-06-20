@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
-import vec from '../../../../../../public/assets/kamathenu Images/BAS/Seller/registrer_image2.png'
 
 const RegistrationPage = () => {
   return (

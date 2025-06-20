@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/carousel";
 import "../../../../Style/anite/headerBgImage.css";
 import Autoplay from "embla-carousel-autoplay";
-import abc from "../../../../../../public/assets/kamathenu Images/BAS/Seller/Vector 2.png";
 
 export default function Seller() {
   const similarProducts = [
@@ -89,16 +88,16 @@ export default function Seller() {
                           <div className="p-15 flex flex-col gap-4">
                             <div className="text-center text-[23px] font-semibold ">
                               <h1>
-                                "A Game Changer for My Architecture Practice!"
+                              `&quot`A Game Changer for My Architecture Practice!`&quot`
                               </h1>
                             </div>
                             <div className="text-[18px] text-[#353333] text-center">
                               <h1>
-                                "I used to struggle finding clients for my
+                              `&quot`I used to struggle finding clients for my
                                 pre-made house plans. After joining this
                                 platform, my designs are now reaching people
-                                across the country. It's given me both exposure
-                                and steady income every month."
+                                across the country. It`&apos`s given me both exposure
+                                and steady income every month.`&quot`
                               </h1>
                             </div>
                             <div className="grid grid-cols-12 items-center">

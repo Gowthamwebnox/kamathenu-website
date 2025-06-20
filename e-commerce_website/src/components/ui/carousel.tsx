@@ -173,7 +173,6 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 
 function CarouselPrevious({
   className,
-  variant = "outline",
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -181,11 +180,9 @@ function CarouselPrevious({
 
   return (
     <Button
-      data-slot="carousel-previous"
-      variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
+        "absolute size-28 ",
         orientation === "horizontal"
           ? "top-1/2 -left-12 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",

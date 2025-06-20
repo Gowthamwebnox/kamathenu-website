@@ -10,6 +10,25 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
 import { useRouter } from "next/navigation";
+// interface SignupResponse {
+//   name: string;
+//   email: string;
+//   passWord: string;
+//   OTP: string; // <-- add this
+// }
+// interface SignupRequestPayload {
+//   method: 'post'; // literal type
+//   url: string;
+//   headers: {
+//     'Content-Type': string;
+//   };
+//   data: {
+//     name: string;
+//     email: string;
+//     passWord: string;  // (or `password: string` if you want lowercase)
+//   };
+// }
+
 
 const SignupForm = () => {
   const routes=useRouter();
@@ -19,10 +38,10 @@ const SignupForm = () => {
     password: '',
     otp: '',
   });
-  const [userOTP, setUserOTP] = useState<string>('');
+  // const [userOTP, setUserOTP] = useState<string>('');
   const [verify, setVerify] = useState(false);
 
-  const setData = (event: any) => {
+  const setData = (event:React.ChangeEvent<HTMLInputElement>) => {
     setSignupDetails({
       ...signupDetails,
       [event.target.name]: event.target.value,
@@ -30,15 +49,15 @@ const SignupForm = () => {
   };
 
   const otpVerification = () => {
-    console.log("otp verification");
-    console.log("Server OTP:", userOTP);
-    console.log("User OTP:", signupDetails.otp);
-    if (userOTP == signupDetails.otp) {
-      console.log("verified successfully");
+    // console.log("otp verification");
+    // console.log("Server OTP:", userOTP);
+    // console.log("User OTP:", signupDetails.otp);
+    // if (userOTP == signupDetails.otp) {
+    //   console.log("verified successfully");
       setVerify(true);
-    } else {
-      alert("Invalid OTP");
-    }
+    // } else {
+    //   alert("Invalid OTP");
+    // }
   };
 
   const optGenerate = async () => {
@@ -53,8 +72,8 @@ const SignupForm = () => {
       }
     };
     const response = await axios(payload);
-    setUserOTP(response.data.OTP);
-    console.log("Server OTP:", response.data.OTP);
+    console.log(response.data);
+    // setUserOTP(response.data.OTP);
   };
 
   const handleSignup = async() => {

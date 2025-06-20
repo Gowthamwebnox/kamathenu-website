@@ -2,19 +2,16 @@
 import ApiService from '@/app/components/apiCall';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { log } from 'console';
 import { Loader2, Link } from 'lucide-react';
 import React, { useState } from 'react'
-import { TiArrowRight } from 'react-icons/ti';
 
 const SigninForm = () => {
     
-  const [isLoadings, setIsLoadings] = useState(false);
   const[loginData,setloginData]=useState({
     email:'',
     password:''
   })
-  const setData=(event:any)=>{
+  const setData=(event:React.ChangeEvent<HTMLInputElement>)=>{
         setloginData({...loginData,[event.target.name]:event.target.value})
   }
 
@@ -26,9 +23,12 @@ const SigninForm = () => {
         data:loginData
 
      }
-     const response= await ApiService(payload)
-     console.log(response.data)
-     localStorage.setItem('jwtToken',response.data)
+     const response = await ApiService({
+        ...payload,
+        data: JSON.stringify(loginData)
+     });
+     console.log(response.data);
+     localStorage.setItem('jwtToken', response.data);
 
   }
 
@@ -196,9 +196,9 @@ const SigninForm = () => {
             type="button"
             // onClick={handleForgotPassword}
             className="text-sm font-medium text-red-600 hover:text-red-500 cursor-pointer"
-            disabled={isLoadings}  
+            disabled={false}  
           >
-            {isLoadings ? (
+            {false ? (
               
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
@@ -227,7 +227,7 @@ const SigninForm = () => {
       </div>
 
       <p className="mt-8 text-center text-sm text-gray-600">
-        Don't have an account?{" "}
+        Don&`&apos`t have an account?{" "}
         <Link
           href="/auth/signup"
           className="font-medium text-red-600 hover:text-red-500"
