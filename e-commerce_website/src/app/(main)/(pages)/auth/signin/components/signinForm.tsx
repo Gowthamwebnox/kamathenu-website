@@ -3,10 +3,11 @@ import ApiService from '@/app/components/apiCall';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, Link } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 const SigninForm = () => {
-    
+    const router=useRouter()
   const[loginData,setloginData]=useState({
     email:'',
     password:''
@@ -19,19 +20,33 @@ const SigninForm = () => {
      console.log(loginData)
      const payload={
         method:'post',
-        url:'http://localhost:8000/api/login',
+        url:'http://localhost:8000/api/auth/login',
         data:loginData
 
      }
-     const response = await ApiService({
-        ...payload,
-        data: JSON.stringify(loginData)
-     });
+     const response = await ApiService(payload);
      console.log(response.data);
      localStorage.setItem('jwtToken', response.data);
-
+     router.push('/')
   }
-
+  const handleGoogleLogin=async()=>{
+    const payload={
+      method:'get',
+      url:'http://localhost:8000/api/auth/google',     
+      
+    }
+    window.location.href=payload.url
+    const response:any = await ApiService(payload);
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const token:string|null = urlParams.get('token');
+    localStorage.setItem('jwtToken', response.data.token||'');
+    console.log(response.data.token+">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
+    if(response.data.status==401){
+      alert('Create an account first')
+      router.push('/auth/signup')
+    }
+    
+  }
   return (
     
     <div className="p-8 md:p-12 flex flex-col">
@@ -61,7 +76,8 @@ const SigninForm = () => {
           variant="outline"
         //   onClick={() => handleSocialSignIn("google")}
         //   disabled={isLoading}
-          className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50"
+          className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50 cursor-pointer" 
+          onClick={()=>{handleGoogleLogin()}}
         >
           {/* <Image
             src={"/assets/icons/google.png"}
@@ -69,7 +85,9 @@ const SigninForm = () => {
             height={20}
             alt="google-icon"
             className="rounded-full"
-          /> */}
+          />  */}
+          
+          <img src="/assets/icons/google.png" alt="google-icon" className="rounded-full w-5 h-5" />
           <span className="hidden ">Login with google</span>
         </Button>
 

@@ -65,7 +65,7 @@ const SignupForm = () => {
   const optGenerate = async () => {
     const payload = {
       method: 'post',
-      url: 'http://localhost:8000/api/verifyOTP',
+      url: 'http://localhost:8000/api/auth/verifyOTP',
       headers: { 'Content-Type': 'application/json' },
       data: {
         name: signupDetails.name,
@@ -81,8 +81,8 @@ const SignupForm = () => {
   const handleSignup = async() => {
     console.log(signupDetails);
     const payload={
-      method:'get',
-      url:'http://localhost:8000/api/auth/google',
+      method:'post',
+      url:'http://localhost:8000/api/auth/newuser',
       data:{signupDetails,isEmailValidation:true,id:userOTPID}
     }
     console.log(userOTPID)
