@@ -10,37 +10,39 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
 import { useRouter } from "next/navigation";
-// interface SignupResponse {
-//   name: string;
-//   email: string;
-//   passWord: string;
-//   OTP: string; // <-- add this
-// }
-// interface SignupRequestPayload {
-//   method: 'post'; // literal type
-//   url: string;
-//   headers: {
-//     'Content-Type': string;
-//   };
-//   data: {
-//     name: string;
-//     email: string;
-//     passWord: string;  // (or `password: string` if you want lowercase)
-//   };
-// }
+interface SignupResponse {
+  name: string;
+  email: string;
+  passWord: string;
+  OTP: string; // <-- add this
+}
+interface SignupRequestPayload {
+  method: 'post'; // literal type
+  url: string;
+  headers: {
+    'Content-Type': string;
+  };
+  data: {
+    name: string;
+    email: string;
+    passWord: string;  // (or `password: string` if you want lowercase)
+  };
+}
 
 
 const SignupForm = () => {
   const routes=useRouter();
+  var optId=null
   const [signupDetails, setSignupDetails] = useState({
     name: '',
     email: '',
     password: '',
     otp: '',
+    firstname:'',
+    lastname:'',
+    number:''
   });
-  // const [userOTP, setUserOTP] = useState<string>('');
-  const [verify, setVerify] = useState(false);
-
+  const [userOTPID, setUserOTPID] = useState(null);
   const setData = (event:React.ChangeEvent<HTMLInputElement>) => {
     setSignupDetails({
       ...signupDetails,
@@ -48,17 +50,17 @@ const SignupForm = () => {
     });
   };
 
-  const otpVerification = () => {
-    // console.log("otp verification");
-    // console.log("Server OTP:", userOTP);
-    // console.log("User OTP:", signupDetails.otp);
-    // if (userOTP == signupDetails.otp) {
-    //   console.log("verified successfully");
-      setVerify(true);
-    // } else {
-    //   alert("Invalid OTP");
-    // }
-  };
+  // const otpVerification = () => {
+  //   console.log("otp verification");
+  //   console.log("Server OTP:", userOTP);
+  //   console.log("User OTP:", signupDetails.otp);
+  //   if (userOTP == signupDetails.otp) {
+  //     console.log("verified successfully");
+  //     setVerify(true);
+  //   } else {
+  //     alert("Invalid OTP");
+  //   }
+  // };
 
   const optGenerate = async () => {
     const payload = {
@@ -67,22 +69,23 @@ const SignupForm = () => {
       headers: { 'Content-Type': 'application/json' },
       data: {
         name: signupDetails.name,
-        email: signupDetails.email,
-        passWord: signupDetails.password
+        email: signupDetails.email
       }
     };
     const response = await axios(payload);
-    console.log(response.data);
-    // setUserOTP(response.data.OTP);
+    console.log((response.data)+">>>>>>>><><><<<><><><<<<<<<<><<<<<<<<<<<<<<<<<<<<")
+
+    setUserOTPID(response.data)
   };
 
   const handleSignup = async() => {
     console.log(signupDetails);
     const payload={
-      method:'post',
-      url:'http://localhost:8000/api/newuser',
-      data:{signupDetails,isEmailValidation:true}
+      method:'get',
+      url:'http://localhost:8000/api/auth/google',
+      data:{signupDetails,isEmailValidation:true,id:userOTPID}
     }
+    console.log(userOTPID)
     const response=await axios(payload)
     if(response.status===200){
       alert(response.data)
@@ -92,8 +95,9 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="border-2 border-black rounded-[12px] ml-[31%] mt-[12%] p-[5%] w-[40%] bg-gray-100 ">
-      <div className="grid w-[100%] items-center gap-3">
+    <div className="border-2 flex flex-col gap-5 items-center border-black rounded-[12px] ml-[31%] mt-[12%] p-[5%] w-[40%] bg-gray-100 ">
+      <div className=" w-[100%] items-center ">
+
         <Input
           type="text"
           name="name"
@@ -104,7 +108,7 @@ const SignupForm = () => {
         />
       </div>
 
-      <div className="flex mt-5 w-[100%] items-center gap-3">
+      <div className="flex w-[100%] items-center gap-3">
         <Input
           type="email"
           name="email"
@@ -121,7 +125,8 @@ const SignupForm = () => {
         </button>
       </div>
 
-      <div className="grid mt-5 w-[100%] items-center gap-3">
+
+      <div className="grid  w-[100%] items-center gap-3">
         <Input
           type="password"
           name="password"
@@ -132,7 +137,7 @@ const SignupForm = () => {
         />
       </div>
 
-      <div className="mt-5 md:flex items-center space-x-4 w-auto">
+      <div className="">
         <InputOTP
           maxLength={6}
           name="otp"
@@ -151,14 +156,40 @@ const SignupForm = () => {
             ))}
           </InputOTPGroup>
         </InputOTP>
-
-        <Button onClick={otpVerification} className="sm:block md:border-2 border-black">
-          Verify
-        </Button>
+      </div>
+      <div className="grid w-[100%] items-center gap-3">
+        <Input
+          type="text"
+          name="firstname"
+          value={signupDetails.firstname}
+          placeholder="FirstName"
+          className="text-center p-5 border-2 border-black"
+          onChange={setData}
+        />
+      </div>
+       <div className="grid w-[100%] items-center gap-3">
+        <Input
+          type="text"
+          name="lastname"
+          value={signupDetails.lastname}
+          placeholder="lasttName"
+          className="text-center p-5 border-2 border-black"
+          onChange={setData}
+        />
+      </div>
+       <div className="grid w-[100%] items-center gap-3">
+        <Input
+          type="text"
+          name="number"
+          value={signupDetails.number}
+          placeholder="number"
+          className="text-center p-5 border-2 border-black"
+          onChange={setData}
+        />
       </div>
 
-      {verify  && (
-        <div className="mt-9 ml-[38%]">
+      
+        <div className="mt-3">
           <Button
             variant="outline"
             className="px-7 py-5 text-[18px] border-2 border-black"
@@ -167,7 +198,6 @@ const SignupForm = () => {
             SignUp
           </Button>
         </div>
-      )}
     </div>
   );
 };
