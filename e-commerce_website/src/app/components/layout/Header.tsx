@@ -1,21 +1,32 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import kamathenuLogo from "../../../../public/assets/kamathenu Images/kamathenuLogo.png";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import userData from "@/app/(main)/StateManagement/userData";
 
 type HeaderProps = {
   headerColor?: [string, string]; // [backgroundColor, textColor]
 };
 
 export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
+  useEffect(()=>{
+    if(localStorage.getItem('jwtToken')!=null){
+      setShowLogin(false)
+      
+    }
+  },[])
+  const currentUser=userData.getState().userData
+  console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   
     const routers=useRouter()
+    const [showLogin,setShowLogin]=useState(true)
+    
 
      const handleBecomeSellerPage=async()=>{
      routers.push('/becomeSeller')
@@ -78,18 +89,19 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">
-          <Button
+          {showLogin && <Button
             className="bg-white text-[#D8A526] border hover:bg-[#D8A526] hover:text-white"
             style={{ borderColor: "#D8A526" }}
           >
             Log in
-          </Button>
-          <Button
+          </Button>}
+          {showLogin && <Button
             className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
             style={{ borderColor: "#D8A526" }}
           >
             Sign in
-          </Button>
+          </Button>}
+          {!showLogin && <h1 className="text-white font-bold text-lg">{currentUser}</h1>}
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
           <MdOutlineShoppingCart className="size-6" />
         </div>

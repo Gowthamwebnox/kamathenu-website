@@ -8,8 +8,8 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
-import axios from 'axios';
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/app/utils/axiosInstance";
 interface SignupResponse {
   name: string;
   email: string;
@@ -64,30 +64,21 @@ const SignupForm = () => {
 
   const optGenerate = async () => {
     const payload = {
-      method: 'post',
-      url: 'http://localhost:8000/api/auth/verifyOTP',
-      headers: { 'Content-Type': 'application/json' },
-      data: {
         name: signupDetails.name,
         email: signupDetails.email
-      }
     };
-    const response = await axios(payload);
+    const response = await axiosInstance.post('auth/verifyOTP',payload);
     console.log((response.data)+">>>>>>>><><><<<><><><<<<<<<<><<<<<<<<<<<<<<<<<<<<")
-
-    setUserOTPID(response.data)
   };
 
   const handleSignup = async() => {
     console.log(signupDetails);
     const payload={
-      method:'post',
-      url:'http://localhost:8000/api/auth/newuser',
       data:{signupDetails,isEmailValidation:true,id:userOTPID}
     }
     console.log(userOTPID)
-    const response=await axios(payload)
-    if(response.status===200){
+    const response=await axiosInstance.post('auth/newuser',payload)
+    if(response.status===200 ){
       alert(response.data)
       routes.push('/')
 

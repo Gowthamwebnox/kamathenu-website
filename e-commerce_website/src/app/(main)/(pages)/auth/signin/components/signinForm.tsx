@@ -1,12 +1,15 @@
 'use client'
 import ApiService from '@/app/components/apiCall';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, Link } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import userData from '@/app/(main)/StateManagement/userData'
 
 const SigninForm = () => {
+  const userDataStore=userData(state=>state.setUserData)
     const router=useRouter()
   const[loginData,setloginData]=useState({
     email:'',
@@ -17,34 +20,37 @@ const SigninForm = () => {
   }
 
   const handleLogin=async()=>{
-     console.log(loginData)
-     const payload={
-        method:'post',
-        url:'http://localhost:8000/api/auth/login',
-        data:loginData
+     console.log(loginData+">>>>>>>>>>>>>>")
+     const payload:{data:any}={
+        data:{
+          email:loginData.email,
+          password:loginData.password
+        }
 
      }
-     const response = await ApiService(payload);
-     console.log(response.data);
-     localStorage.setItem('jwtToken', response.data);
-     router.push('/')
+     const response = await axiosInstance.post('auth/login',payload.data);
+     console.log(response.data +">>>>>>>>>>>>token<<<<<<<<<<<<<<<<<");
+     
+     if(response.data=="Password is incorrect"){
+      alert("Password is incorrect")
+     }
+     else{
+      console.log("response.data.UserData 🔥🔥🔥🔥🔥 ", response.data.user.name);
+      userDataStore(response.data.user.name)
+      localStorage.setItem('jwtToken', response.data.Token);
+      router.push('/')
+     }
   }
   const handleGoogleLogin=async()=>{
-    const payload={
-      method:'get',
-      url:'http://localhost:8000/api/auth/google',     
-      
-    }
-    window.location.href=payload.url
-    const response:any = await ApiService(payload);
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const token:string|null = urlParams.get('token');
-    localStorage.setItem('jwtToken', response.data.token||'');
-    console.log(response.data.token+">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
-    if(response.data.status==401){
-      alert('Create an account first')
-      router.push('/auth/signup')
-    }
+    const url='http://localhost:8000/api/auth/google'
+    
+    window.location.href=url
+    const response:any = await axiosInstance.get('auth/google');
+    const urlParams = new URLSearchParams(window.location.search);
+    const token:string|null = urlParams.get('token');
+    console.log(token+">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
+    localStorage.setItem('jwtToken', token||'');
+    
     
   }
   return (
@@ -91,7 +97,7 @@ const SigninForm = () => {
           <span className="hidden ">Login with google</span>
         </Button>
 
-        <Button
+        {/* <Button
           variant="outline"
         //   onClick={() => handleSocialSignIn("apple")}
         //   disabled={isLoading}
@@ -105,8 +111,8 @@ const SigninForm = () => {
             className="rounded-full"
           />
           <span className="hidden ">Login with Apple</span>
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           variant="outline"
         //   onClick={() => handleSocialSignIn("linkedin")}
         //   disabled={isLoading}
@@ -120,7 +126,7 @@ const SigninForm = () => {
             className="rounded-full"
           />
           <span className="hidden ">Login with Linkedin</span>
-        </Button>
+        </Button> */}
       </div>
 
       <div className="relative my-6">
