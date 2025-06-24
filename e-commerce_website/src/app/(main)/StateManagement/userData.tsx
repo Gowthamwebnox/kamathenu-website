@@ -8,7 +8,18 @@ const userData=create( persist(
     }),
     {
         name: "user-data-storage", // name of localStorage key
-        storage: localStorage, // or sessionStorage
+        storage: {
+            getItem: (name) => {
+                const item = sessionStorage.getItem(name);
+                return item ? JSON.parse(item) : null;
+            },
+            setItem: (name, value) => {
+                sessionStorage.setItem(name, JSON.stringify(value));
+            },
+            removeItem: (name) => {
+                sessionStorage.removeItem(name);
+            },
+        },
     }
 ))
 
