@@ -49,6 +49,7 @@ const SignupForm = () => {
       [event.target.name]: event.target.value,
     });
   };
+  const [generateOTP,setGenerateOTP]=useState('')
 
   // const otpVerification = () => {
   //   console.log("otp verification");
@@ -69,19 +70,19 @@ const SignupForm = () => {
     };
     const response = await axiosInstance.post('auth/verifyOTP',payload);
     console.log((response.data)+">>>>>>>><><><<<><><><<<<<<<<><<<<<<<<<<<<<<<<<<<<")
+    setGenerateOTP(response.data)
   };
 
   const handleSignup = async() => {
     console.log(signupDetails);
     const payload={
-      data:{signupDetails,isEmailValidation:true,id:userOTPID}
+      signupDetails,isEmailValidation:true,id:generateOTP
     }
     console.log(userOTPID)
     const response=await axiosInstance.post('auth/newuser',payload)
     if(response.status===200 ){
       alert(response.data)
-      routes.push('/')
-
+      routes.push('/auth/login')
     }
   };
 

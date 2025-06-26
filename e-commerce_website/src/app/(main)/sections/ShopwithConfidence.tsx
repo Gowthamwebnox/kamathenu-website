@@ -5,84 +5,68 @@ import FeaturePlan from "./FeaturePlan";
 import Footer from "@/app/components/layout/Footer";
 
 export default function ShopwithConfidence() {
+  const shopWithConfidence = [{
+    img1: "/assets/kamathenu Images/shopWithConfidence/secureTop.png",
+    img2: "/assets/kamathenu Images/shopWithConfidence/secureLow.png",
+    title: "Secure Payment",
+    desc: "Safe and encrypted transactions for worry-free checkout.",
+  },
+  {
+    img1: "/assets/kamathenu Images/shopWithConfidence/download.png",
+    title: "Instant Download",
+    desc: "Your purchases are ready to use immediately after checkout.",
+  },
+  {
+    img1: "/assets/kamathenu Images/shopWithConfidence/contact.png",
+    title: "Customer Support",
+    desc: "Get support from our team anytime you need assistance.",
+  },
+  {
+    img1: "/assets/kamathenu Images/shopWithConfidence/trust.png",
+    title: "Trusted by Thousands",
+    desc: "Join thousands of happy customers who trust our service.",
+  },]
   return (
     <div className="mt-12">
-      <div className="mt-24 f-full flex gap-[53px] mx-15">
-        <div className="w-[500px] h-[124px] p-8 border-0 bg-[#FFFAEF] flex items-center gap-7 rounded-[9px]">
-          <div>
-            <img
-              src="/assets/kamathenu Images/shopWithConfidence/secureTop.png"
-              alt="securelogo_1"
-              className="w-[73.87px] h-[36.89]"
-            />
-            <img
-              src="/assets/kamathenu Images/shopWithConfidence/secureLow.png"
-              alt="securelogo_1"
-              className="w-[71.84px] h-[24.31]"
-            />
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 md:mt-24 w-full px-4 md:px-16">
+        {shopWithConfidence.map((item, index) => (
+          <div
+            key={index}
+            className="flex items-center gap-6 bg-[#FFFAEF] rounded-[9px] border-0 p-6 lg:p-8"
+          >
+            <div>
+              <img
+                src={item.img1}
+                alt="icon"
+                className="w-[70px] h-[56px] object-contain"
+              />
+              {item.img2 && (
+                <img
+                  src={item.img2}
+                  alt="icon-2"
+                  className="w-[71.84px] h-[24.31px] mt-2"
+                />
+              )}
+            </div>
+            <div>
+              <h1 className="text-[19px] font-semibold">{item.title}</h1>
+              <p className="text-gray-400 font-normal mt-2 text-[17px]">
+                {item.desc}
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-[19px] font-semibold">Secure Payment</h1>
-            <p className="] text-gray-400 font-normal mt-2 text-[17px]">
-              Safe and encrypted transactions for worry-free checkout.
-            </p>
-          </div>
-        </div>
-        <div className="w-[500px] h-[124px] p-8 border-0 bg-[#FFFAEF] flex items-center gap-7 rounded-[9px]">
-          <div>
-            <img
-              src="/assets/kamathenu Images/shopWithConfidence/download.png"
-              alt="securelogo_1"
-              className="w-[73.87px] h-[56.89]"
-            />
-          </div>
-          <div>
-            <h1 className="text-[19px] font-semibold">Instant Download</h1>
-            <p className=" text-gray-400 font-normal mt-2 text-[17px]">
-              Safe and encrypted transactions for worry-free checkout.
-            </p>
-          </div>
-        </div>
-        <div className="w-[500px] h-[124px] p-8 border-0 bg-[#FFFAEF] flex items-center gap-7 rounded-[9px]">
-          <div>
-            <img
-              src="/assets/kamathenu Images/shopWithConfidence/contact.png"
-              alt="securelogo_1"
-              className="w-[70.87px] h-[56.89]"
-            />
-          </div>
-          <div>
-            <h1 className="text-[19px] font-semibold">Customer Support</h1>
-            <p className=" text-gray-400 font-normal mt-2 text-[17px]">
-              Safe and encrypted transactions for worry-free checkout.
-            </p>
-          </div>
-        </div>
-        <div className="w-[500px] h-[124px] p-8 border-0 bg-[#FFFAEF] flex items-center gap-7 rounded-[9px]">
-          <div>
-            <img
-              src="/assets/kamathenu Images/shopWithConfidence/trust.png"
-              alt="securelogo_1"
-              className="w-[70.87px] h-[56.89]"
-            />
-          </div>
-          <div>
-            <h1 className="text-[18px] font-semibold">Trusted by Thousands</h1>
-            <p className="text-gray-400 font-normal mt-2 text-[17px]">
-              Safe and encrypted transactions for worry-free checkout.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
+
       {/* categories start*/}
-      <div className="relative">
-        <h1 className="ml-[46%] mt-[62px] text-[29px] font-semibold">
+      <div className="">
+        <h1 className="text-center mt-[62px] text-[29px] font-semibold">
           Categories
         </h1>
         <div className="p-15 grid grid-cols-12 grid-rows-4  gap-7">
           {/* first */}
           <div className=" group col-span-6 row-span-4 border rounded-xl overflow-hidden bg-[#FFF4DA]">
-            
+
 
             <div className=" text-[#333] flex flex-col gap-y-5 py-5 px-8 ">
               <h1 className="text-[24px] text-right text-[#D8A526] font-semibold">
@@ -104,18 +88,18 @@ export default function ShopwithConfidence() {
                 <img
                   src="/assets/kamathenu Images//Categories/Home/Home_1.png"
                   alt=""
-                  className="absolute transition-transform duration-300 group-hover:scale-x-97   "
+                  className="absolute transition-transform duration-300 group-hover:scale-x-97 group-hover:scale-y-97  "
                 />
               </div>
               <div className="relative top-9 left-169">
                 <img
                   src="/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"
                   alt="Home1_outlook"
-                  className="absolute  w-[140.49600219726562px] h-[204px] opacity-60"
+                  className="absolute  w-[140.49600219726562px] h-[204px] object-contain opacity-60"
                 />
               </div>
             </div>
-            
+
           </div>
 
           {/* second */}
@@ -211,7 +195,7 @@ export default function ShopwithConfidence() {
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
       {/* Desing Home Image */}

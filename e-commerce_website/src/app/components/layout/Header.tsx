@@ -37,6 +37,11 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
   const handleShopPlanPage=async()=>{
     routers.push('/shopPlan')
   }
+  const handleLogout=async()=>{
+    localStorage.removeItem('jwtToken')
+    setShowLogin(true)
+    routers.refresh()
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,6 +107,12 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
             Sign in
           </Button>}
           {!showLogin && <h1 className="text-white font-bold text-lg">{currentUser}</h1>}
+          {!showLogin && <Button
+            className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
+            style={{ borderColor: "#D8A526" }} onClick={()=>handleLogout()}
+          >
+            Log out
+          </Button>}
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
           <MdOutlineShoppingCart className="size-6" />
         </div>
