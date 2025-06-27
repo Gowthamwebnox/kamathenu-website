@@ -123,9 +123,9 @@ function TabsTrigger({ value, children, className, ...props }: TabsTriggerProps)
       {children}
       {isActive && (
         <motion.div
-          className="absolute -bottom-4 left-3 w-[90%] h-1 bg-[#D8A526]"
+          className="absolute -bottom-1  w-[95%] h-1 bg-[#D8A526]"
           layoutId="tab-indicator"
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          transition={{ type: "spring", stiffness: 500, damping: 40 }}
         />
       )}
     </button>

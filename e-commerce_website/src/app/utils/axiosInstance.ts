@@ -12,7 +12,7 @@ console.log(process.env.NEXT_PUBLIC_BASE_URL +">>>>>>>><<<<<<<<<<<<<<<<<<")
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('jwtToken');
-    if (token) {
+    if (token && config.headers) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     console.log('Request:',  config.data);

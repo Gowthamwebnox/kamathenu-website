@@ -1,10 +1,82 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Design from "./Design";
 import FeaturePlan from "./FeaturePlan";
 import Footer from "@/app/components/layout/Footer";
+import axiosInstance from "@/app/utils/axiosInstance";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { FaHeart } from "react-icons/fa";
+import { IoIosStar, IoIosArrowRoundForward } from "react-icons/io";
+
+
 
 export default function ShopwithConfidence() {
+  useEffect(() => {
+    allCategoriesAPI()
+  }, [])
+  
+  // Method 1: useEffect approach (current implementation)
+  // useEffect(() => {
+  //   handleDesignHome()
+  // }, [activeCategory])
+
+  // Method 2: Custom onChange handler
+  
+
+  // Method 3: Direct onClick approach
+  
+  const[getluxuryVillaPlans,setGetluxuryVillaPlans]=useState<any[]>([])
+  const[getCompactHomePlans,setGetCompactHomePlans]=useState<any[]>([])
+  const[getAppartmentPlans,setGetAppartmentPlans]=useState<any[]>([])
+  const[getIndependentHousePlans,setGetIndependentHousePlans]=useState<any[]>([])
+  const[getCustomizedPlans,setGetCustomizedPlans]=useState<any[]>([])
+
+  const allCategoriesAPI = async () => {
+   
+    const categories = [
+      {
+        categoryName:"New Luxurious Villa Plans",
+        limit: 1
+      },
+      {
+        categoryName:"Compact Home Plans",
+        limit: 1
+      },
+      {
+        categoryName:"Appartment Plans",
+        limit: 1
+      },
+      {
+        categoryName:"Independent House Plans",
+        limit: 1
+      },
+      {
+        categoryName:"Customized Plans",
+        limit: 2
+      },
+
+    ]
+    const response:any = await axiosInstance.post("category/getAllCategory",categories)
+    setGetluxuryVillaPlans(response.data.data["New Luxurious Villa Plans"])
+    setGetCompactHomePlans(response.data.data["Compact Home Plans"])
+    setGetAppartmentPlans(response.data.data["Appartment Plans"])
+    setGetIndependentHousePlans(response.data.data["Independent House Plans"])
+    setGetCustomizedPlans(response.data.data["Customized Plans"])
+  }
+  // console.log(getluxuryVillaPlans[0].images[0].imageUrl)
+  
+  const handleDesignHome = async (category?: string) => {
+    const selectedCategory = category || activeCategory;
+    console.log("🔥🔥🔥🔥🔥🔥activeCategory🔥🔥🔥🔥🔥🔥", selectedCategory)
+    // You can add your API call here to fetch data based on selectedCategory
+    // Example:
+    // const response = await axiosInstance.post('design/getDesigns', { category: selectedCategory });
+    // setDesignData(response.data);
+  }
+  
+
   const shopWithConfidence = [{
     img1: "/assets/kamathenu Images/shopWithConfidence/secureTop.png",
     img2: "/assets/kamathenu Images/shopWithConfidence/secureLow.png",
@@ -28,7 +100,7 @@ export default function ShopwithConfidence() {
   },]
   return (
     <div className="mt-12">
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 md:mt-24 w-full px-4 md:px-16">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:mt-24 w-full px-4 md:px-16">
         {shopWithConfidence.map((item, index) => (
           <div
             key={index}
@@ -58,25 +130,26 @@ export default function ShopwithConfidence() {
         ))}
       </div>
 
-      {/* categories start*/}
+                                                                                {/* categories start*/}
       <div className="">
         <h1 className="text-center mt-[62px] text-[29px] font-semibold">
           Categories
         </h1>
-        <div className="p-15 grid grid-cols-12 grid-rows-4  gap-7">
+        <div className="p-15 grid grid-cols-1 lg:grid-cols-12 grid-rows-4  gap-7">
           {/* first */}
           <div className=" group col-span-6 row-span-4 border rounded-xl overflow-hidden bg-[#FFF4DA]">
-
-
             <div className=" text-[#333] flex flex-col gap-y-5 py-5 px-8 ">
               <h1 className="text-[24px] text-right text-[#D8A526] font-semibold">
                 New Plans
               </h1>
               <h1 className="text-[28px] font-semibold text-right">
-                New Luxurious Villa Plans
+                {getluxuryVillaPlans.length > 0 
+                  ? getluxuryVillaPlans[0].category.name 
+                  : "none"}
               </h1>
               <h1 className="text-[24px] text-gray-600  text-right font-semibold">
-                Up to 20% offer
+                Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0].discounts[0].discountValue}${getluxuryVillaPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}` 
+                  : '20%'} offer
               </h1>
               <Button
                 className="ml-[83%] bg-white w-[17%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[17px] p-6 "
@@ -84,32 +157,39 @@ export default function ShopwithConfidence() {
               >
                 Shop now
               </Button>
-              <div className="relative w-[110%] bottom-133 right-77 ">
+              
+              <div className="relative w-[110%] bottom-13 right- ">
                 <img
-                  src="/assets/kamathenu Images//Categories/Home/Home_1.png"
-                  alt=""
-                  className="absolute transition-transform duration-300 group-hover:scale-x-97 group-hover:scale-y-97  "
+                  src={getluxuryVillaPlans.length > 0 ? getluxuryVillaPlans[0].images[0].imageUrl[0] 
+                    : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
+                  alt="Luxury Villa Plan"
+                  className="absolute transition-transform duration-300 group-hover:scale-x-97 group-hover:scale-y-97 w-[40%] object-contain"
                 />
               </div>
               <div className="relative top-9 left-169">
                 <img
-                  src="/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"
+                  src={getluxuryVillaPlans.length > 0  
+                    ? getluxuryVillaPlans[0].images[0]?.imageUrl[1]   
+                    : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                   alt="Home1_outlook"
                   className="absolute  w-[140.49600219726562px] h-[204px] object-contain opacity-60"
                 />
               </div>
             </div>
-
           </div>
 
           {/* second */}
-          <div className=" col-span-3 row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
+          <div className=" col-span-6 row-span-4  lg:col-span-3 lg:row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
             <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
               <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                Compact Home Plans
+                {getCompactHomePlans.length > 0 
+                  ? getCompactHomePlans[0].category.name 
+                  : "none"}
               </h1>
               <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-                Up to 20% offer
+                Up to {getCompactHomePlans.length > 0 
+                  ? `${getCompactHomePlans[0].discounts[0].discountValue}${getCompactHomePlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}` 
+                  : 'd0%'} offer
               </h1>
               <Button
                 className="ml-[73%] bg-white w-[12%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-13  "
@@ -119,14 +199,14 @@ export default function ShopwithConfidence() {
               </Button>
               <div className="relative w-[97%] bottom-16 right-22 ">
                 <img
-                  src="/assets/kamathenu Images//Categories/Home/Home_4.png"
-                  alt=""
+                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[0] : "asdfa"}
+                  alt="Compact Home Plan"
                   className="absolute transition-transform duration-300 group-hover:scale-x-97  "
                 />
               </div>
               <div className="relative w-[20%] top left-75  ">
                 <img
-                  src="/assets/kamathenu Images//Categories/HomeOutlook/outLook_4.png"
+                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[1] : "asdfasd"}
                   alt="Home4_outlook"
                   className="absolute  opacity-90"
                 />
@@ -134,13 +214,15 @@ export default function ShopwithConfidence() {
             </div>
           </div>
           {/* third */}
-          <div className=" col-span-3 row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
+          <div className=" col-span-6 row-span-4 lg:col-span-3 lg:row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
             <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
               <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                Appartment Plans
+                {getAppartmentPlans.length >0 ?getAppartmentPlans[0].category.name :"none"}
               </h1>
               <h1 className="text-[17px] text-gray-600  text-right font-semibold">
-                Up to 20% offer
+              Up to {getAppartmentPlans.length > 0 
+                  ? `${getAppartmentPlans[0]?.discounts[0]?.discountValue}${getAppartmentPlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}` 
+                  : '20%'} offer
               </h1>
               <Button
                 className="ml-[73%] bg-white w-[12%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-13  "
@@ -150,14 +232,14 @@ export default function ShopwithConfidence() {
               </Button>
               <div className="relative w-[97%] bottom-44 right-27 ">
                 <img
-                  src="/assets/kamathenu Images//Categories/Home/Home_3.png"
+                  src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0]?.images[0]?.imageUrl[0] : "asdfa"}
                   alt=""
                   className="absolute transition-transform duration-300 group-hover:scale-x-97 "
                 />
               </div>
               <div className="relative w-[40%] top-5 left-58  ">
                 <img
-                  src="/assets/kamathenu Images//Categories/HomeOutlook/outLook_3.png"
+                  src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0]?.images[0]?.imageUrl[1] : "asdfa"}
                   alt="Home3_outlook"
                   className="  opacity-90"
                 />
@@ -168,10 +250,12 @@ export default function ShopwithConfidence() {
           <div className=" col-span-6 row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
             <div className=" text-[#333] flex flex-col gap-y-2 py-5 px-6 w-full ">
               <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                Independent House Plans
+                {getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].category.name : "none"}
               </h1>
               <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-                Up to 20% offer
+                Up to {getIndependentHousePlans.length > 0 
+                  ? `${getIndependentHousePlans[0]?.discounts[0]?.discountValue}${getIndependentHousePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}` 
+                  : '0%'} offer
               </h1>
               <Button
                 className="ml-[83%] bg-white w-[17%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-11  "
@@ -181,15 +265,15 @@ export default function ShopwithConfidence() {
               </Button>
               <div className="relative w-[75%] bottom-48 right-7 ">
                 <img
-                  src="/assets/kamathenu Images//Categories/Home/Home_2.png"
-                  alt=""
+                  src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0]?.images[0]?.imageUrl[0] : "asdfa"}
+                  alt="Independent House Plan"
                   className="absolute transition-transform duration-300 group-hover:scale-x-97 "
                 />
               </div>
-              <div className="relative   left-178 bottom-1 ">
+              <div className="relative left-8 bottom-1 ">
                 <img
-                  src="/assets/kamathenu Images//Categories/HomeOutlook/outLook_2.png"
-                  alt="Home3_outlook"
+                  src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0]?.images[0]?.imageUrl[1] : "afdsa"}
+                  alt="Independent House Plan"
                   className="absolute w-[14%] opacity-90"
                 />
               </div>
@@ -198,10 +282,10 @@ export default function ShopwithConfidence() {
 
         </div>
       </div>
-      {/* Desing Home Image */}
+                                                                                {/* Desing Home Start */}
 
-      <Design />
-
+      
+                  <Design/>
       {/* Desing Home End */}
 
       <div>

@@ -19,7 +19,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
       
     }
   },[])
-  const currentUser=userData.getState().userData
+  const currentUser=userData.getState().userData  
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
