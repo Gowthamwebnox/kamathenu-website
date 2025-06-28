@@ -32,7 +32,7 @@ export default function ShopwithConfidence() {
   const[getAppartmentPlans,setGetAppartmentPlans]=useState<any[]>([])
   const[getIndependentHousePlans,setGetIndependentHousePlans]=useState<any[]>([])
   const[getCustomizedPlans,setGetCustomizedPlans]=useState<any[]>([])
-
+ 
   const allCategoriesAPI = async () => {
    
     const categories = [
@@ -67,14 +67,7 @@ export default function ShopwithConfidence() {
   }
   // console.log(getluxuryVillaPlans[0].images[0].imageUrl)
   
-  const handleDesignHome = async (category?: string) => {
-    const selectedCategory = category || activeCategory;
-    console.log("🔥🔥🔥🔥🔥🔥activeCategory🔥🔥🔥🔥🔥🔥", selectedCategory)
-    // You can add your API call here to fetch data based on selectedCategory
-    // Example:
-    // const response = await axiosInstance.post('design/getDesigns', { category: selectedCategory });
-    // setDesignData(response.data);
-  }
+  
   
 
   const shopWithConfidence = [{
@@ -144,7 +137,7 @@ export default function ShopwithConfidence() {
               </h1>
               <h1 className="text-[28px] font-semibold text-right">
                 {getluxuryVillaPlans.length > 0 
-                  ? getluxuryVillaPlans[0].category.name 
+                  ? getluxuryVillaPlans[0].name
                   : "none"}
               </h1>
               <h1 className="text-[24px] text-gray-600  text-right font-semibold">
@@ -169,7 +162,7 @@ export default function ShopwithConfidence() {
               <div className="relative top-9 left-169">
                 <img
                   src={getluxuryVillaPlans.length > 0  
-                    ? getluxuryVillaPlans[0].images[0]?.imageUrl[1]   
+                    ? getluxuryVillaPlans[0].images[0]?.imageLayerout[0]   
                     : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                   alt="Home1_outlook"
                   className="absolute  w-[140.49600219726562px] h-[204px] object-contain opacity-60"
@@ -183,13 +176,11 @@ export default function ShopwithConfidence() {
             <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
               <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
                 {getCompactHomePlans.length > 0 
-                  ? getCompactHomePlans[0].category.name 
-                  : "none"}
+                  ? getCompactHomePlans[0].name:"none"}
               </h1>
               <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-                Up to {getCompactHomePlans.length > 0 
-                  ? `${getCompactHomePlans[0].discounts[0].discountValue}${getCompactHomePlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}` 
-                  : 'd0%'} offer
+              Up to {getCompactHomePlans?.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}` 
+                  : '20%'} offer
               </h1>
               <Button
                 className="ml-[73%] bg-white w-[12%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-13  "
@@ -199,14 +190,14 @@ export default function ShopwithConfidence() {
               </Button>
               <div className="relative w-[97%] bottom-16 right-22 ">
                 <img
-                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[0] : "asdfa"}
+                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[1] : "asdfa"}
                   alt="Compact Home Plan"
                   className="absolute transition-transform duration-300 group-hover:scale-x-97  "
                 />
               </div>
               <div className="relative w-[20%] top left-75  ">
                 <img
-                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[1] : "asdfasd"}
+                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageLayerout[0] : "asdfasd"}
                   alt="Home4_outlook"
                   className="absolute  opacity-90"
                 />

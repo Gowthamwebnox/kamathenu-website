@@ -1,11 +1,12 @@
 'use client'
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaHeart } from "react-icons/fa";
 import { IoIosStar, IoIosArrowRoundForward } from "react-icons/io";
 
 const FeaturePlan = () => {
-  // const route=useRouter();
+  const route=useRouter();
   return (
     <div className="bg-white text-black py-8 px-4 md:px-8 my-[2rem] mb-0">
       <div className="container mx-auto">

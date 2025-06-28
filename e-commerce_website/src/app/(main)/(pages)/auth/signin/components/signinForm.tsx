@@ -9,7 +9,7 @@ import React, { useState } from 'react'
 import userData from '@/app/(main)/StateManagement/userData'
 
 const SigninForm = () => {
-  const userDataStore=userData(state=>state.setUserData)
+  const userDataStore=userData((state:any)=>state.setUserData)
     const router=useRouter()
   const[loginData,setloginData]=useState({
     email:'',
@@ -28,7 +28,7 @@ const SigninForm = () => {
         }
 
      }
-     const response = await axiosInstance.post('auth/login',payload.data);
+     const response:any = await axiosInstance.post('auth/login',payload.data);
      console.log(response.data +">>>>>>>>>>>>token<<<<<<<<<<<<<<<<<");
      
      if(response.data=="Password is incorrect"){
@@ -250,11 +250,14 @@ const SigninForm = () => {
         </Button>
       </div>
 
-      <p className="mt-8 text-center text-sm text-gray-600">
-        Don&`&apos`t have an account?{" "}
+      <p className="mt-8 text-center text-sm text-gray-600" onClick={()=>{
+        router.push('/auth/signup')
+      }}>
+        Don't have an account?
         <Link
           href="/auth/signup"
           className="font-medium text-red-600 hover:text-red-500"
+          
         >
           create an account
         </Link>

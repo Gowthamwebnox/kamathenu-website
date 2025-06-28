@@ -42,6 +42,7 @@ const SignupForm = () => {
     lastname:'',
     number:''
   });
+  
   const [userOTPID, setUserOTPID] = useState(null);
   const setData = (event:React.ChangeEvent<HTMLInputElement>) => {
     setSignupDetails({
@@ -68,7 +69,7 @@ const SignupForm = () => {
         name: signupDetails.name,
         email: signupDetails.email
     };
-    const response = await axiosInstance.post('auth/verifyOTP',payload);
+    const response:any = await axiosInstance.post('auth/verifyOTP',payload);
     console.log((response.data)+">>>>>>>><><><<<><><><<<<<<<<><<<<<<<<<<<<<<<<<<<<")
     setGenerateOTP(response.data)
   };
