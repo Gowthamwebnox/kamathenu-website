@@ -76,7 +76,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
         left: 0,
       }}
     >
-      <div className="flex items-center justify-between p-4">
+      <div className=" flex items-center justify-between p-4">
         <div>
           <Image
             src={kamathenuLogo}
@@ -88,8 +88,6 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           <h2>Home</h2>
           <h2 onClick={handleAboutPage} className="cursor-pointer ">About Us</h2>
           <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
-          <h2>Gallery</h2>
-          <h2>FAQs</h2>
           <h2>Contact Us</h2>
           <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>

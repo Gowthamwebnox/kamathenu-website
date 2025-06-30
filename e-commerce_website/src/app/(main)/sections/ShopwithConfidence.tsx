@@ -16,49 +16,49 @@ export default function ShopwithConfidence() {
   useEffect(() => {
     allCategoriesAPI()
   }, [])
-  
+
   // Method 1: useEffect approach (current implementation)
   // useEffect(() => {
   //   handleDesignHome()
   // }, [activeCategory])
 
   // Method 2: Custom onChange handler
-  
+
 
   // Method 3: Direct onClick approach
-  
-  const[getluxuryVillaPlans,setGetluxuryVillaPlans]=useState<any[]>([])
-  const[getCompactHomePlans,setGetCompactHomePlans]=useState<any[]>([])
-  const[getAppartmentPlans,setGetAppartmentPlans]=useState<any[]>([])
-  const[getIndependentHousePlans,setGetIndependentHousePlans]=useState<any[]>([])
-  const[getCustomizedPlans,setGetCustomizedPlans]=useState<any[]>([])
- 
+
+  const [getluxuryVillaPlans, setGetluxuryVillaPlans] = useState<any[]>([])
+  const [getCompactHomePlans, setGetCompactHomePlans] = useState<any[]>([])
+  const [getAppartmentPlans, setGetAppartmentPlans] = useState<any[]>([])
+  const [getIndependentHousePlans, setGetIndependentHousePlans] = useState<any[]>([])
+  const [getCustomizedPlans, setGetCustomizedPlans] = useState<any[]>([])
+
   const allCategoriesAPI = async () => {
-   
+
     const categories = [
       {
-        categoryName:"New Luxurious Villa Plans",
+        categoryName: "New Luxurious Villa Plans",
         limit: 1
       },
       {
-        categoryName:"Compact Home Plans",
+        categoryName: "Compact Home Plans",
         limit: 1
       },
       {
-        categoryName:"Appartment Plans",
+        categoryName: "Appartment Plans",
         limit: 1
       },
       {
-        categoryName:"Independent House Plans",
+        categoryName: "Independent House Plans",
         limit: 1
       },
       {
-        categoryName:"Customized Plans",
+        categoryName: "Customized Plans",
         limit: 2
       },
 
     ]
-    const response:any = await axiosInstance.post("category/getAllCategory",categories)
+    const response: any = await axiosInstance.post("category/getAllCategory", categories)
     setGetluxuryVillaPlans(response.data.data["New Luxurious Villa Plans"])
     setGetCompactHomePlans(response.data.data["Compact Home Plans"])
     setGetAppartmentPlans(response.data.data["Appartment Plans"])
@@ -66,9 +66,10 @@ export default function ShopwithConfidence() {
     setGetCustomizedPlans(response.data.data["Customized Plans"])
   }
   // console.log(getluxuryVillaPlans[0].images[0].imageUrl)
-  
-  
-  
+
+
+  console.log(getCustomizedPlans)
+  console.log("👌👌👌👌")
 
   const shopWithConfidence = [{
     img1: "/assets/kamathenu Images/shopWithConfidence/secureTop.png",
@@ -123,7 +124,7 @@ export default function ShopwithConfidence() {
         ))}
       </div>
 
-                                                                                {/* categories start*/}
+      {/* categories start*/}
       <div className="">
         <h1 className="text-center mt-[62px] text-[29px] font-semibold">
           Categories
@@ -136,12 +137,12 @@ export default function ShopwithConfidence() {
                 New Plans
               </h1>
               <h1 className="text-[28px] font-semibold text-right">
-                {getluxuryVillaPlans.length > 0 
+                {getluxuryVillaPlans.length > 0
                   ? getluxuryVillaPlans[0].name
                   : "none"}
               </h1>
               <h1 className="text-[24px] text-gray-600  text-right font-semibold">
-                Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0].discounts[0].discountValue}${getluxuryVillaPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}` 
+                Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0].discounts[0].discountValue}${getluxuryVillaPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
                   : '20%'} offer
               </h1>
               <Button
@@ -150,10 +151,10 @@ export default function ShopwithConfidence() {
               >
                 Shop now
               </Button>
-              
+
               <div className="relative w-[110%] bottom-13 right- ">
                 <img
-                  src={getluxuryVillaPlans.length > 0 ? getluxuryVillaPlans[0].images[0].imageUrl[0] 
+                  src={getluxuryVillaPlans.length > 0 ? getluxuryVillaPlans[0].images[0].imageUrl[0]
                     : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
                   alt="Luxury Villa Plan"
                   className="absolute transition-transform duration-300 group-hover:scale-x-97 group-hover:scale-y-97 w-[40%] object-contain"
@@ -161,8 +162,8 @@ export default function ShopwithConfidence() {
               </div>
               <div className="relative top-9 left-169">
                 <img
-                  src={getluxuryVillaPlans.length > 0  
-                    ? getluxuryVillaPlans[0].images[0]?.imageLayerout[0]   
+                  src={getluxuryVillaPlans.length > 0
+                    ? getluxuryVillaPlans[0].images[0]?.imageLayerout[0]
                     : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                   alt="Home1_outlook"
                   className="absolute  w-[140.49600219726562px] h-[204px] object-contain opacity-60"
@@ -175,11 +176,11 @@ export default function ShopwithConfidence() {
           <div className=" col-span-6 row-span-4  lg:col-span-3 lg:row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
             <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
               <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                {getCompactHomePlans.length > 0 
-                  ? getCompactHomePlans[0].name:"none"}
+                {getCompactHomePlans.length > 0
+                  ? getCompactHomePlans[0].name : "none"}
               </h1>
               <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-              Up to {getCompactHomePlans?.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}` 
+                Up to {getCompactHomePlans?.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                   : '20%'} offer
               </h1>
               <Button
@@ -208,11 +209,11 @@ export default function ShopwithConfidence() {
           <div className=" col-span-6 row-span-4 lg:col-span-3 lg:row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
             <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
               <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                {getAppartmentPlans.length >0 ?getAppartmentPlans[0].category.name :"none"}
+                {getAppartmentPlans.length > 0 ? getAppartmentPlans[0].category.name : "none"}
               </h1>
               <h1 className="text-[17px] text-gray-600  text-right font-semibold">
-              Up to {getAppartmentPlans.length > 0 
-                  ? `${getAppartmentPlans[0]?.discounts[0]?.discountValue}${getAppartmentPlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}` 
+                Up to {getAppartmentPlans.length > 0
+                  ? `${getAppartmentPlans[0]?.discounts[0]?.discountValue}${getAppartmentPlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                   : '20%'} offer
               </h1>
               <Button
@@ -244,8 +245,8 @@ export default function ShopwithConfidence() {
                 {getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].category.name : "none"}
               </h1>
               <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-                Up to {getIndependentHousePlans.length > 0 
-                  ? `${getIndependentHousePlans[0]?.discounts[0]?.discountValue}${getIndependentHousePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}` 
+                Up to {getIndependentHousePlans.length > 0
+                  ? `${getIndependentHousePlans[0]?.discounts[0]?.discountValue}${getIndependentHousePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                   : '0%'} offer
               </h1>
               <Button
@@ -273,61 +274,46 @@ export default function ShopwithConfidence() {
 
         </div>
       </div>
-                                                                                {/* Desing Home Start */}
+      {/* Desing Home Start */}
 
-      
-                  <Design/>
+
+      <Design />
       {/* Desing Home End */}
 
       <div>
-        <div className="p-12 flex w-full gap-13">
-          <div className="w-[50%] h-[300px] border group border-[#DADADA] bg-[#DADADA] rounded-[4px] overflow-hidden  ">
-            <div className="flex flex-col gap-4 ">
-              <h1 className="w-[67%] px-5 pt-9 text-[25px] font-semibold ">
-                Get your Customized Appartment Plan
-              </h1>
-              <h2 className="w-[67%] px-5 text-[25px] text-[#1A1A1AB2] font-semibold">
-                Up to 40% offer
-              </h2>
-              <Button className="mx-5 bg-[#DADADA] w-[15%] text-black border-1 border-black group-hover:bg-[#D8A526] group-hover:text-white group-hover:border-[#D8A526]  rounded-[23px] text-[17px] p-3">
-                Shop now
-              </Button>
+        
+      <div className="p-4 sm:p-8 md:p-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 lg:gap-13">
+            
+        {getCustomizedPlans.map((ele, ind) => (
+          <div key={ind} className="h-[250px] sm:h-[280px] md:h-[300px] border group border-[#DADADA] bg-[#DADADA] rounded-[4px] overflow-hidden relative">
+              <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 p-3 sm:p-4 md:p-5">
+                <h1 className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[25px] font-semibold leading-tight">
+                  {ele.name}
+                </h1>
+                <h2 className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[25px] text-[#1A1A1AB2] font-semibold">
+                  Up to {ele.discounts[0].discountValue} {ele.discounts[0].discountType === 'percentage' ? '%' : '₹'} offer
+                </h2>
+                <Button className="bg-[#DADADA] w-fit text-black border border-black group-hover:bg-[#D8A526] group-hover:text-white group-hover:border-[#D8A526] rounded-[23px] text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px] px-3 sm:px-4 py-2 sm:py-3">
+                  Shop now
+                </Button>
+              </div>
+              <div className="absolute bottom-0 right-0 w-[40%] sm:w-[45%] md:w-[45%]">
+                <img
+                  src={ele.images[0].imageUrl[0]}
+                  alt="Customized Apartment Plan"
+                  className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-95"
+                />
+              </div>
+              <div className="absolute bottom-0 right-[45%] sm:right-[50%] md:right-[50%] w-[25%] sm:w-[30%] md:w-[32%]">
+                <img
+                  src={ele.images[0].imageUrl[1]}
+                  alt="Customized Apartment Plan"
+                  className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-95"
+                />
+              </div>
             </div>
-            <div className="relative w-[45%]   ">
-              <img
-                src="/assets/kamathenu Images//Categories/Home/Home_5.png"
-                alt=""
-                className="w-[52%] absolute bottom-[-119] left-108 transition-transform duration-300 group-hover:scale-x-97"
-              />
-            </div>
-            <div className="relative w-[32%] ">
-              <img
-                src="/assets/kamathenu Images//Categories/Home/Home_5.png"
-                alt=""
-                className=" absolute bottom-[-119] left-153 transition-transform duration-300 group-hover:scale-x-97"
-              />
-            </div>
-          </div>
-          <div className="w-[50%] h-[300px] border group border-[#DADADA] bg-[#DADADA] rounded-[4px] overflow-hidden  ">
-            <div className="flex flex-col gap-4 ">
-              <h1 className="w-[67%] px-5 pt-9 text-[25px] font-semibold ">
-                Buy Customized 2BHK Home Plan Design
-              </h1>
-              <h2 className="w-[67%] px-5 text-[25px] text-[#1A1A1AB2] font-semibold">
-                Up to 40% offer
-              </h2>
-              <Button className="mx-5 bg-[#DADADA] w-[15%] text-black border-1 border-black group-hover:bg-[#D8A526] group-hover:border-[#D8A526] group-hover:text-white  rounded-[23px] text-[17px] p-3">
-                Shop now
-              </Button>
-            </div>
-            <div className="relative w-[59%]">
-              <img
-                src="/assets/kamathenu Images//Categories/Home/Home_7.png"
-                alt=""
-                className=" absolute bottom-[-216] left-92 transition-transform duration-300 group-hover:scale-x-97 "
-              />
-            </div>
-          </div>
+          
+        ))}
         </div>
       </div>
 

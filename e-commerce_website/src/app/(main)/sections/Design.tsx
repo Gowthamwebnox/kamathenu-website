@@ -139,14 +139,14 @@ export default function FeaturedProducts() {
             <TabsContent key={category} value={category}>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-8 xl:gap-12 mb-8">
                 {designCategoryData.map((items:any,index:any)=>(
-                  <div key={index+1} className="flex flex-col border border-gray-300 rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative">
+                  <div key={index+1} onClick={() => router.push(`/product/${items.id}?name=${encodeURIComponent(items.name)}`)} className="flex cursor-pointer flex-col border border-gray-300 rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative">
                   <img
                     src={items.images[0].imageUrl[0]}
                     alt="design_home_1"
                     className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover"
                   />
                   <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] px-2 sm:px-3 font-semibold">
-                    {items.aboutProduct.about}
+                    {items.name}
                   </h1>
                   <div className="flex items-center gap-1 sm:gap-2 px-2">
                     <img

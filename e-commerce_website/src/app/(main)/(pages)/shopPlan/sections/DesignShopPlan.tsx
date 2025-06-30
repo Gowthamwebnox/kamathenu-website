@@ -65,7 +65,7 @@ export default function DesignShopPlan() {
                     {categories.map((category) => (
                         <TabsContent key={category} value={category}>
                             <div className="flex flex-row items-center gap-12 mb-8">
-                                <div className="flex flex-col border border-gray-300 rounded-t-[15px] gap-4 hover:cursor-pointer " onClick={() => { router.push(`/product/${1}`) }}>
+                                <div className="flex flex-col border border-gray-300 rounded-t-[15px] gap-4 hover:cursor-pointer " onClick={() => { router.push(`/product/${1}?name=${encodeURIComponent("Modern 3BHK Plan with Open Layout")}`) }}>
                                     <img
                                         src="/assets/kamathenu Images/Design/design_home_1.jpg"
                                         alt="design_home_1"
