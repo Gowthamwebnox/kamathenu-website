@@ -17,50 +17,6 @@ const categories = [
   "Infrastructure Plan",
 ];
 
-const designHome = [
-  {
-    id:1,
-    image:"/assets/kamathenu Images/Design/design_home_1.jpg",
-    title:"Modern 3BHK Plan with Open Layout",
-    constructor:"Dinesh Kumar",
-    experience:"2 Yrs of Exp",
-  },
-  {
-    id:2,
-    image:"/assets/kamathenu Images/Design/design_home_1.jpg",
-    title:"Modern 3BHK Plan with Open Layout",
-    constructor:"Dinesh Kumar",
-    experience:"2 Yrs of Exp",
-  },  
-  {
-    id:3,
-    image:"/assets/kamathenu Images/Design/design_home_1.jpg",
-    title:"Modern 3BHK Plan with Open Layout",
-    constructor:"Dinesh Kumar",
-    experience:"2 Yrs of Exp",
-  },    
-  {
-    id:4,
-    image:"/assets/kamathenu Images/Design/design_home_1.jpg",
-    title:"Modern 3BHK Plan with Open Layout",
-    constructor:"Dinesh Kumar",
-    experience:"2 Yrs of Exp",
-  },
-  {
-    id:5,
-    image:"/assets/kamathenu Images/Design/design_home_1.jpg",
-    title:"Modern 3BHK Plan with Open Layout",
-    constructor:"Dinesh Kumar",
-    experience:"2 Yrs of Exp",
-  },
-  {
-    id:6,
-    image:"/assets/kamathenu Images/Design/design_home_1.jpg",
-    title:"Modern 3BHK Plan with Open Layout",
-    constructor:"Dinesh Kumar",
-    experience:"2 Yrs of Exp",
-  },
-]
 
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
