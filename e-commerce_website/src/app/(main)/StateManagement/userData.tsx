@@ -4,7 +4,9 @@ import { persist } from "zustand/middleware";
 const userData=create( persist(
     (set) => ({
         userData: null,
+        userId:null,
         setUserData: (userData: string) => set({ userData }),
+        setUserId:(userId:string)=>set({userId}),
     }),
     {
         name: "user-data-storage", // name of localStorage key

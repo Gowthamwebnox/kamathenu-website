@@ -19,7 +19,8 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
       
     }
   },[])
-  const currentUser=userData.getState().userData  
+  const currentUser=(userData.getState()as any).userData  
+  localStorage.setItem('currentUserId',(userData.getState() as any).userId)
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -34,13 +35,22 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
   const handleAboutPage=async()=>{
     routers.push('/about')
   }
+  const handleHomePage=async()=>{
+    routers.push('/')
+  }
   const handleShopPlanPage=async()=>{
     routers.push('/shopPlan')
+  }
+  const handleContactPage=async()=>{
+    routers.push('/contact')
   }
   const handleLogout=async()=>{
     localStorage.removeItem('jwtToken')
     setShowLogin(true)
     routers.refresh()
+  }
+  const handleAddCartPage=async()=>{
+    routers.push('/addCart')
   }
 
   useEffect(() => {
@@ -85,10 +95,10 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           />
         </div>
         <div className="hidden md:flex gap-[50px]">
-          <h2>Home</h2>
+          <h2 onClick={handleHomePage} className="cursor-pointer ">Home</h2>
           <h2 onClick={handleAboutPage} className="cursor-pointer ">About Us</h2>
           <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
-          <h2>Contact Us</h2>
+          <h2 onClick={handleContactPage} className="cursor-pointer ">Contact Us</h2>
           <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -112,7 +122,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
             Log out
           </Button>}
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
-          <MdOutlineShoppingCart className="size-6" />
+          <MdOutlineShoppingCart className="size-6 cursor-pointer" onClick={()=>handleAddCartPage()} />
         </div>
       </div>
     </header>

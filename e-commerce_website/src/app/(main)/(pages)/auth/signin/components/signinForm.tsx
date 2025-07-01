@@ -10,6 +10,7 @@ import userData from '@/app/(main)/StateManagement/userData'
 
 const SigninForm = () => {
   const userDataStore=userData((state:any)=>state.setUserData)
+  const userIdStore=userData((state:any)=>state.setUserId)
     const router=useRouter()
   const[loginData,setloginData]=useState({
     email:'',
@@ -35,8 +36,8 @@ const SigninForm = () => {
       alert("Password is incorrect")
      }
      else{
-      console.log("response.data.UserData 🔥🔥🔥🔥🔥 ", response.data.user.name);
       userDataStore(response.data.user.name)
+      userIdStore(response.data.user.id)
       localStorage.setItem('jwtToken', response.data.Token);
       router.push('/')
      }

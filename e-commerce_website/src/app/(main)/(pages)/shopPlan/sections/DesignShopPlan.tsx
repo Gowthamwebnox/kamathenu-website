@@ -9,10 +9,10 @@ import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
 const categories = [
-  "Residential Designs",
+  "Residential Designes",
   "Commercial Plans",
-  "Industrial Plan",
-  "Institutional Plan",
+  "Industrial Plans",
+  "Institutional Plans",
   "Infrastructure Plan",
 ];
 
@@ -20,6 +20,7 @@ export default function DesignShopPlan() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   // Trigger on component mount
   useEffect(() => {
@@ -44,10 +45,7 @@ export default function DesignShopPlan() {
         limit: limit,
       };
 
-      const response: any = await axiosInstance.post(
-        "category/getDesignAndFeature",
-        payload
-      );
+      const response: any = await axiosInstance.post("category/getDesignAndFeature",payload);
       console.log("🔥🔥🔥🔥🔥🔥activeCategory🔥🔥🔥🔥🔥🔥", selectedCategory);
       console.log("🔥🔥🔥🔥🔥🔥designCategoryData🔥🔥🔥🔥🔥🔥", response.data);
       setDesignCategoryData(response.data);
@@ -114,7 +112,7 @@ export default function DesignShopPlan() {
                       alt="design_home_1"
                       className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover"
                     />
-                    <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] px-2 sm:px-3 font-semibold">
+                    <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] h-[55px] px-2 sm:px-3 font-semibold">
                       {items.name}
                     </h1>
                     <div className="flex items-center gap-1 sm:gap-2 px-2">
