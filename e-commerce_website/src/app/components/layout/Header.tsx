@@ -47,7 +47,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
   const handleLogout=async()=>{
     localStorage.removeItem('jwtToken')
     setShowLogin(true)
-    routers.refresh()
+    window.location.reload()
   }
   const handleAddCartPage=async()=>{
     routers.push('/addCart')

@@ -129,150 +129,199 @@ export default function ShopwithConfidence() {
         <h1 className="text-center mt-[62px] text-[29px] font-semibold">
           Categories
         </h1>
-        <div className="p-15 grid grid-cols-1 lg:grid-cols-12 grid-rows-4  gap-7">
-          {/* first */}
-          <div className=" group col-span-6 row-span-4 border rounded-xl overflow-hidden bg-[#FFF4DA]">
-            <div className=" text-[#333] flex flex-col gap-y-5 py-5 px-8 ">
-              <h1 className="text-[24px] text-right text-[#D8A526] font-semibold">
-                New Plans
-              </h1>
-              <h1 className="text-[28px] font-semibold text-right">
-                {getluxuryVillaPlans.length > 0
-                  ? getluxuryVillaPlans[0].name
-                  : "none"}
-              </h1>
-              <h1 className="text-[24px] text-gray-600  text-right font-semibold">
-                Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0].discounts[0].discountValue}${getluxuryVillaPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
-                  : '20%'} offer
-              </h1>
-              <Button
-                className="ml-[83%] bg-white w-[17%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[17px] p-6 "
-                style={{ borderColor: "#D8A526" }}
-              >
-                Shop now
-              </Button>
-
-              <div className="relative w-[110%] bottom-13 right- ">
+        <div className="flex h-full w-full items-center justify-center">
+          
+          <div className="grid h-full w-full gap-4 0 p-2 grid-cols-4 grid-rows-4 gap-7 rounded-lg px-14 ">
+            {/* first card start */}
+            <div className="group col-span-4 lg:col-span-2 row-span-4 rounded-lg shadow-md flex items-end justify-center bg-[#FFF4DA]">
+              <div className="md:w-[60%] ">
                 <img
                   src={getluxuryVillaPlans.length > 0 ? getluxuryVillaPlans[0].images[0].imageUrl[0]
                     : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
-                  alt="Luxury Villa Plan"
-                  className="absolute transition-transform duration-300 group-hover:scale-x-97 group-hover:scale-y-97 w-[40%] object-contain"
+                  alt="Compact Home Plan"
+                  className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[300px] lg:h-[522px] "
                 />
               </div>
-              <div className="relative top-9 left-169">
-                <img
-                  src={getluxuryVillaPlans.length > 0
-                    ? getluxuryVillaPlans[0].images[0]?.imageLayerout[0]
-                    : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
-                  alt="Home1_outlook"
-                  className="absolute  w-[140.49600219726562px] h-[204px] object-contain opacity-60"
-                />
+              <div className=" text-[#333] flex flex-col gap-y-45 py-5 px-4 items-center lg:items-end overflow-hidden">
+                <div className="flex flex-col gap-y-5 items-end">
+                  <h1 className="sm:text-[20px] md:text-[24px] lg:text-[28px] text-right text-[#D8A526] font-semibold">
+                    New Plans
+                  </h1>
+                  <h1 className="text-[12px] md:text-[24px] lg:text-[25px] font-semibold text-right">
+                    {getluxuryVillaPlans.length > 0
+                      ? getluxuryVillaPlans[0].name
+                      : "none"}
+                  </h1>
+                  <h1 className="sm:text-[20px] md:text-[28px] lg:text-[32px] text-gray-600  text-right font-semibold">
+                    Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0].discounts[0].discountValue}${getluxuryVillaPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
+                      : '20%'} offer
+                  </h1>
+                  <Button
+                    className="sm:text-[14px] md:text-[17px] w-[130px] lg:text-[19px] bg-white  text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] "
+                    style={{ borderColor: "#D8A526" }}
+                  >
+                    Shop now
+                  </Button>
+
+                </div>
+
+
+                <div className="sm:block hidden">
+                  <img
+                    src={getluxuryVillaPlans.length > 0
+                      ? getluxuryVillaPlans[0].images[0]?.imageLayerout[0]
+                      : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
+                    alt="Home3_outlook"
+                    className="  opacity-90 h-[182px]"
+                  />
+                </div>
+
               </div>
             </div>
-          </div>
-
-          {/* second */}
-          <div className=" col-span-6 row-span-4  lg:col-span-3 lg:row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
-            <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
-              <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
+            {/* second card start */}
+            <div className="group col-span-4 lg:col-span-1 row-span-2 rounded-lg shadow-md bg-[#FFE2C7]">
+              <h1 className="sm:text-[20px] md:text-[24px] lg:text-[20px] font-semibold text-right mr-4 my-4">
                 {getCompactHomePlans.length > 0
                   ? getCompactHomePlans[0].name : "none"}
               </h1>
-              <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-                Up to {getCompactHomePlans?.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
-                  : '20%'} offer
-              </h1>
-              <Button
-                className="ml-[73%] bg-white w-[12%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-13  "
-                style={{ borderColor: "#D8A526" }}
-              >
-                Shop now
-              </Button>
-              <div className="relative w-[97%] bottom-16 right-22 ">
-                <img
-                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[1] : "asdfa"}
-                  alt="Compact Home Plan"
-                  className="absolute transition-transform duration-300 group-hover:scale-x-97  "
-                />
-              </div>
-              <div className="relative w-[20%] top left-75  ">
-                <img
-                  src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageLayerout[0] : "asdfasd"}
-                  alt="Home4_outlook"
-                  className="absolute  opacity-90"
-                />
-              </div>
-            </div>
-          </div>
-          {/* third */}
-          <div className=" col-span-6 row-span-4 lg:col-span-3 lg:row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
-            <div className=" text-[#333] flex flex-col gap-y-1 py-5 px-6 w-full ">
-              <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                {getAppartmentPlans.length > 0 ? getAppartmentPlans[0].category.name : "none"}
-              </h1>
-              <h1 className="text-[17px] text-gray-600  text-right font-semibold">
-                Up to {getAppartmentPlans.length > 0
-                  ? `${getAppartmentPlans[0]?.discounts[0]?.discountValue}${getAppartmentPlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
-                  : '20%'} offer
-              </h1>
-              <Button
-                className="ml-[73%] bg-white w-[12%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-13  "
-                style={{ borderColor: "#D8A526" }}
-              >
-                Shop now
-              </Button>
-              <div className="relative w-[97%] bottom-44 right-27 ">
-                <img
-                  src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0]?.images[0]?.imageUrl[0] : "asdfa"}
-                  alt=""
-                  className="absolute transition-transform duration-300 group-hover:scale-x-97 "
-                />
-              </div>
-              <div className="relative w-[40%] top-5 left-58  ">
-                <img
-                  src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0]?.images[0]?.imageUrl[1] : "asdfa"}
-                  alt="Home3_outlook"
-                  className="  opacity-90"
-                />
-              </div>
-            </div>
-          </div>
-          {/* fourth */}
-          <div className=" col-span-6 row-span-2 group flex border rounded-xl overflow-hidden bg-[#FFE2C7]">
-            <div className=" text-[#333] flex flex-col gap-y-2 py-5 px-6 w-full ">
-              <h1 className="text-[24px] text-right text-[#0f0f0e] font-semibold">
-                {getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].category.name : "none"}
-              </h1>
-              <h1 className="text-[18px] text-gray-600  text-right font-semibold">
-                Up to {getIndependentHousePlans.length > 0
-                  ? `${getIndependentHousePlans[0]?.discounts[0]?.discountValue}${getIndependentHousePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
-                  : '0%'} offer
-              </h1>
-              <Button
-                className="ml-[83%] bg-white w-[17%] text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] text-[13px] px-11  "
-                style={{ borderColor: "#D8A526" }}
-              >
-                Shop now
-              </Button>
-              <div className="relative w-[75%] bottom-48 right-7 ">
-                <img
-                  src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0]?.images[0]?.imageUrl[0] : "asdfa"}
-                  alt="Independent House Plan"
-                  className="absolute transition-transform duration-300 group-hover:scale-x-97 "
-                />
-              </div>
-              <div className="relative left-8 bottom-1 ">
-                <img
-                  src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0]?.images[0]?.imageUrl[1] : "afdsa"}
-                  alt="Independent House Plan"
-                  className="absolute w-[14%] opacity-90"
-                />
-              </div>
-            </div>
-          </div>
+              <div className="  flex  items-center justify-end">
+                  <div className="md:w-[61%] ">
+                    <img
+                      src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[1]
+                        : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
+                      alt="Compact Home Plan"
+                      className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[158px] lg:h-[258px] "
+                    />
+                  </div>
+                  <div className=" text-[#333] flex flex-col gap-y-19  px-4 items-end overflow-hidden">
+                    <div className="flex flex-col gap-y-5 items-end">
 
+
+                      <h1 className="text-[15px] md:text-[28px] lg:text-[15px] text-gray-600  text-right font-semibold">
+                        Up to {getCompactHomePlans.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
+                          : '20%'} offer
+                      </h1>
+                      <Button
+                        className="sm:text-[14px] md:text-[17px] w-[90px] lg:text-[15px] bg-white  text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] py-2 "
+                        style={{ borderColor: "#D8A526" }}
+                      >
+                        Shop now
+                      </Button>
+
+                    </div>
+
+
+                    <div className="sm:block hidden">
+                      <img
+                        src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageLayerout[0]
+                          : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
+                        alt="Home3_outlook"
+                        className="  opacity-90 h-[82px]"
+                      />
+                    </div>
+
+                  </div>
+
+                </div>
+
+            </div>
+
+            {/* third card start */}
+            <div className="group col-span-4 lg:col-span-1 row-span-2 bg-[#D9E6FF] rounded-lg shadow-md ">
+              <h1 className="sm:text-[20px] md:text-[24px] lg:text-[20px] font-semibold text-right mr-4 my-4">
+                {getAppartmentPlans.length > 0
+                  ? getAppartmentPlans[0].name : "none"}
+              </h1>
+              <div className="  flex  items-center justify-end">
+                  <div className="md:w-[61%] ">
+                    <img
+                      src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0].images[0].imageUrl[1]
+                        : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
+                      alt="Compact Home Plan"
+                      className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[158px] lg:h-[258px]  "
+                    />
+                  </div>
+                  <div className=" text-[#333] flex flex-col gap-y-19  px-4 items-end overflow-hidden">
+                    <div className="flex flex-col gap-y-5 items-end">
+
+
+                      <h1 className="text-[15px] md:text-[28px] lg:text-[15px] text-gray-600  text-right font-semibold">
+                        Up to {getAppartmentPlans.length > 0 ? `${getAppartmentPlans[0].discounts[0].discountValue}${getAppartmentPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
+                          : '20%'} offer
+                      </h1>
+                      <Button
+                        className="sm:text-[14px] md:text-[17px] w-[90px] lg:text-[15px] bg-white  text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] py-2 "
+                        style={{ borderColor: "#D8A526" }}
+                      >
+                        Shop now
+                      </Button>
+
+                    </div>
+
+
+                    <div className="sm:block hidden">
+                      <img
+                        src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0].images[0].imageLayerout[0]
+                          : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
+                        alt="Home3_outlook"
+                        className="  opacity-90 h-[82px]"
+                      />
+                    </div>
+
+                  </div>
+
+                </div>
+            </div>
+            {/* fourth card start */}
+            <div className="group col-span-4 lg:col-span-2 row-span-2 bg-[#F9C6A3] rounded-lg shadow-md ">
+            <h1 className="sm:text-[20px] md:text-[24px] lg:text-[26px] font-semibold text-right mr-4 my-4">
+                {getIndependentHousePlans.length > 0
+                  ? getIndependentHousePlans[0].name : "none"}
+              </h1>
+              <div className="  flex  items-center justify-end">
+                  <div className="md:w-[90%] ">
+                    <img
+                      src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].images[0].imageUrl[1]
+                        : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
+                      alt="Compact Home Plan"
+                      className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[168px] lg:h-[258px] w-[80%] "
+                    />
+                  </div>
+                  <div className=" text-[#333] flex flex-col gap-y-10  px-4 items-end overflow-hidden">
+                    <div className="flex flex-col gap-y-5 items-end">
+
+
+                      <h1 className="text-[15px] md:text-[28px] lg:text-[15px] text-gray-600 mb-5 text-right font-semibold">
+                        Up to {getIndependentHousePlans.length > 0 ? `${getIndependentHousePlans[0].discounts[0].discountValue}${getIndependentHousePlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
+                          : '20%'} offer
+                      </h1>
+                      <Button
+                        className="sm:text-[14px] md:text-[17px] w-[90px] lg:text-[15px] bg-white  text-black border-1  border-black group-hover:bg-[#D8A526] group-hover:text-white  rounded-[23px] py-2 "
+                        style={{ borderColor: "#D8A526" }}
+                      >
+                        Shop now
+                      </Button>
+
+                    </div>
+
+
+                    <div className="sm:block hidden">
+                      <img
+                        src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].images[0].imageLayerout[0]
+                          : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
+                        alt="Home3_outlook"
+                        className="  opacity-90 h-[82px]"
+                      />
+                    </div>
+
+                  </div>
+
+                </div>
+            </div>
+
+          </div>
         </div>
+
       </div>
       {/* Desing Home Start */}
 
@@ -281,11 +330,11 @@ export default function ShopwithConfidence() {
       {/* Desing Home End */}
 
       <div>
-        
-      <div className="p-4 sm:p-8 md:p-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 lg:gap-13">
-            
-        {getCustomizedPlans.map((ele, ind) => (
-          <div key={ind} className="h-[250px] sm:h-[280px] md:h-[300px] border group border-[#DADADA] bg-[#DADADA] rounded-[4px] overflow-hidden relative">
+
+        <div className="p-4 sm:p-8 md:p-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 lg:gap-13">
+
+          {getCustomizedPlans.map((ele, ind) => (
+            <div key={ind} className="h-[250px] sm:h-[280px] md:h-[300px] border group border-[#DADADA] bg-[#DADADA] rounded-[4px] overflow-hidden relative">
               <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 p-3 sm:p-4 md:p-5">
                 <h1 className="text-[18px] sm:text-[20px] md:text-[22px] lg:text-[25px] font-semibold leading-tight">
                   {ele.name}
@@ -312,8 +361,8 @@ export default function ShopwithConfidence() {
                 />
               </div>
             </div>
-          
-        ))}
+
+          ))}
         </div>
       </div>
 
