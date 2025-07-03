@@ -5,24 +5,51 @@ import { Button } from "@/components/ui/button";
 
 
 const BecomeSellerHero = () => {
-  // const [activeTab, setActiveTab] = useState("overview");
-  // const tabItems = [
-  //   {
-  //     id: "overview",
-  //     title: "Overview",
-  //     content: "This is the Overview content.",
-  //   },
-  //   { id: "features", title: "Features", content: "Here are the Features." },
-  //   {
-  //     id: "specs",
-  //     title: "Specifications",
-  //     content: "These are the Specifications.",
-  //   },
-  // ];
+  
   return (
     <>
-      
-      <div className="md:relative top-0 w-[100%] h-[795px]  ">
+      {/* Mobile Layout (sm) */}
+      <div className="block md:hidden relative w-full h-[500px]">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('/assets/kamathenu Images/BecomeSellereLand_bg.jpg')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black opacity-60"></div>
+        </div>
+
+        {/* Foreground content */}
+        <div className="relative flex flex-col justify-center items-center py-16 h-full px-6 text-white text-center">
+          <h1 className="text-2xl font-semibold text-[#EFBB39] leading-tight">
+            Share Your Designs. Get Paid. Inspire Builders.
+          </h1>
+
+          <p className="mt-4 text-base font-light w-full leading-relaxed">
+            Join our marketplace and monetize your floor plans, elevations, and full construction drawings.
+          </p>
+          <div className="mt-6">
+            <Button
+              className="bg-[#D8A526] text-black text-base p-4 border hover:bg-white hover:text-[#D8A526]"
+              style={{ borderColor: "#D8A526" }}
+            >
+              Start Selling
+            </Button>
+          </div>
+        </div>
+
+        {/* why sell with us */}
+        <div className="mt-8 px-4">
+          <h1 className="w-full text-2xl text-center font-semibold">
+            Why Sell With Us
+          </h1>
+          <div className="border border-t-1 border-black w-16 mx-auto mt-3"></div>
+        </div>
+      </div>
+
+      {/* Desktop Layout (md and lg) - Same as original */}
+      <div className="hidden md:block md:relative top-0 w-[100%] h-[795px]">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -39,9 +66,9 @@ const BecomeSellerHero = () => {
             Share Your Designs. Get Paid. Inspire Builders.
           </h1>
 
-          <p className="mt-4 text-[25px] font-light w-[43%] ml-[30%]">
+          <p className="mt-4 text-[25px] font-light w-full text-center">
             Join our marketplace and monetize your floor plans, elevations,{" "}
-            <span className="ml-41">and full construction drawings.</span>
+            and full construction drawings.
           </p>
           <div className="ml-[45%] mt-9">
             <Button

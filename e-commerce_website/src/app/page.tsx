@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from "react";
-import Hero from "./(main)/sections/Hero";
-import ShopwithConfidence from "./(main)/sections/ShopwithConfidence";
+import Hero from "./(main)/LandingSections/Hero";
+import ShopwithConfidence from "./(main)/LandingSections/ShopwithConfidence";
 import Header from "./components/layout/Header";
 
 export default function Home() {

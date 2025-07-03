@@ -5,10 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { IoIosStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
 import StarRatings from 'react-star-ratings';
-import { Button } from "@/components/ui/button";
 
 const categories = [
   "Residential Designes",

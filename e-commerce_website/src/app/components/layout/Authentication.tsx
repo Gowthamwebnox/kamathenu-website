@@ -15,7 +15,7 @@ export default function AuthChecker() {
       }
       
       try {
-        const response = await axiosInstance.post('/me', payload);
+        const response:any = await axiosInstance.post('/me', payload);
         
         console.log("response🎊🎊🎊", response.data);
         if(response.data.status==404){
