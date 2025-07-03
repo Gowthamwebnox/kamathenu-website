@@ -18,7 +18,7 @@ export default function AuthChecker() {
         const response = await axiosInstance.post('/me', payload);
         
         console.log("response🎊🎊🎊", response.data);
-        if(response.data.status==401){
+        if(response.data.status==404){
           router.push('/auth/signin')
         }
 

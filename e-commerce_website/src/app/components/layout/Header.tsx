@@ -20,7 +20,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
     }
   },[])
   const currentUser=(userData.getState()as any).userData  
-  localStorage.setItem('currentUserId',(userData.getState() as any).userId)
+  // localStorage.setItem('currentUserId',(userData.getState() as any).userId)
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);

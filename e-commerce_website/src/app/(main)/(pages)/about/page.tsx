@@ -11,9 +11,6 @@ const AboutPage = () => {
     <>
     <Header headerColor={["black", "white"]} />
     <AboutHero/>
-    <YearsofExperience/>
-    <Service/>
-    <ChooseUs/>
     <Footer/>
     </>
   )

@@ -20,7 +20,7 @@ const AboutHero = () => {
   return (
     <>
       
-      <div className="md:relative top-0 w-[100%] h-[795px]  ">
+      <div className="md:relative top-0 w-[100%] h-[600px] lg:h-[900px]   ">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -32,8 +32,8 @@ const AboutHero = () => {
         </div>
 
         <div className="text-center relative top-1/2">
-            <h2 className="text-[33px] font-semibold text-white">About Us</h2>
-            <h1 className="text-[48px] font-semibold text-[#EFBB39]">Your Dream Home Starts Here</h1>
+            <h2 className="text-[20px] md:text-[33px] font-semibold text-white">About Us</h2>
+            <h1 className="text-[20px] md:text-[48px] font-semibold text-[#EFBB39]">Your Dream Home Starts Here</h1>
         </div>
 
         
