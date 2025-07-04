@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
 import StarRatings from 'react-star-ratings';
+import userData from "../StateManagement/userData";
+import { assert } from "console";
+import Wishlist from "../(pages)/wishlist/page";
 
 const categories = [
   "Residential Designes",
@@ -23,6 +26,7 @@ export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [wishlistStatus, setWishlistStatus] = useState<{[key: string]: boolean}>({});
 
   // Trigger on component mount
   useEffect(() => {
@@ -33,6 +37,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     if (activeCategory) {
       handleDesignHome();
+      
     }
   }, [activeCategory]);
 
@@ -53,10 +58,57 @@ export default function FeaturedProducts() {
       console.log("🔥🔥🔥🔥🔥🔥designCategoryData🔥🔥🔥🔥🔥🔥", response.data);
       setDesignCategoryData(response.data)
 
+      // Initialize wishlist status based on the data
+      const initialWishlistStatus: {[key: string]: boolean} = {};
+      response.data.forEach((item: any) => {
+        initialWishlistStatus[item.id] = item?.wishlist[0]?.productId === item?.id;
+      });
+      setWishlistStatus(initialWishlistStatus);
+
     } catch (error) {
       console.error("Error fetching design data:", error);
     }
   }
+  
+  const handleWishlist = async (productId: string, wishlistProductId: string, wishlistId: string) => {
+    console.log("🔥🔥🔥🔥🔥🔥wishlistId🔥🔥🔥🔥🔥🔥", wishlistId)
+    const payload = {
+      productId: productId,
+      wishlistProductId: wishlistProductId,
+      userId: localStorage.getItem("currentUserId"),
+      wishlistId: wishlistId
+    }
+    console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
+    
+    try {
+      if (wishlistId !== undefined) {
+        console.log("🎊🎊😎😎🎊🎊")
+        const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response.data)
+        console.log("🔥🔥🔥🔥🔥🔥handleWishlist🔥🔥🔥🔥🔥🔥")
+        
+        // Update local state to remove from wishlist
+        setWishlistStatus(prev => ({
+          ...prev,
+          [productId]: false
+        }));
+      } else {
+        console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
+        const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
+        
+        // Update local state to remove from wishlist
+        setWishlistStatus(prev => ({
+          ...prev,
+          [productId]: false
+        }));
+      }
+    } catch (error) {
+      console.error("Error handling wishlist:", error);
+    }
+  }
+
+
+
 
   const router = useRouter();
   // const [favs,setFavs]=useState(
@@ -69,6 +121,8 @@ export default function FeaturedProducts() {
 
   // }
   console.log("🔥🔥🔥🔥🔥🔥designCategoryData🔥🔥🔥🔥🔥🔥", designCategoryData)
+
+
 
   return (
     <div className="bg-white text-black py-8 px-4 md:px-8 my-[2rem] mb-0">
@@ -96,11 +150,12 @@ export default function FeaturedProducts() {
             <TabsContent key={category} value={category}>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-8 xl:gap-12 mb-8">
                 {designCategoryData.map((items: any, index: any) => (
-                  <div  key={index + 1} onClick={() => router.push(`/product/${items.id}?name=${encodeURIComponent(items.category.name)}`)} className="flex cursor-pointer flex-col border border-gray-300 rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative">
+                  <div  key={index + 1} className="flex cursor-pointer flex-col border border-gray-300 rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative">
                     <img
                       src={items.images[0].imageUrl[0]}
                       alt="design_home_1"
                       className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover"
+                      onClick={() => router.push(`/product/${items.id}?name=${encodeURIComponent(items.category.name)}`)}
                     />
                     <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] px-2 sm:px-3 font-semibold">
                       {items.name}
@@ -139,7 +194,12 @@ export default function FeaturedProducts() {
                       </div>
                     </div>
                     <div className="absolute top-2 right-2">
-                      <FaHeart className="size-4 sm:size-5 text-white" />
+                      <FaHeart 
+                        className={`size-4 sm:size-5 cursor-pointer transition-colors ${
+                          wishlistStatus[items.id] ? 'text-yellow-500' : 'text-white'
+                        }`}
+                        onClick={() => handleWishlist(items.id, items.wishlist[0]?.productId, items?.wishlist[0]?.id)}
+                      />
                     </div>
                   </div>
                 ))}

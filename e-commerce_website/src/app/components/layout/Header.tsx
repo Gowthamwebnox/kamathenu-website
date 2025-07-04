@@ -52,6 +52,9 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
   const handleAddCartPage=async()=>{
     routers.push('/addCart')
   }
+  const handleWishlistPage=async()=>{
+    routers.push('/wishlist')
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,10 +71,6 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
-
-  
-
-  
 
   return (
     <header
@@ -97,8 +96,9 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
         <div className="hidden md:flex gap-[50px]">
           <h2 onClick={handleHomePage} className="cursor-pointer ">Home</h2>
           <h2 onClick={handleAboutPage} className="cursor-pointer ">About Us</h2>
-          <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
-          <h2 onClick={handleContactPage} className="cursor-pointer ">Contact Us</h2>
+            <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
+            <h2 onClick={handleContactPage} className="cursor-pointer ">Contact Us</h2>
+            <h2 onClick={handleWishlistPage} className="cursor-pointer ">Wishlist</h2>
           <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">

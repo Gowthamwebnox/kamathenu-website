@@ -139,7 +139,7 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            <div className="">
+            <div className="hidden md:block">
               <Carousel
                 opts={{
                   align: "start",
