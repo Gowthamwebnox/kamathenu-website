@@ -27,6 +27,8 @@ export default function FeaturedProducts() {
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [wishlistStatus, setWishlistStatus] = useState<{[key: string]: boolean}>({});
+  const [limit, setLimit] = useState(1);
+  const [showMore, setShowMore] = useState(true);
 
   // Trigger on component mount
   useEffect(() => {
@@ -39,10 +41,9 @@ export default function FeaturedProducts() {
       handleDesignHome();
       
     }
-  }, [activeCategory]);
+  }, [activeCategory,limit]);
 
 
-  const [limit, setLimit] = useState(12);
 
   const handleDesignHome = async (category?: string) => {
     try {
@@ -64,6 +65,7 @@ export default function FeaturedProducts() {
         initialWishlistStatus[item.id] = item?.wishlist[0]?.productId === item?.id;
       });
       setWishlistStatus(initialWishlistStatus);
+      response.data.length===limit?setShowMore(true):setShowMore(false);
 
     } catch (error) {
       console.error("Error fetching design data:", error);
@@ -76,30 +78,31 @@ export default function FeaturedProducts() {
       productId: productId,
       wishlistProductId: wishlistProductId,
       userId: localStorage.getItem("currentUserId"),
-      wishlistId: wishlistId
+      wishlistId: wishlistId // with the help of this we can remove the product from the wishlist
     }
-    console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
-    
+    console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥")
+    console.log(payload)
+    console.log(wishlistStatus[productId])
     try {
-      if (wishlistId !== undefined) {
+      if (wishlistStatus[productId] === true) {
         console.log("🎊🎊😎😎🎊🎊")
         const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
-        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response.data)
-        console.log("🔥🔥🔥🔥🔥🔥handleWishlist🔥🔥🔥🔥🔥🔥")
         
-        // Update local state to remove from wishlist
+        console.log("productId", productId)
         setWishlistStatus(prev => ({
           ...prev,
           [productId]: false
         }));
+        payload.wishlistId='';
+        console.log("🔥🔥🔥🔥🔥🔥wishlistStatus🔥🔥🔥🔥🔥🔥", wishlistStatus)
       } else {
         console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
-        const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
+        const response: any = await axiosInstance.post("product/addWishlistProduct", payload)
         
         // Update local state to remove from wishlist
         setWishlistStatus(prev => ({
           ...prev,
-          [productId]: false
+          [productId]: true
         }));
       }
     } catch (error) {
@@ -206,9 +209,9 @@ export default function FeaturedProducts() {
               </div>
 
 
-              <Button className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 " style={{ borderColor: '#D8A526' }}>
-                <div className="flex items-center gap-1 "><span className="text-[19px]" >Show More</span> <IoIosArrowRoundForward className=" size-12" /></div>
-              </Button>
+              {showMore && <Button className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 " style={{ borderColor: '#D8A526' }}>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={()=>setLimit(limit+5)}><span className="text-[19px]"  >Show More</span> <IoIosArrowRoundForward className=" size-12" /></div>
+              </Button>}
 
 
             </TabsContent>
