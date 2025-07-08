@@ -7,6 +7,8 @@ import { Loader2, Link } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import userData from '@/app/(main)/StateManagement/userData'
+import { FcGoogle } from "react-icons/fc";
+import loginLogo from '../../../../../../../public/assets/kamathenu Images/login/Group 715.png'
 
 const SigninForm = () => {
   const userDataStore=userData((state:any)=>state.setUserData)
@@ -56,78 +58,22 @@ const SigninForm = () => {
   }
   return (
     
-    <div className="p-8 md:p-12 flex flex-col">
+    <div className=" px-8 my-35 lg:flex lg:pl-58  lg:pt-13 lg:ml-32">
+      <div className=" p-8 w-full lg: flex flex-col border-1 border-gray-300  lg:w-[40%] h-[550px] ">
       <h1 className="text-3xl font-bold mb-8 text-center">
         Login to your account
       </h1>
 
-      {/* {error && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertTitle className="flex justify-between items-center">
-            {error ? error : "An error occurred during sign in"}{" "}
-            {error == "Please verify your email" && (
-              <Button
-                className="text-blue-800 cursor-pointer"
-                variant={"link"}
-                onClick={handleResendVerificationMail}
-              >
-                Resent Mail
-              </Button>
-            )}
-          </AlertTitle>
-        </Alert>
-      )} */}
+      
 
-      <div className="grid grid-cols-3 gap-4 mb-6 w-[12rem]  mx-auto ">
+      <div className="flex justify-center mb-6 w-[12rem]  mx-auto ">
         <Button
-          variant="outline"
-        //   onClick={() => handleSocialSignIn("google")}
-        //   disabled={isLoading}
-          className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50 cursor-pointer" 
-          onClick={()=>{handleGoogleLogin()}}
-        >
-          {/* <Image
-            src={"/assets/icons/google.png"}
-            width={20}
-            height={20}
-            alt="google-icon"
-            className="rounded-full"
-          />  */}
-          
-          <img src="/assets/icons/google.png" alt="google-icon" className="rounded-full w-5 h-5" />
+          variant="outline" className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50 cursor-pointer" onClick={()=>{handleGoogleLogin()}}>
+            <FcGoogle />
           <span className="hidden ">Login with google</span>
         </Button>
 
-        {/* <Button
-          variant="outline"
-        //   onClick={() => handleSocialSignIn("apple")}
-        //   disabled={isLoading}
-          className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50"
-        >
-          <img
-            src={""}
-            width={20}
-            height={20}
-            alt="apple-icon"
-            className="rounded-full"
-          />
-          <span className="hidden ">Login with Apple</span>
-        </Button> */}
-        {/* <Button
-          variant="outline"
-        //   onClick={() => handleSocialSignIn("linkedin")}
-        //   disabled={isLoading}
-          className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50"
-        >
-          <img
-            src={"/assets/icons/linkedin.png"}
-            width={20}
-            height={20}
-            alt="linkedin-icon"
-            className="rounded-full"
-          />
-          <span className="hidden ">Login with Linkedin</span>
-        </Button> */}
+        
       </div>
 
       <div className="relative my-6">
@@ -254,15 +200,21 @@ const SigninForm = () => {
       <p className="mt-8 text-center text-sm text-gray-600" onClick={()=>{
         router.push('/auth/signup')
       }}>
-        Don't have an account?
-        <Link
-          href="/auth/signup"
-          className="font-medium text-red-600 hover:text-red-500"
-          
-        >
+        Don't have an account?<span className="ml-2 font-medium text-red-600 hover:text-red-500 cursor-pointer" onClick={()=>{
+          router.push('/auth/signup')
+        }}>
           create an account
-        </Link>
+        </span>
+        {/* <Link
+          href="/auth/signup"
+          className="font-medium text-red-600 hover:text-red-500">
+          create an account
+        </Link> */}
       </p>
+    </div>
+    <div className=" hidden  lg:block flex flex-col w-[500px] h-[550px] border-1 border-gray-300 rounded-lg p-12 bg-gray-100 relative right-2" >
+      <img src={loginLogo.src} alt="login-logo" className="w-[400px] h-[400px] object-cover" />
+    </div>
     </div>
   )
 }

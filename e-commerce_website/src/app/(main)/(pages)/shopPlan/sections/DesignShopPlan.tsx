@@ -32,7 +32,9 @@ export default function DesignShopPlan() {
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [wishlist, setWishlist] = useState<{[key:string]:boolean}>({});
+  const [limit,setLimit]=useState(1);
   const router = useRouter();
+  const[showMore,setShowMore]=useState(true);
   const [filter, setFilter] = useState({
     planType: '',
     bedroomType: '',
@@ -44,19 +46,14 @@ export default function DesignShopPlan() {
   }
   // Trigger on component mount
   useEffect(() => {
-    handleDesignHome();
-  }, []);
+    handleDesignHome(activeCategory,limit);
+  }, [activeCategory,limit]);
 
   // Trigger when activeCategory changes
-  useEffect(() => {
-    if (activeCategory) {
-      handleDesignHome();
-    }
-  }, [activeCategory]);
 
-  const [limit, setLimit] = useState(12);
 
-  const handleDesignHome = async (category?: string) => {
+
+  const handleDesignHome = async (category?: string,limit?:number) => {
     try {
       setIsLoading(true);
       const selectedCategory = category || activeCategory;
@@ -64,6 +61,7 @@ export default function DesignShopPlan() {
         categoryName: selectedCategory,
         limit: limit,
       };
+
 
       const response: any = await axiosInstance.post("category/getDesignAndFeature", payload);
       console.log("🔥🔥🔥🔥🔥🔥activeCategory🔥🔥🔥🔥🔥🔥", selectedCategory);
@@ -73,7 +71,8 @@ export default function DesignShopPlan() {
         initialWishlist[item.id]=item?.wishlist[0]?.productId===item?.id;
       })
       setDesignCategoryData(response.data);
-      setWishlist(initialWishlist)
+      setWishlist(initialWishlist);
+      response.data.length!==limit?setShowMore(false):setShowMore(true) 
     } catch (error) {
       console.error("Error fetching design data:", error);
     }
@@ -133,9 +132,9 @@ export default function DesignShopPlan() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <TabsList className="gap-10">
+              <TabsList className="flex flex-wrap justify-center px-4 sm:px-8 md:px-16 lg:px-32 xl:px-60 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12">
                 {categories.map((category) => (
-                  <TabsTrigger key={category} value={category}>
+                  <TabsTrigger key={category} value={category} className="text-sm sm:text-base md:text-lg">
                     {category}
                   </TabsTrigger>
                 ))}
@@ -221,9 +220,9 @@ export default function DesignShopPlan() {
                     </div>
                     <DialogFooter className="justify-center">
                       <DialogClose asChild  >
-                        <Button variant="outline">Cancel</Button>
+                        <Button className="bg-white text-[#D8A526] border hover:bg-white hover:text-[#D8A526] font-semibold cursor-pointer" style={{ borderColor: "#D8A526" }}>Cancel</Button>
                       </DialogClose>
-                      <Button type="submit" onClick={() => handleApplyFilters()}>Apply Filters</Button>
+                      <Button type="submit" className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] font-semibold cursor-pointer " style={{ borderColor: "#D8A526" }} onClick={() => handleApplyFilters()}>Apply Filters</Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -304,15 +303,15 @@ export default function DesignShopPlan() {
                 ))}
               </div>
 
-              <Button
+              {showMore && <Button
                 className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 "
                 style={{ borderColor: "#D8A526" }}
               >
-                <div className="flex items-center gap-1 ">
+                <div className="flex items-center gap-1 " onClick={()=>setLimit(limit+3)}>
                   <span className="text-[19px]">Show More</span>{" "}
                   <IoIosArrowRoundForward className=" size-12" />
                 </div>
-              </Button>
+              </Button>}
             </TabsContent>
           ))}
         </Tabs>

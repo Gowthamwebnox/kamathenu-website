@@ -110,8 +110,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           </Button>}
           {showLogin && <Button
             className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
-            style={{ borderColor: "#D8A526" }}
-          >
+            style={{ borderColor: "#D8A526" }}>
             Sign in
           </Button>}
           {!showLogin && <h1 className="text-white font-bold text-lg">{currentUser}</h1>}

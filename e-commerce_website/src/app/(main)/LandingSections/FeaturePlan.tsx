@@ -79,6 +79,8 @@ const FeaturePlan = () => {
               className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover cursor-pointer"
               onClick={() => routes.push(`/product/${items.id}?name=${encodeURIComponent(items.category.name)}`)}
             />
+            <div className="p-[12px] flex flex-col gap-4">
+              
             <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] px-2 sm:px-3 font-semibold">
               {items.aboutProduct.about}
             </h1>
@@ -101,7 +103,7 @@ const FeaturePlan = () => {
                       starDimension="35px"
                       starSpacing="1px"
                     />
-            <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 justify-between">
+            <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 justify-between items-center">
               <div>
                 <div className="text-gray-400 line-through flex items-center">
                   <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items.variants[0].discountPrice}</span>
@@ -111,17 +113,18 @@ const FeaturePlan = () => {
                 </div>
               </div>
               <div className="">
-                <img src="/assets/kamathenu Images/Design/shopNow.png" alt="" className="bg-[#FFFAEF] p-1 sm:p-2 rounded-[50%] size-8 sm:size-10 lg:size-12" />
+                <img src="/assets/kamathenu Images/Design/shopNow.png" alt="" className="bg-[#FFFAEF] p-1 sm:p-2 rounded-[50%] size-8 sm:size-10 lg:w-[60px] lg:h-[60px]" />
               </div>
             </div>
             <div className="absolute top-2 right-2">
               <FaHeart className={`size-4 sm:size-5 text-white ${wishlistStatus[items.id] ? 'text-yellow-500' : 'text-white'}`} onClick={() => handleWishlist(items.id, items.wishlist[0]?.productId, items?.wishlist[0]?.id)} />
             </div>
+            </div>
           </div>
         ))}
       </div>
       {showMore && <Button className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 " style={{ borderColor: '#D8A526' }}>
-        <div className="flex items-center gap-1 cursor-pointer " onClick={() => setLimit(limit + 5)}><span className="text-[19px]"  >Show More</span> <IoIosArrowRoundForward className=" size-12" /></div>
+        <div className="flex items-center gap-1 cursor-pointer " onClick={() => setLimit(limit + 5)}><span className="text-[19px]"  >See More</span> <IoIosArrowRoundForward className=" size-12" /></div>
       </Button>}
     </>
 
