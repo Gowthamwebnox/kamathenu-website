@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useRouter } from "next/navigation"
+import signupLogo from '../../../../../../../public/assets/kamathenu Images/signUp/Group 730.png'
 import { Loader2, Mail, Lock, User, Phone, Eye, EyeOff, Shield, Clock, Users } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
+import axiosInstance from "@/app/utils/axiosInstance"
 
 interface SignupDetails {
   name: string
@@ -117,13 +119,13 @@ const SignupForm = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
       // Mock response - replace with actual API response
-      const mockOtpId = "mock-otp-id-" + Date.now()
-      setGenerateOTP(mockOtpId)
+      const response: any = await axiosInstance.post("auth/verifyOTP", payload);
+      setGenerateOTP(response.data)
+      console.log(response.data)
       setOtpSent(true)
       setSuccessMessage("OTP sent successfully to your email!")
 
       // Clear success message after 3 seconds
-      setTimeout(() => setSuccessMessage(""), 3000)
     } catch (error) {
       setApiError("Failed to send OTP. Please try again.")
     } finally {
@@ -160,15 +162,18 @@ const SignupForm = () => {
         isEmailValidation: true,
         id: generateOTP,
       }
-
+console.log(payload)
       // Simulate API call - replace with your actual API
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      const response = await axiosInstance.post("auth/newuser", payload);
+      if(response.status===200){
+        setSuccessMessage("Account created successfully! Redirecting to login...")
+        setTimeout(() => {
+          router.push("/auth/login")
+        }, 2000)
+      }else{
+        setApiError("Failed to create account. Please try again.")
+      }
 
-      setSuccessMessage("Account created successfully! Redirecting to login...")
-
-      setTimeout(() => {
-        router.push("/auth/login")
-      }, 2000)
     } catch (error) {
       setApiError("Failed to create account. Please try again.")
     } finally {
@@ -184,10 +189,10 @@ const SignupForm = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto items-center min-h-screen">
-          {/* Form Section */}
-          <div className="flex items-center justify-center order-2 lg:order-1">
-            <Card className="w-full max-w-md shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <div className="flex max-w-7xl mx-auto items-center justify-center min-h-screen ">
+         
+          <div className="flex items-center justify-center order-2 lg:order-1 ">
+            <Card className="w-full max-w-md shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-none ">
               <CardHeader className="text-center pb-6">
                 <CardTitle className="text-3xl font-bold text-gray-800">Create Account</CardTitle>
                 <p className="text-gray-600 mt-2">Join us today and get started</p>
@@ -395,64 +400,22 @@ const SignupForm = () => {
           </div>
 
           {/* Image Section */}
-          <div className="flex items-center justify-center order-1 lg:order-2">
+          <div className="flex items-center justify-center items-center order-1 lg:order-2">
             <div className="w-full max-w-lg space-y-6">
               {/* Main Hero Image */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#D8A526] to-[#B8941F]">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#D8A526]/90 to-[#B8941F]/90"></div>
+              <div className="relative  right-2 rounded-[15px] overflow-hidden shadow-2xl border-none bg-gradient-to-br from-gray-100 to-[#B8941F] h-[770px] flex items-center justify-center">
+                <div className=""></div>
                 <img
-                  src="/placeholder.svg?height=500&width=400"
+                  src={signupLogo.src}
                   alt="Join our platform"
-                  className="w-full h-[500px] object-cover opacity-20"
+                  className="w-full h-[500px] object-cover object-center "
                 />
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-8 text-center">
-                  <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-6 backdrop-blur-sm">
-                    <Users className="w-12 h-12 text-white" />
-                  </div>
-                  <h2 className="text-3xl font-bold mb-4">Welcome to Our Platform</h2>
-                  <p className="text-lg opacity-90 leading-relaxed mb-8">
-                    Join thousands of users who trust us with their journey. Create your account today and unlock
-                    amazing features.
-                  </p>
-
-                  {/* Feature Stats */}
-                  <div className="grid grid-cols-3 gap-6 w-full max-w-sm">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold">10K+</div>
-                      <div className="text-sm opacity-80">Users</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold">99%</div>
-                      <div className="text-sm opacity-80">Uptime</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold">24/7</div>
-                      <div className="text-sm opacity-80">Support</div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* Feature Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/20">
-                  <Shield className="w-8 h-8 text-[#D8A526] mx-auto mb-2" />
-                  <h4 className="font-semibold text-gray-800 text-sm">Secure</h4>
-                  <p className="text-xs text-gray-600 mt-1">Bank-level security</p>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/20">
-                  <Clock className="w-8 h-8 text-[#D8A526] mx-auto mb-2" />
-                  <h4 className="font-semibold text-gray-800 text-sm">Fast</h4>
-                  <p className="text-xs text-gray-600 mt-1">Quick setup</p>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-white/20">
-                  <Users className="w-8 h-8 text-[#D8A526] mx-auto mb-2" />
-                  <h4 className="font-semibold text-gray-800 text-sm">Trusted</h4>
-                  <p className="text-xs text-gray-600 mt-1">By thousands</p>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>

@@ -3,25 +3,30 @@ import ApiService from '@/app/components/apiCall';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Link } from 'lucide-react';
+import { Loader2, Link, Divide } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import userData from '@/app/(main)/StateManagement/userData'
 import { FcGoogle } from "react-icons/fc";
 import loginLogo from '../../../../../../../public/assets/kamathenu Images/login/Group 715.png'
+import Header from '@/app/components/layout/Header';
+import Footer from '@/app/components/layout/Footer';
 
 const SigninForm = () => {
   const userDataStore=userData((state:any)=>state.setUserData)
   const userIdStore=userData((state:any)=>state.setUserId)
     const router=useRouter()
+    
   const[loginData,setloginData]=useState({
     email:'',
     password:''
   })
+  
   const setData=(event:React.ChangeEvent<HTMLInputElement>)=>{
         setloginData({...loginData,[event.target.name]:event.target.value})
   }
 
+  
   const handleLogin=async()=>{
      console.log(loginData+">>>>>>>>>>>>>>")
      const payload:{data:any}={
@@ -51,14 +56,20 @@ const SigninForm = () => {
     const response:any = await axiosInstance.get('auth/google');
     const urlParams = new URLSearchParams(window.location.search);
     const token:string|null = urlParams.get('token');
+    const userId:string|null = urlParams.get('userId');
+    console.log(userId+">>>>>>>>>>>>>>>>>>>>>>>>>USERID<<<<<<<<<<<<<<<<<<<<<<")
     console.log(token+">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
     localStorage.setItem('jwtToken', token||'');
+    localStorage.setItem('currentUserId', userId||'');
     
     
   }
   return (
     
-    <div className=" px-8 my-35 lg:flex lg:pl-58  lg:pt-13 lg:ml-32">
+    
+   <div>
+    <Header headerColor={["#D8A526", "white"]} />
+       <div className=" px-8 my-35 lg:flex lg:pl-58  lg:pt-13 lg:ml-42">
       <div className=" p-8 w-full lg: flex flex-col border-1 border-gray-300  lg:w-[40%] h-[550px] ">
       <h1 className="text-3xl font-bold mb-8 text-center">
         Login to your account
@@ -216,6 +227,10 @@ const SigninForm = () => {
       <img src={loginLogo.src} alt="login-logo" className="w-[400px] h-[400px] object-cover" />
     </div>
     </div>
+    <Footer />
+   </div>
+
+
   )
 }
 

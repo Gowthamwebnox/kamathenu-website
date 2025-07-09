@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import userData from "@/app/(main)/StateManagement/userData";
+import { FaUser } from "react-icons/fa6";
+import axiosInstance from "@/app/utils/axiosInstance";
 
 type HeaderProps = {
   headerColor?: [string, string]; // [backgroundColor, textColor]
@@ -20,15 +22,28 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
     }
   },[])
   const currentUser=(userData.getState()as any).userData  
-  // localStorage.setItem('currentUserId',(userData.getState() as any).userId)
+  localStorage.setItem('currentUserId',(userData.getState() as any).userId)
+  
+  const userId=localStorage.getItem('currentUserId')
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   
+  const [getUserData,setUserData]=useState<any>()
+  const [showUserName,setShowUserName]=useState(false)
+  
     const routers=useRouter()
     const [showLogin,setShowLogin]=useState(true)
+    useEffect(()=>{
+      fetchUserData()
+    },[])
     
-
+    const fetchUserData=async()=>{
+      const userId=localStorage.getItem('currentUserId')
+      const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
+      setUserData(response.data)
+      setShowUserName(true)
+    }
      const handleBecomeSellerPage=async()=>{
      routers.push('/becomeSeller')
   }
@@ -44,11 +59,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
   const handleContactPage=async()=>{
     routers.push('/contact')
   }
-  const handleLogout=async()=>{
-    localStorage.removeItem('jwtToken')
-    setShowLogin(true)
-    window.location.reload()
-  }
+  
   const handleAddCartPage=async()=>{
     routers.push('/addCart')
   }
@@ -70,8 +81,12 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+
   }, [lastScrollY]);
 
+  const handleUserProfile=()=>{
+    routers.push('/userProfile')
+  }
   return (
     <header
       className={`transition-transform duration-500 ease-in-out w-full z-50 text-white backdrop-blur-md opacity-90 ${
@@ -102,7 +117,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">
-          {showLogin && <Button
+          {/* {showLogin && <Button
             className="bg-white text-[#D8A526] border hover:bg-[#D8A526] hover:text-white"
             style={{ borderColor: "#D8A526" }}
           >
@@ -119,7 +134,10 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
             style={{ borderColor: "#D8A526" }} onClick={()=>handleLogout()}
           >
             Log out
-          </Button>}
+          </Button>} */}
+{/* Toshow the userName */}
+{/* {userId!==null?getUserData?.name:'UserProfile'} */}
+          <div onClick={handleUserProfile}><FaUser size={25} className="cursor-pointer " /></div>
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
           <MdOutlineShoppingCart className="size-6 cursor-pointer" onClick={()=>handleAddCartPage()} />
         </div>

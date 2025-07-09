@@ -1,0 +1,201 @@
+"use client"
+
+import Header from "@/app/components/layout/Header"
+import Footer from "@/app/components/layout/Footer"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import userProfileLogo from '../../../../../public/assets/kamathenu Images/BAS/Seller/seller_img1.jpg'
+import { useEffect, useState } from "react"
+import {
+    ChevronRight,
+    ChevronDown,
+    ChevronUp,
+    Gift,
+    Headphones,
+    Home,
+    LogOut,
+    User,
+    MapPin,
+    CreditCard,
+    Package,
+    Truck,
+    CheckCircle,
+    Clock,
+    AlertCircle,
+} from "lucide-react";
+import CustomerSupport from "./CustomerSupport"
+import { Button } from "@/components/ui/button"
+import axiosInstance from "@/app/utils/axiosInstance"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+
+
+const userProfile = () => {
+    const router=useRouter()
+    const [activeTab, setActiveTab] = useState("orders");
+    const [userData, setUserData] = useState()
+    const [userProfile, setUserProfile] = useState({
+        firstName:"",
+        lastName:"",
+        email:"",
+        phone:"",
+
+
+    })
+    useEffect(()=>{
+        if(localStorage.getItem('jwtToken')!==null){
+        getUserProfile()
+        }
+        else{
+            router.push('/auth/signin')
+        }
+    },[])
+
+    const getUserProfile=async()=>{
+        const userId=localStorage.getItem('currentUserId')
+        const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
+        setUserData(response.data)
+        setUserProfile({
+            firstName:response.data.firstName,
+            lastName:response.data.lastName,
+            email:response.data.email,
+            phone:response.data.number,
+        })
+    }
+    const setData=(e:any)=>{
+        setUserProfile({...userProfile,[e.target.id]:e.target.value})
+    }
+    
+    const handleUpdateProfile=async()=>{
+        const userId=localStorage.getItem('currentUserId')
+        const response:any= await axiosInstance.put(`auth/updateUser/${userId}`,userProfile)
+        if(response.status===200){
+            toast.success("Profile updated successfully")
+        }
+    }
+    const handleLogout=async()=>{
+        localStorage.removeItem('jwtToken')
+        localStorage.removeItem('currentUserId')
+        localStorage.removeItem('currentUser')
+        window.location.reload()
+        
+      }
+    
+    return (
+        <div>
+            <Header headerColor={["#D8A526", "white"]} />
+
+            <div className="mt-32">
+                <div className="w-[50%] ml-[25%]">
+
+                    <div className="flex items-center gap-2 border-2 py-5 px-4 rounded-t-lg">
+                        <div className="flex items-center ">
+                            <img src={userData?.image} alt="userProfile" className="w-16 h-16 rounded-full object-center" />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <h1>{userData?.name}</h1>
+                            <h1>{userData?.email}</h1>
+                        </div>
+                    </div>
+                    <div className="border-2 rounded-b-lg flex">
+
+                        <div className=" border-r-2">
+                            <nav>
+                                {[
+                                    { tab: "orders", icon: Home, label: "Orders" },
+                                    { tab: "support", icon: Headphones, label: "Customer Support" },
+                                    { tab: "profile", icon: User, label: "Profile" },
+                                ].map(({ tab, icon: Icon, label }) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        className={`flex items-center gap-3 p-4 w-full text-left ${activeTab === tab
+                                            ? "bg-gray-100 border-l-4 border-blue-500"
+                                            : "hover:bg-gray-50"
+                                            } transition-colors`}
+                                    >
+                                        <Icon className="h-5 w-5 text-gray-700" />
+                                        <span className="font-medium text-gray-800">{label}</span>
+                                    </button>
+                                ))}
+
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center gap-3 p-4 hover:bg-gray-50 border-t w-full transition-colors"
+                                >
+                                    <LogOut className="text-red-500 h-5 w-5" />
+                                    <span className="font-medium text-red-500">Logout</span>
+                                </button>
+                            </nav>
+                        </div>
+                        <div className="w-full">
+                            {activeTab === "orders" && (
+                                <div className="w-full">
+                                    <h1>Orders</h1>
+                                </div>
+                            )}
+                            {activeTab === "support" && <CustomerSupport />}
+                            {activeTab === "profile" && (
+                                <div className="w-full">
+                                    <div className='w-full   py-5 px-4 border-b-1 border-gray-200'>
+                                        <h1 className="mb-4">Profile</h1>
+                                        {/* userProfile Start */}
+                                        <div className="flex items-center justify-between w-full">
+
+                                            <div className="flex items-center gap-2 rounded-t-lg">
+                                                <div className="flex items-center ">
+                                                    <img src={userProfileLogo.src} alt="userProfile" className="w-16 h-16 rounded-full object-center" />
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <h1>{userData?.name}</h1>
+                                                    <h1>{userData?.email}</h1>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Button>Edit Profile</Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-full py-5 px-4 flex flex-col gap-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className="grid w-full max-w-sm items-center gap-3">
+                                                <Label htmlFor="firstName">First Name</Label>
+                                                <Input type="text" id="firstName" value={userProfile.firstName} placeholder="Frist Name" onChange={(e)=>setData(e)}/>
+                                            </div>
+                                            <div className="grid w-full max-w-sm items-center gap-3">
+                                                <Label htmlFor="lastName">Last Name</Label>
+                                                <Input type="text" id="lastName" value={userProfile.lastName} placeholder="Last Name" onChange={(e)=>setData(e)} />
+                                            </div>
+
+
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="grid w-full max-w-sm items-center gap-3">
+                                                <Label htmlFor="email">Email</Label>
+                                                <Input type="text" id="email" value={userProfile.email} placeholder="Email Address" onChange={(e)=>setData(e)} />
+                                            </div>
+                                            <div className="grid w-full max-w-sm items-center gap-3">
+                                                <Label htmlFor="phone">Phone Number</Label>
+                                                <Input type="text" id="phone" value={userProfile.phone} placeholder="Phone Number" onChange={(e)=>setData(e)} />
+                                            </div>
+
+
+                                        </div>
+                                        <Button onClick={handleUpdateProfile}>Submit</Button>
+                                    </div>
+
+
+                                </div>
+
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <Footer />
+        </div>
+    )
+}
+
+export default userProfile
