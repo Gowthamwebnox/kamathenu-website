@@ -15,16 +15,27 @@ type HeaderProps = {
 };
 
 export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
+
+  
+ 
+  const userId=localStorage?.getItem('currentUserId')
+  const [user,setUser]=useState(null)
   useEffect(()=>{
     if(localStorage.getItem('jwtToken')!=null){
+      fetchUser()
       setShowLogin(false)
       
     }
   },[])
+  const fetchUser=async()=>{
+    const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
+    console.log("response💕💕💕💕💕💕💕💕💕❤️❤️❤️❤️❤️❤️💕💕💕💕💕💕💕💕")
+    setUser(response.data)
+    console.log(response)
+  }
   const currentUser=(userData.getState()as any).userData  
   localStorage.setItem('currentUserId',(userData.getState() as any).userId)
   
-  const userId=localStorage.getItem('currentUserId')
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);

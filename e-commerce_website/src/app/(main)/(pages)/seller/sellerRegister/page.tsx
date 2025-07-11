@@ -159,33 +159,25 @@ export default function SellerRegistration() {
 
   return (
 
-    <div>
+    <div className="bg-white" >
       <Header headerColor={["white", "black"]} />
       <div className="flex flex-col items-center justify-center">
         <div className="w-full max-w-7xl mx-2 overflow-hidden  rounded-xl bg-white shadow-[0px_2px_8.9px_0px_rgba(0,0,0,0.25)]  mt-[8rem]">
           <div className="flex flex-col lg:flex-row">
             <div className="w-full lg:w-1/2 relative">
-              <StepperForm
-                // formState={formState}
-                // schema={formSchema}
-                // tabSchemas={tabSchemas}
-                // onSubmit={handleSubmit}
-                // className="relative"
-                // onFormStateChange={setFormState}
-                // currentTab={currentTab}
-                // onTabChange={setCurrentTab}
-              >
-                <div className="sticky top-0 z-10 bg-white">
-                  <div className="p-2 pb-0">
+              
+            <div className="sticky top-0 z-10 bg-white">
+                  {/* <div className="p-2 pb-0">
                     <Tabs className="mb-0">
                       <Tab index={0}>Account Information</Tab>
                       <Tab index={1}>Bank Details</Tab>
                       <Tab index={2}>Review & Submit</Tab>
                     </Tabs>
-                  </div>
+                  </div> */}
+                  
                 </div>
 
-                <div className="max-h-[calc(100vh-20rem)] min-h-[calc(100vh-30rem)] overflow-y-auto p-[2rem]">
+                {/* <div className="max-h-[calc(100vh-20rem)] min-h-[calc(100vh-30rem)] overflow-y-auto p-[2rem]">
                   <TabContent index={0}>
                     {({ index }) => (
                       <div className="flex flex-col gap-6 w-full">
@@ -449,7 +441,7 @@ export default function SellerRegistration() {
                   </TabContent>
                 </div>
 
-                {currentTab !== 0 && (
+                {0 !== 0 && (
                   <div className="sticky bottom-0 z-10 border-t py-[1rem]">
                     <Actions
                       showIcons={true}
@@ -458,8 +450,7 @@ export default function SellerRegistration() {
                       className="rounded-lg px-6 py-0 transition-colors"
                     />
                   </div>
-                )}
-              </StepperForm>
+                  )} */}
             </div>
 
             <div className="hidden bg-gray-100 lg:block lg:w-1/2 rounded-2xl">
@@ -489,3 +480,43 @@ export default function SellerRegistration() {
     </div>
   );
 }
+
+
+// import { AppWindowIcon, CodeIcon } from "lucide-react"
+
+// import { Button } from "@/components/ui/button"
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card"
+// import { Input } from "@/components/ui/input"
+// import { Label } from "@/components/ui/label"
+// import {
+//   Tabs,
+//   TabsContent,
+//   TabsList,
+//   TabsTrigger,
+// } from "@/components/ui/tabs"
+
+// export function TabsDemo() {
+//   return (
+    // <div className="flex w-full max-w-sm flex-col gap-6">
+      {/* <Tabs defaultValue="account">
+        <TabsList>
+          <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="password">Password</TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">
+         
+        </TabsContent>
+        <TabsContent value="password">
+          
+        </TabsContent>
+      </Tabs> */}
+    // </div>
+//   )
+// }
