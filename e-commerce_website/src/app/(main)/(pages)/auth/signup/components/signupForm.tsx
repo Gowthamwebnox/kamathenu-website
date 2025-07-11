@@ -168,7 +168,7 @@ console.log(payload)
       if(response.status===200){
         setSuccessMessage("Account created successfully! Redirecting to login...")
         setTimeout(() => {
-          router.push("/auth/login")
+          router.push("/auth/signin")
         }, 2000)
       }else{
         setApiError("Failed to create account. Please try again.")
@@ -390,7 +390,7 @@ console.log(payload)
                   Already have an account?{" "}
                   <button
                     className="text-[#D8A526] hover:text-[#B8941F] font-semibold"
-                    onClick={() => router.push("/auth/login")}
+                    onClick={() => router.push("/auth/signin")}
                   >
                     Sign in here
                   </button>

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthChecker from "./components/layout/Authentication";
 import { Toaster } from "@/components/ui/sonner";
+import SessionProviderWrapper from "./components/SessionProviderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <AuthChecker />
-
-        <Toaster position="top-right" />
+        {/* <SessionProviderWrapper> */}
+          {children}
+          <AuthChecker />
+          <Toaster position="top-right" />
+        {/* </SessionProviderWrapper> */}
       </body>
     </html>
   );

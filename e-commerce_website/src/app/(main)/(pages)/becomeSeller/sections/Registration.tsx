@@ -1,7 +1,10 @@
+"use client"
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const RegistrationPage = () => {
+  const router = useRouter();
   return (
     <>
       {/* Mobile and Tablet Layout (sm and md) */}
@@ -15,7 +18,7 @@ const RegistrationPage = () => {
               Tap into builders, homeowners, and contractors looking for ready-made plans. Tap into builders, homeowners, and contractors looking for ready-made plans.
             </h1>
             <Button
-              className="bg-white mt-6 text-base py-4 px-6 text-[#D8A526] border hover:bg-[#D8A526] hover:text-white rounded-lg"
+              className="bg-white mt-6 text-base py-4 px-6 text-[#D8A526] border hover:bg-[#D8A526] hover:text-white rounded-lg" 
             >
               Register Now
             </Button>
@@ -42,9 +45,7 @@ const RegistrationPage = () => {
               ready-made plans. Tap into builders, homeowners, and contractors
               looking for ready-made plans.
             </h1>
-            <Button
-              className="bg-white mt-7 text-[20px] py-6 text-[#D8A526] border hover:bg-[#D8A526] hover:text-white"
-            >
+            <Button className="bg-white mt-7 text-[20px] py-6 text-[#D8A526] border hover:bg-[#D8A526] hover:text-white cursor-pointer" onClick={()=>router.push("/seller/sellerRegister")}>
               Register Now
             </Button>
           </div>

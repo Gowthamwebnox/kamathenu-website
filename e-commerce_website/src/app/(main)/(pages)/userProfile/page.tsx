@@ -172,7 +172,7 @@ const userProfile = () => {
                                         <div className="flex items-center gap-2">
                                             <div className="grid w-full max-w-sm items-center gap-3">
                                                 <Label htmlFor="email">Email</Label>
-                                                <Input type="text" id="email" value={userProfile.email} placeholder="Email Address" onChange={(e)=>setData(e)} />
+                                                <Input type="text" id="email" value={userProfile.email} placeholder="Email Address"  />
                                             </div>
                                             <div className="grid w-full max-w-sm items-center gap-3">
                                                 <Label htmlFor="phone">Phone Number</Label>
