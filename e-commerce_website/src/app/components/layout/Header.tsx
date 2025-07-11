@@ -16,65 +16,65 @@ type HeaderProps = {
 
 export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
 
-  
- 
-  const userId=localStorage?.getItem('currentUserId')
-  const [user,setUser]=useState(null)
-  useEffect(()=>{
-    if(localStorage.getItem('jwtToken')!=null){
+
+
+  const userId = localStorage?.getItem('currentUserId')
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+    if (localStorage.getItem('jwtToken') != null) {
       fetchUser()
       setShowLogin(false)
-      
+
     }
-  },[])
-  const fetchUser=async()=>{
-    const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
+  }, [])
+  const fetchUser = async () => {
+    const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
     console.log("response💕💕💕💕💕💕💕💕💕❤️❤️❤️❤️❤️❤️💕💕💕💕💕💕💕💕")
     setUser(response.data)
     console.log(response)
   }
-  const currentUser=(userData.getState()as any).userData  
-  localStorage.setItem('currentUserId',(userData.getState() as any).userId)
-  
-  console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊",currentUser)
+  const currentUser = (userData.getState() as any).userData
+  localStorage.setItem('currentUserId', (userData.getState() as any).userId)
+
+  console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊", currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  
-  const [getUserData,setUserData]=useState<any>()
-  const [showUserName,setShowUserName]=useState(false)
-  
-    const routers=useRouter()
-    const [showLogin,setShowLogin]=useState(true)
-    useEffect(()=>{
-      fetchUserData()
-    },[])
-    
-    const fetchUserData=async()=>{
-      const userId=localStorage.getItem('currentUserId')
-      const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
-      setUserData(response.data)
-      setShowUserName(true)
-    }
-     const handleBecomeSellerPage=async()=>{
-     routers.push('/becomeSeller')
+
+  const [getUserData, setUserData] = useState<any>()
+  const [showUserName, setShowUserName] = useState(false)
+
+  const routers = useRouter()
+  const [showLogin, setShowLogin] = useState(true)
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+
+  const fetchUserData = async () => {
+    const userId = localStorage.getItem('currentUserId')
+    const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
+    setUserData(response.data)
+    setShowUserName(true)
   }
-  const handleAboutPage=async()=>{
+  const handleBecomeSellerPage = async () => {
+    routers.push('/becomeSeller')
+  }
+  const handleAboutPage = async () => {
     routers.push('/about')
   }
-  const handleHomePage=async()=>{
+  const handleHomePage = async () => {
     routers.push('/')
   }
-  const handleShopPlanPage=async()=>{
+  const handleShopPlanPage = async () => {
     routers.push('/shopPlan')
   }
-  const handleContactPage=async()=>{
+  const handleContactPage = async () => {
     routers.push('/contact')
   }
-  
-  const handleAddCartPage=async()=>{
+
+  const handleAddCartPage = async () => {
     routers.push('/addCart')
   }
-  const handleWishlistPage=async()=>{
+  const handleWishlistPage = async () => {
     routers.push('/wishlist')
   }
 
@@ -89,20 +89,19 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
       setLastScrollY(currentScrollY);
     };
 
-   
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
 
   }, [lastScrollY]);
 
-  const handleUserProfile=()=>{
+  const handleUserProfile = () => {
     routers.push('/userProfile')
   }
   return (
     <header
-      className={`transition-transform duration-500 ease-in-out w-full z-50 text-white backdrop-blur-md opacity-90 ${
-        showHeader ? "translate-y-0" : "-translate-y-full"
-      }`}
+      className={`transition-transform duration-500 ease-in-out w-full z-50 text-white backdrop-blur-md opacity-90 ${showHeader ? "translate-y-0" : "-translate-y-full"
+        }`}
       style={{
         backgroundColor: headerColor[0],
         color: headerColor[1],
@@ -122,9 +121,9 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
         <div className="hidden md:flex gap-[50px]">
           <h2 onClick={handleHomePage} className="cursor-pointer ">Home</h2>
           <h2 onClick={handleAboutPage} className="cursor-pointer ">About Us</h2>
-            <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
-            <h2 onClick={handleContactPage} className="cursor-pointer ">Contact Us</h2>
-            <h2 onClick={handleWishlistPage} className="cursor-pointer ">Wishlist</h2>
+          <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
+          <h2 onClick={handleContactPage} className="cursor-pointer ">Contact Us</h2>
+          <h2 onClick={handleWishlistPage} className="cursor-pointer ">Wishlist</h2>
           <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -146,11 +145,20 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
           >
             Log out
           </Button>} */}
-{/* Toshow the userName */}
-{/* {userId!==null?getUserData?.name:'UserProfile'} */}
-          <div onClick={handleUserProfile}><FaUser size={25} className="cursor-pointer " /></div>
+          {/* Toshow the userName */}
+          {/* {userId!==null?getUserData?.name:'UserProfile'} */}
+          <div className="flex items-center gap-2">
+            <div onClick={handleUserProfile}>
+              <FaUser size={25} className="cursor-pointer" />
+            </div>
+            <div>
+              {localStorage.getItem("jwtToken") !== null && user && user.firstName
+                ? user.firstName
+                : "Account"}
+            </div>
+          </div>
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
-          <MdOutlineShoppingCart className="size-6 cursor-pointer" onClick={()=>handleAddCartPage()} />
+          <MdOutlineShoppingCart className="size-6 cursor-pointer" onClick={handleAddCartPage} />
         </div>
       </div>
     </header>
