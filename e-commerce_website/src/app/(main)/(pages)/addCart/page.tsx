@@ -7,14 +7,15 @@ import { TiDelete } from "react-icons/ti";
 import userData from "../../StateManagement/userData";
 import axiosInstance from "@/app/utils/axiosInstance";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function AddCart() {
     const currentUser = localStorage.getItem('currentUserId')
-    const [cartData, setCartData] = useState([])
-    const [subTotal, setSubTotal] = useState(0)
-    const [discount, setDiscount] = useState(0)
-    const [platformFee, setPlatformFee] = useState(0)
-    const [totalAmount, setTotalAmount] = useState(0)
+    const [cartData, setCartData] = useState<any[]>([])
+    const [subTotal, setSubTotal] = useState<number>(0)
+    const [discount, setDiscount] = useState<number>(0)
+    const [platformFee, setPlatformFee] = useState<number>(0)
+    const [totalAmount, setTotalAmount] = useState<number>(0)
     if (currentUser !== null) {
         useEffect(() => {
             getCartData()
@@ -52,7 +53,32 @@ export default function AddCart() {
             console.error("Error removing item from cart:", error)
         }
     }
-    console.log(currentUser)
+    const handleOrderCart=async()=>{
+        console.log(cartData)
+        const userOrderData:any=[]
+        cartData.forEach((item:any)=>{
+            userOrderData.push({
+                productId:item.product.id,
+                amount:item.product.variants[0].discountPrice,
+                sellerId:item?.product?.sellerId
+
+            })
+        })
+        const payload={
+            userId:localStorage.getItem('currentUserId'),
+            userOrderData:userOrderData,
+            totalAmount:totalAmount,
+            cart:true
+        }
+        console.log(payload)
+        const response:any=await axiosInstance.post('order/createOrder',payload)
+        if(response.status===200){
+            toast.success(response.data.message)
+            window.location.href='/addCart'
+        }else{
+            toast.error(response.data.message)
+        }
+    }
     return (
         <div>
             <Header headerColor={["#D8A526", "white"]} />
@@ -153,7 +179,7 @@ export default function AddCart() {
                         <div className="flex justify-center items-center p-3">
                             <Button
                                 className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] text-sm md:text-base font-semibold px-4 py-2 md:px-6 md:py-3 w-full"
-                                style={{ borderColor: "#D8A526" }}>
+                                style={{ borderColor: "#D8A526" }} onClick={()=>{handleOrderCart()}}>
                                 Proceed to Checkout
                             </Button>
                         </div>

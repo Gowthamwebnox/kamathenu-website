@@ -16,6 +16,7 @@ import { FaHeart } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import axiosInstance from "@/app/utils/axiosInstance";
+import { toast } from "sonner";
 
 
 
@@ -65,7 +66,7 @@ const ProductDetails = () => {
 
 
   const changePhoto = (alt: string) => {
-
+    
     const getMainPhoto = mainPhoto
     if (alt === 'img1') {
 
@@ -83,6 +84,35 @@ const ProductDetails = () => {
       setMainPhoto(img3)
       setImg3(getMainPhoto)
     }
+  }
+  const handleAddCart=async(productId:string)=>{
+    const payload={
+      userId:localStorage.getItem('currentUserId'),
+      productId:productId,
+    }
+    const response:any=await axiosInstance.post('cart/addCart',payload)
+    console.log(response.data.cartData)
+    if(response.status===200){
+      toast.success(response.data.message)
+    }else{
+      toast.error(response.data.cartData.message)
+    }
+  }
+
+  const handleOrderNow=async(productId:string,amount:number,sellerId:string)=>{
+    const userOrderData:any=[]
+    userOrderData.push({
+      productId:productId,
+      amount:amount,
+      sellerId:sellerId,
+    })
+    const payload={
+      userId:localStorage.getItem('currentUserId'),
+      userOrderData:userOrderData,
+      totalAmount:amount,
+    }
+    console.log(payload)
+    const response:any=await axiosInstance.post('order/createOrder',payload)
   }
 
   return (
@@ -168,14 +198,15 @@ const ProductDetails = () => {
 
                 <div className="flex gap-4">
                   <Button
-                    className="bg-[#D86A26] w-30 text-[19px] p-7 font-normal text-white border hover:bg-white hover:text-[#D8A526]"
-                    style={{ borderColor: "#D8A526" }}
+                    className="bg-[#D86A26] w-30 text-[19px] p-7 font-normal text-white border hover:bg-white hover:text-[#D8A526] cursor-pointer"
+                    style={{ borderColor: "#D8A526" }} 
+                    onClick={()=>{handleOrderNow(productDetails?.id,productDetails?.variants[0].discountPrice,productDetails?.seller.id)}}
                   >
                     Order Now
                   </Button>
                   <Button
-                    className="bg-[#D8A526] w-40 text-[19px] p-7 text-white border hover:bg-white hover:text-[#D8A526]"
-                    style={{ borderColor: "#D8A526" }}
+                    className="bg-[#D8A526] w-40 text-[19px] p-7 text-white border hover:bg-white hover:text-[#D8A526] cursor-pointer"
+                    style={{ borderColor: "#D8A526" }} onClick={()=>{handleAddCart(productDetails?.id)}}
                   >
                     Add to Cart <MdOutlineShoppingCart className="size-6 ml-2" />
                   </Button>

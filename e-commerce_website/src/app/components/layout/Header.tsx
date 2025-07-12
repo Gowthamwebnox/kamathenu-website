@@ -152,7 +152,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
               <FaUser size={25} className="cursor-pointer" />
             </div>
             <div>
-              {localStorage.getItem("jwtToken") !== null && user && user.firstName
+              {localStorage.getItem("jwtToken") !== null && user && user?.firstName
                 ? user.firstName
                 : "Account"}
             </div>
