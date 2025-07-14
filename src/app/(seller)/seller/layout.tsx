@@ -42,7 +42,8 @@ function AuthenticatedContent({ children }: { children: React.ReactNode }) {
             </div> */}
           </div>
           <div className="flex items-center gap-4">
-            <LinkButton href="/seller/productForm" variant="default" className="bg-red-600 hover:bg-red-700 text-white">
+            <LinkButton href="/seller/productForm" variant="default" className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
+            style={{ borderColor: "#D8A526" }}>
               <Plus className="h-4 w-4" /> Add Product
             </LinkButton>
             <div onClick={handleProfileClick}

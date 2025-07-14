@@ -423,13 +423,13 @@ const AnalysisPage = () => {
 
                             <div className="flex space-x-3 text-gray-400 font-medium text-sm">
                                 <span
-                                    className={`cursor-pointer ${selectedTab === "week" ? "text-red-500 font-semibold" : ""}`}
+                                    className={`cursor-pointer ${selectedTab === "week" ? "text-yellow-600 font-semibold" : ""}`}
                                     onClick={() => setSelectedTab("week")}
                                 >
                                     Week
                                 </span>
                                 <span
-                                    className={`cursor-pointer ${selectedTab === "month" ? "text-black font-semibold" : ""}`}
+                                    className={`cursor-pointer ${selectedTab === "month" ? "text-yellow-600 font-semibold" : ""}`}
                                     onClick={() => setSelectedTab("month")}
                                 >
                                     Month
@@ -442,8 +442,8 @@ const AnalysisPage = () => {
                                 <AreaChart data={selectedTab === "week" ? weekData : monthData}>
                                     <defs>
                                         <linearGradient id="redFill" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="red" stopOpacity={0.6} />
-                                            <stop offset="100%" stopColor="red" stopOpacity={0.1} />
+                                            <stop offset="0%" stopColor="#D8A526" stopOpacity={0.6} />
+                                            <stop offset="100%" stopColor="#D8A526" stopOpacity={0.1} />
                                         </linearGradient>
                                     </defs>
 
@@ -462,16 +462,16 @@ const AnalysisPage = () => {
                                         tickCount={5}
                                     />
 
-                                    <Tooltip content={<CustomTooltip />} cursor={{ stroke: "red", strokeWidth: 1 }} />
+                                    <Tooltip content={<CustomTooltip />} cursor={{ stroke: "yellow", strokeWidth: 1 }} />
 
                                     <Area
                                         type="monotone"
                                         dataKey="value"
                                         fill="url(#redFill)"
-                                        stroke="red"
+                                        stroke="white"
                                         strokeWidth={2}
                                         dot={{ r: 6 }}
-                                        activeDot={{ r: 8, fill: "red", stroke: "red", strokeWidth: 2 }}
+                                        activeDot={{ r: 8, fill: "#D8A526", stroke: "#D8A526", strokeWidth: 2 }}
                                     />
                                 </AreaChart>
                             </ResponsiveContainer>
@@ -510,7 +510,7 @@ const AnalysisPage = () => {
                                         {monthbardata.map((entry, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
-                                                fill={index === hoverIndex ? "#52C41A" : "#E5E7EB"} // Only hover effect
+                                                fill={index === hoverIndex ? "#FFF5DB" : "#E5E7EB"} // Only hover effect
                                                 onMouseEnter={() => setHoverIndex(index)}
                                                 onMouseLeave={() => setHoverIndex(null)}
                                             />
