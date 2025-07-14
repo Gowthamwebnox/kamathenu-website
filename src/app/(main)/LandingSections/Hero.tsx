@@ -278,7 +278,7 @@ export default function Hero() {
       image: "/assets/kamathenu Images/Landing_page_Scroll/scroll_2.png",
       alt: "Scroll Design",
       className:
-        "absolute top-20 left-5  rotate-[-90deg] w-[250px] md:w-[250px] lg:w-[300px] opacity-95 z-10",
+        "absolute top-24 left-5  rotate-[-90deg] w-[250px] md:w-[250px] lg:w-[300px] opacity-95 z-10",
     },
     {
       id: 3,
@@ -310,7 +310,7 @@ export default function Hero() {
         </div>
 
         {/* Foreground content */}
-        <div className="relative flex flex-col justify-center items-start px-5 sm:px-10 md:px-20 text-white py-20 md:py-[240px]">
+        <div className="relative flex flex-col justify-center items-start pl-5 sm:pl-10 md:pl-20 text-white py-20 md:py-[240px]">
           <h1 className="text-[32px] sm:text-[45px] md:text-[55px] font-normal">
             Build Your Dream Home
           </h1>
@@ -484,47 +484,9 @@ export default function Hero() {
                 ))}
               </Tabs>
 
-              {/* <div className="flex flex-col sm:flex-row flex-wrap gap-4 bg-white text-black border border-gray-200 rounded-b-[10px] p-4">
-                <Select>
-                  <SelectTrigger className="w-full sm:w-[180px] border-0">
-                    <SelectValue placeholder="Property Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                  </SelectContent>
-                </Select>
+              
 
-                <Select>
-                  <SelectTrigger className="w-full sm:w-[180px] border-0">
-                    <SelectValue placeholder="Price Range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-full sm:w-[180px] border-0">
-                    <SelectValue placeholder="Sq ft Range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Button className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2" style={{ borderColor: "#D8A526" }}>
-                  Search
-                  <IoSearch />
-                </Button>
-              </div> */}
-
-              <div className="flex flex-col  mt-10">
+              <div className="flex flex-col mt-10">
                 <div className="flex gap-16 sm:gap-32 md:gap-[220px]">
                   <h1 className="text-[40px] sm:text-[50px] md:text-[61px] font-medium">
                     1.2K +
@@ -543,7 +505,9 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            <div className="hidden md:block">
+            <div className="w-[40%] rounded-lg">
+              
+            <div className="hidden md:block  ">
               <Carousel
                 opts={{
                   align: "start",
@@ -577,11 +541,11 @@ export default function Hero() {
                     return (
                       <CarouselItem
                         key={index}
-                        className={`md:basis-1/2 lg:1/2 ml-8 ${isActive ? 'scale-110 z-20' : 'scale-90 opacity-60'}`}
+                        className={`md:basis-1/2 lg:1/2 ml-8 ${isActive ? 'scale-110 z-20 ' : 'scale-90 opacity-60'}`}
                       >
                         <div className="">
                           {/* Card with semi-transparent background */}
-                          <Card className="bg-black/30 backdrop-blur-sm border-gray-400/20 p-0 ">
+                          <Card className="bg-black/30 backdrop-blur-sm border-gray-400/20 p-0 rounded-lg ">
                             <CardContent className="flex aspect-square items-center justify-center p-9 rounded-lg bg-white/10">
                               {/* Semi-transparent background overlay */}
                               <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-300/20 rounded-lg"></div>
@@ -600,6 +564,7 @@ export default function Hero() {
                   )}
                 </CarouselContent>
               </Carousel>
+            </div>
             </div>
           </div>
 
