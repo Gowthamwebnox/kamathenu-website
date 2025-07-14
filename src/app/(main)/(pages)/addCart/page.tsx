@@ -4,28 +4,32 @@ import Header from "@/app/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TiDelete } from "react-icons/ti";
-import userData from "../../StateManagement/userData";
 import axiosInstance from "@/app/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function AddCart() {
-    const currentUser = localStorage.getItem('currentUserId')
+    const [currentUser, setCurrentUser] = useState<string | null>(null)
     const [cartData, setCartData] = useState<any[]>([])
     const [subTotal, setSubTotal] = useState<number>(0)
     const [discount, setDiscount] = useState<number>(0)
     const [platformFee, setPlatformFee] = useState<number>(0)
     const [totalAmount, setTotalAmount] = useState<number>(0)
-    if (currentUser !== null) {
-        useEffect(() => {
-            getCartData()
-        }, [])
-    }
+    
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const userId = localStorage.getItem('currentUserId')
+            setCurrentUser(userId)
+            if (userId) {
+                getCartData(userId)
+            }
+        }
+    }, [])
 
-    const getCartData = async () => {
+    const getCartData = async (userId: string) => {
         try {
             const payload: any = {
-                userId: currentUser as string
+                userId: userId
             }
             const response: any = await axiosInstance.post(`/cart/cartPage`, payload)
             console.log("Full response:", response.data)
@@ -33,8 +37,8 @@ export default function AddCart() {
             setCartData(response.data.cart || [])
             setSubTotal(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].price), 0))
             setDiscount(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].price), 0) - response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].discountPrice), 0))
-            setPlatformFee(response.data.cart.reduce((acc: any, item: any) => acc +2, 0))
-            setTotalAmount(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].discountPrice), 0) + response.data.cart.reduce((acc: any, item: any) => acc +2, 0))
+            setPlatformFee(response.data.cart.reduce((acc: any) => acc +2, 0))
+            setTotalAmount(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].discountPrice), 0) + response.data.cart.reduce((acc: any) => acc +2, 0))
         } catch (error) {
             console.error("Error fetching cart data:", error)
             setCartData([])
@@ -48,7 +52,9 @@ export default function AddCart() {
             }
             const response: any = await axiosInstance.post(`/cart/removeUserCart`, payload)
             console.log(response.data)
-            getCartData()
+            if (currentUser) {
+                getCartData(currentUser)
+            }
         } catch (error) {
             console.error("Error removing item from cart:", error)
         }
@@ -65,7 +71,7 @@ export default function AddCart() {
             })
         })
         const payload={
-            userId:localStorage.getItem('currentUserId'),
+            userId: currentUser,
             userOrderData:userOrderData,
             totalAmount:totalAmount,
             cart:true

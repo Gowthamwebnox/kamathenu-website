@@ -3,15 +3,11 @@
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import { IoIosStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
 import StarRatings from 'react-star-ratings';
-import userData from "../StateManagement/userData";
-import { assert } from "console";
-import Wishlist from "../(pages)/wishlist/page";
 
 const categories = [
   "Residential Designes",
@@ -25,7 +21,8 @@ const categories = [
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  
   const [wishlistStatus, setWishlistStatus] = useState<{[key: string]: boolean}>({});
   const [limit, setLimit] = useState(1);
   const [showMore, setShowMore] = useState(true);
@@ -47,7 +44,7 @@ export default function FeaturedProducts() {
 
   const handleDesignHome = async (category?: string) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const selectedCategory = category || activeCategory;
       const payload = {
         categoryName: selectedCategory,
@@ -87,7 +84,7 @@ export default function FeaturedProducts() {
       if (wishlistStatus[productId] === true) {
         console.log("🎊🎊😎😎🎊🎊")
         const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
-        
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         console.log("productId", productId)
         setWishlistStatus(prev => ({
           ...prev,
@@ -98,7 +95,7 @@ export default function FeaturedProducts() {
       } else {
         console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
         const response: any = await axiosInstance.post("product/addWishlistProduct", payload)
-        
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         // Update local state to remove from wishlist
         setWishlistStatus(prev => ({
           ...prev,

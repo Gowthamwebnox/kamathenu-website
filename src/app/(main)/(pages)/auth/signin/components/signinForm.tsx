@@ -1,11 +1,10 @@
 'use client'
-import ApiService from '@/app/components/apiCall';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Link, Divide } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import userData from '@/app/(main)/StateManagement/userData'
 import { FcGoogle } from "react-icons/fc";
 import loginLogo from '../../../../../../../public/assets/kamathenu Images/login/Group 715.png'
@@ -211,7 +210,7 @@ const SigninForm = () => {
       <p className="mt-8 text-center text-sm text-gray-600" onClick={()=>{
         router.push('/auth/signup')
       }}>
-        Don't have an account?<span className="ml-2 font-medium text-red-600 hover:text-red-500 cursor-pointer" onClick={()=>{
+        Don&apos;t have an account?<span className="ml-2 font-medium text-red-600 hover:text-red-500 cursor-pointer" onClick={()=>{
           router.push('/auth/signup')
         }}>
           create an account

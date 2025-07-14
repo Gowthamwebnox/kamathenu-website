@@ -79,7 +79,7 @@ export default function Contact() {
 
             <div className="pt-28 ">
                 <h1 className="text-center text-4xl font-bold">Get in touch with us</h1>
-                <p className="text-center mt-7">We're here to help you with any questions or concerns you may have. Please fill out the form below and we'll get back to you as soon as possible.</p>
+                <p className="text-center mt-7">We&apos;re here to help you with any questions or concerns you may have. Please fill out the form below and we&apos;ll get back to you as soon as possible.</p>
                 <div className="grid grid-cols-12 items-center gap-8  lg:mx-42 my-35 border-1 border-none shadow-lg bg-white px-12 py-12 rounded-[10px] ">
                     <div className="border-1 rounded-[8px]  col-span-12 md:col-span-5  flex flex-col gap-8 px-20 py-20 bg-[#D8A526] text-white ">
                         <h1 className="text-[21px] font-semibold">Contact Information</h1>

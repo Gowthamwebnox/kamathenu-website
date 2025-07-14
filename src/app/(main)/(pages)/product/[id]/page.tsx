@@ -14,7 +14,7 @@ import {
 
 import { FaHeart } from "react-icons/fa";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import axiosInstance from "@/app/utils/axiosInstance";
 import { toast } from "sonner";
 import {
@@ -28,10 +28,9 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Label } from "@/components/ui/label";
 
 const ProductDetails = () => {
-  const router = useRouter();
+  
   const { id } = useParams();
   const searchParams = useSearchParams();
   const productName = searchParams.get("name");
@@ -119,9 +118,6 @@ const ProductDetails = () => {
       setErrorValidation(true);
     }
   };
-  const handleDescription = () => {
-    return <div></div>;
-  };
   const handleOrder = () => {
     setShowDescription(true);
   };
@@ -149,6 +145,7 @@ const ProductDetails = () => {
         "order/createOrder",
         payload
       );
+      console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
 
       setShowDescription(false);
     }
@@ -302,7 +299,7 @@ const ProductDetails = () => {
                           Description <span className="text-red-600">*</span>
                         </DialogTitle>
                         <DialogDescription>
-                          Describe what 'design' means in your own words.
+                          Describe what &apos;design&apos; means in your own words.
                         </DialogDescription>
                       </DialogHeader>
                       <Textarea
@@ -347,7 +344,7 @@ const ProductDetails = () => {
         <div className="bg-white rounded-lg shadow  border-1 border-gray-400 m-5 md:m-19  ">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="flex flex-wrap justify-center px-4 sm:px-8 md:px-16 lg:px-32 xl:px-60 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 border-b border-gray-300 ">
-              {tabs.map((category, ind) => (
+              {tabs.map((category) => (
                 <TabsTrigger
                   key={category}
                   value={category}
@@ -358,8 +355,8 @@ const ProductDetails = () => {
               ))}
             </TabsList>
 
-            {tabs.map((t: any, ind: any) => (
-              <TabsContent key={ind} value={t}>
+            {tabs.map((t: any) => (
+              <TabsContent key={t} value={t}>
                 <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8 px-11 pt-3 pb-11">
                   {/* Left Column */}
                   <div className="ml-15">

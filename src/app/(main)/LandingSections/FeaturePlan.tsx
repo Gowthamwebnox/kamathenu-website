@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { IoIosStar, IoIosArrowRoundForward } from "react-icons/io";
+import {  IoIosArrowRoundForward } from "react-icons/io";
 import StarRatings from "react-star-ratings";
 
 const FeaturePlan = () => {
@@ -28,6 +28,7 @@ const FeaturePlan = () => {
     setFeaturedPlans(response.data)
     const initialWishlistStatus: { [key: string]: boolean } = {};
     response.data.forEach((item: any, ele: any) => {
+      console.log("🔥🔥🔥🔥🔥🔥item🔥🔥🔥🔥🔥🔥", ele)
       initialWishlistStatus[item.id] = item?.wishlist[0]?.productId === item?.id;
     })
     setWishlistStatus(initialWishlistStatus);
@@ -47,6 +48,7 @@ const FeaturePlan = () => {
     try {
       if (wishlistStatus[productId] === true) {
         const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         setWishlistStatus(prev => ({
           ...prev,
           [productId]: false
@@ -55,6 +57,7 @@ const FeaturePlan = () => {
         console.log("🔥🔥🔥🔥🔥🔥wishlistStatus🔥🔥🔥🔥🔥🔥", wishlistStatus)
       } else {
         const response: any = await axiosInstance.post("product/addWishlistProduct", payload)
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         setWishlistStatus(prev => ({
           ...prev,
           [productId]: true

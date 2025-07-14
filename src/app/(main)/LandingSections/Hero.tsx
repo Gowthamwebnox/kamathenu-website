@@ -255,13 +255,9 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabHero";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import axiosInstance from "@/app/utils/axiosInstance";
 
 export default function Hero() {
 
@@ -270,7 +266,7 @@ export default function Hero() {
   
   const [userType, setUserType] = useState(['House', 'Villa', 'Flat'])
   const [activeUserType, setActiveUserType] = useState(userType[0])
-  const [scrollImage, setScrollImage] = useState([
+  const scrollImage = [
     {
       id: 1,
       image: "/assets/kamathenu Images/Landing_page_Scroll/scroll_1.png",
@@ -304,7 +300,7 @@ export default function Hero() {
       className:
         "absolute top-20 lg:top-26 rotate-[-90deg] w-[250px] md:w-[250px] lg:w-[300px] opacity-95 z-10",
     },
-  ]);
+  ];
   const [currentSlide, setCurrentSlide] = useState(0)
   return (
     <>

@@ -6,9 +6,6 @@ import Design from "./Design";
 import FeaturePlan from "./FeaturePlan";
 import Footer from "@/app/components/layout/Footer";
 import axiosInstance from "@/app/utils/axiosInstance";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { FaHeart } from "react-icons/fa";
-import { IoIosStar, IoIosArrowRoundForward } from "react-icons/io";
 
 
 

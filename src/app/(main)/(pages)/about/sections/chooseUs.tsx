@@ -46,7 +46,7 @@ export default function ChooseUs() {
                     </div>
 
                     <div className='flex flex-col gap-4 mt-8'>
-                        <h1 className='text-2xl font-semibold text-center'>Let's Build Something Great</h1>
+                        <h1 className='text-2xl font-semibold text-center'>Let&apos;s Build Something Great</h1>
                         <Button className='bg-white text-black text-base px-6 py-4 rounded-[8px] mx-auto'>Order Now</Button>
                     </div>
                 </div>
@@ -93,7 +93,7 @@ export default function ChooseUs() {
 
                     </div>
                     <div className='flex justify-between mt-25'>
-                        <h1 className='text-[44px] font-semibold'>Let's Build Something Great</h1>
+                        <h1 className='text-[44px] font-semibold'>Let&apos;s Build Something Great</h1>
                         <Button className='bg-white text-black text-[20px] px-10 py-7 rounded-[8px]'>Order Now</Button>
                     </div>
 

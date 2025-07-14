@@ -91,7 +91,7 @@ const DesignUploading = () => {
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col gap-4 border-b border-gray-300 pb-4 mt-2">
                     <p className="text-sm text-gray-500 ml-7 leading-relaxed">
-                      You'll be paid directly to your bank account or UPI every week/month.
+                      You&apos;ll be paid directly to your bank account or UPI every week/month.
                     </p>
                   </AccordionContent>
                 </AccordionItem>

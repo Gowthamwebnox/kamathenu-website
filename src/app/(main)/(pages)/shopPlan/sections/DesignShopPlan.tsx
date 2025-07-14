@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import { IoIosStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
 import StarRatings from "react-star-ratings";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -30,7 +29,8 @@ const categories = [
 export default function DesignShopPlan() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  var setIsLoading=false
   const [wishlist, setWishlist] = useState<{[key:string]:boolean}>({});
   const [limit,setLimit]=useState(1);
   const router = useRouter();
@@ -93,7 +93,7 @@ export default function DesignShopPlan() {
       if (wishlist[productId] === true) {
         console.log("🎊🎊😎😎🎊🎊")
         const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
-        
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         console.log("productId", productId)
         setWishlist(prev => ({
           ...prev,
@@ -104,7 +104,7 @@ export default function DesignShopPlan() {
       } else {
         console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
         const response: any = await axiosInstance.post("product/addWishlistProduct", payload)
-        
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         // Update local state to remove from wishlist
         setWishlist(prev => ({
           ...prev,

@@ -2,11 +2,8 @@
 'use client'
 import Header from "@/app/components/layout/Header";
 import axiosInstance from "@/app/utils/axiosInstance";
-import { TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/table";
-import { Table } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { TiDelete } from "react-icons/ti";
 import StarRatings from "react-star-ratings";
 
 export default function Wishlist() {

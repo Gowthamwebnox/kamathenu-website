@@ -1,12 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { type StepperFormState } from "@/components/ui/stepper-form";
 
 interface SellerRegistrationState {
-  formState: StepperFormState;
+  formState: any;
   currentTab: number;
   isSubmitted: boolean;
-  setFormState: (state: StepperFormState) => void;
+  setFormState: (state: any) => void;
   onFormChange: ({
     tabIndex,
     fieldName,
@@ -21,7 +20,7 @@ interface SellerRegistrationState {
   resetForm: () => void;
 }
 
-const initialFormState: StepperFormState = [
+  const initialFormState: any = [
   {
     tabName: "Login",
     fields: {
@@ -79,7 +78,7 @@ export const useSellerRegistrationStore = create<SellerRegistrationState>()(
       setFormState: (state) => set({ formState: state }),
       onFormChange: ({ tabIndex, fieldName, value }) =>
         set((state) => {
-          const updatedState = state.formState.map((tab, index) =>
+          const updatedState = state.formState.map((tab: any, index: any      ) =>
             index === tabIndex
               ? {
                   ...tab,

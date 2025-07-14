@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import kamathenuLogo from "../../../../public/assets/kamathenu Images/kamathenuLogo.png";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import userData from "@/app/(main)/StateManagement/userData";
@@ -14,46 +13,78 @@ type HeaderProps = {
   headerColor?: [string, string]; // [backgroundColor, textColor]
 };
 
+interface UserResponse {
+  id: string;
+  email: string;
+  password: string;
+  hasedPassword: string;
+  profile: string | null;
+  firstName: string;
+  lastName: string;
+  number: string;
+  name: string;
+  roleId: string;
+  image: string | null;
+  isEmailVerified: boolean;
+  emailVerifiedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
 
-
-
-  const userId = localStorage?.getItem('currentUserId')
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<UserResponse | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
+  
   useEffect(() => {
-    if (localStorage.getItem('jwtToken') != null) {
-      fetchUser()
-      setShowLogin(false)
-
+    // Check if we're on the client side
+    if (typeof window !== 'undefined') {
+      const storedUserId = localStorage?.getItem('currentUserId')
+      setUserId(storedUserId)
+      
+      if (localStorage.getItem('jwtToken') != null) {
+        fetchUser(storedUserId)
+      }
     }
   }, [])
-  const fetchUser = async () => {
-    const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
-    console.log("response💕💕💕💕💕💕💕💕💕❤️❤️❤️❤️❤️❤️💕💕💕💕💕💕💕💕")
+  
+  const fetchUser = async (currentUserId: string | null) => {
+    if (!currentUserId) return
+    const response = await axiosInstance.get<UserResponse>(`auth/fetchUser/${currentUserId}`)
     setUser(response.data)
     console.log(response)
   }
+  
   const currentUser = (userData.getState() as any).userData
-  localStorage.setItem('currentUserId', (userData.getState() as any).userId)
+  // Only set localStorage on client side
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('currentUserId', (userData.getState() as any).userId)
+  }
 
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊", currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const [getUserData, setUserData] = useState<any>()
-  const [showUserName, setShowUserName] = useState(false)
+  // const [getUserData, setUserData] = useState<any>()
+  // const [showUserName, setShowUserName] = useState(false)
 
   const routers = useRouter()
-  const [showLogin, setShowLogin] = useState(true)
+  // const [showLogin, setShowLogin] = useState(true)
+  
   useEffect(() => {
     fetchUserData()
   }, [])
 
   const fetchUserData = async () => {
-    const userId = localStorage.getItem('currentUserId')
-    const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
-    setUserData(response.data)
-    setShowUserName(true)
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem('currentUserId')
+      if (userId) {
+        const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
+        console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
+        // setUserData(response.data)
+        // setShowUserName(true)
+      }
+    }
   }
   const handleBecomeSellerPage = async () => {
     routers.push('/becomeSeller')
@@ -152,7 +183,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
               <FaUser size={25} className="cursor-pointer" />
             </div>
             <div>
-              {localStorage.getItem("jwtToken") !== null && user && user?.firstName
+              {typeof window !== 'undefined' && localStorage.getItem("jwtToken") !== null && user && user?.firstName
                 ? user.firstName
                 : "Account"}
             </div>

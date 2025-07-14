@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useRouter } from "next/navigation"
 import signupLogo from '../../../../../../../public/assets/kamathenu Images/signUp/Group 730.png'
-import { Loader2, Mail, Lock, User, Phone, Eye, EyeOff, Shield, Clock, Users } from "lucide-react"
+import { Loader2, Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
 import axiosInstance from "@/app/utils/axiosInstance"
 

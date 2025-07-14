@@ -7,21 +7,10 @@ import { Label } from "@/components/ui/label"
 import userProfileLogo from '../../../../../public/assets/kamathenu Images/BAS/Seller/seller_img1.jpg'
 import { useEffect, useState } from "react"
 import {
-    ChevronRight,
-    ChevronDown,
-    ChevronUp,
-    Gift,
     Headphones,
     Home,
     LogOut,
     User,
-    MapPin,
-    CreditCard,
-    Package,
-    Truck,
-    CheckCircle,
-    Clock,
-    AlertCircle,
 } from "lucide-react";
 import CustomerSupport from "./CustomerSupport"
 import { Button } from "@/components/ui/button"
@@ -33,7 +22,7 @@ import { useRouter } from "next/navigation"
 const userProfile = () => {
     const router=useRouter()
     const [activeTab, setActiveTab] = useState("orders");
-    const [userData, setUserData] = useState()
+    const [userData, setUserData] = useState<any>()
     const [userProfile, setUserProfile] = useState({
         firstName:"",
         lastName:"",
@@ -43,42 +32,53 @@ const userProfile = () => {
 
     })
     useEffect(()=>{
-        if(localStorage.getItem('jwtToken')!==null){
-        getUserProfile()
+        if(typeof window !== 'undefined'){
+            if(localStorage.getItem('jwtToken')!==null){
+                getUserProfile()
+            }
+            else{
+                router.push('/auth/signin')
+            }
         }
-        else{
-            router.push('/auth/signin')
-        }
-    },[])
+    },[router])
 
     const getUserProfile=async()=>{
-        const userId=localStorage.getItem('currentUserId')
-        const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
-        setUserData(response.data)
-        setUserProfile({
-            firstName:response.data.firstName,
-            lastName:response.data.lastName,
-            email:response.data.email,
-            phone:response.data.number,
-        })
+        if(typeof window !== 'undefined'){
+            const userId=localStorage.getItem('currentUserId')
+            if(userId){
+                const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
+                setUserData(response.data)
+                setUserProfile({
+                    firstName:response.data.firstName,
+                    lastName:response.data.lastName,
+                    email:response.data.email,
+                    phone:response.data.number,
+                })
+            }
+        }
     }
     const setData=(e:any)=>{
         setUserProfile({...userProfile,[e.target.id]:e.target.value})
     }
     
     const handleUpdateProfile=async()=>{
-        const userId=localStorage.getItem('currentUserId')
-        const response:any= await axiosInstance.put(`auth/updateUser/${userId}`,userProfile)
-        if(response.status===200){
-            toast.success("Profile updated successfully")
+        if(typeof window !== 'undefined'){
+            const userId=localStorage.getItem('currentUserId')
+            if(userId){
+                const response:any= await axiosInstance.put(`auth/updateUser/${userId}`,userProfile)
+                if(response.status===200){
+                    toast.success("Profile updated successfully")
+                }
+            }
         }
     }
     const handleLogout=async()=>{
-        localStorage.removeItem('jwtToken')
-        localStorage.removeItem('currentUserId')
-        localStorage.removeItem('currentUser')
-        window.location.reload()
-        
+        if(typeof window !== 'undefined'){
+            localStorage.removeItem('jwtToken')
+            localStorage.removeItem('currentUserId')
+            localStorage.removeItem('currentUser')
+            window.location.reload()
+        }
       }
     
     return (

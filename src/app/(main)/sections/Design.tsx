@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
-import { IoIosStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
@@ -22,7 +21,7 @@ const categories = [
 export default function FeaturedProducts() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   // Trigger on component mount
   useEffect(() => {
@@ -37,15 +36,13 @@ export default function FeaturedProducts() {
   }, [activeCategory]);
 
 
-  const [limit, setLimit] = useState(12);
-
   const handleDesignHome = async (category?: string) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const selectedCategory = category || activeCategory;
       const payload = {
         categoryName: selectedCategory,
-        limit: limit
+        limit: 1
       };
 
       const response: any = await axiosInstance.post("category/getDesignAndFeature", payload);
