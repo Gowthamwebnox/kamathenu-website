@@ -186,10 +186,10 @@ export default function FeaturedProducts() {
                     <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 items-center justify-between ml-1">
                       <div>
                         <div className="text-gray-400 line-through flex items-center">
-                          <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items.variants[0].discountPrice}</span>
+                          <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items?.discountPrice}</span>
                         </div>
                         <div className="text-[#D8A526] flex items-center ">
-                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {items.variants[0].price}</span>
+                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {items?.price}</span>
                         </div>
                       </div>
                       <div className="">
