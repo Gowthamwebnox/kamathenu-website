@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { createEditor, Descendant, Editor, Element as SlateElement, Transforms, Text } from 'slate';
+import { createEditor, Descendant, Editor, Element as SlateElement, Transforms, Text, BaseEditor } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps, RenderLeafProps } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { Bold, Italic, Underline, Code, Heading1, Heading2, List, ListOrdered } from 'lucide-react';
@@ -34,7 +34,7 @@ type CustomText = {
 
 declare module 'slate' {
   interface CustomTypes {
-    Editor: Editor;
+    Editor: BaseEditor & { marks: any };
     Element: CustomElement;
     Text: CustomText;
   }
@@ -66,7 +66,7 @@ const toggleMark = (editor: Editor, format: keyof Omit<CustomText, 'text'>) => {
 // Helper to check if block type is active
 const isBlockActive = (editor: Editor, format: string) => {
   const [match] = Editor.nodes(editor, {
-    match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
+    match: n => !Editor.isEditor(n) && SlateElement.isElement(n) && (n as CustomElement).type === format,
   });
   
   return !!match;
@@ -81,18 +81,18 @@ const toggleBlock = (editor: Editor, format: string) => {
     match: n => 
       !Editor.isEditor(n) && 
       SlateElement.isElement(n) && 
-      ['bulleted-list', 'numbered-list'].includes(n.type),
+      ['bulleted-list', 'numbered-list'].includes((n as CustomElement).type),
     split: true,
   });
   
-  const newProperties: Partial<SlateElement> = {
-    type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+  const newProperties: Partial<CustomElement> = {
+    type: (isActive ? 'paragraph' : isList ? 'list-item' : format) as CustomElement['type'],
   };
   
   Transforms.setNodes(editor, newProperties);
   
   if (!isActive && isList) {
-    const block = { type: format, children: [] };
+    const block: CustomElement = { type: format as CustomElement['type'], children: [] };
     Transforms.wrapNodes(editor, block);
   }
 };
@@ -100,6 +100,11 @@ const toggleBlock = (editor: Editor, format: string) => {
 // Convert HTML to Slate nodes
 const deserialize = (html: string): Descendant[] => {
   if (!html) return [{ type: 'paragraph', children: [{ text: '' }] }];
+  
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    return [{ type: 'paragraph', children: [{ text: html }] }];
+  }
   
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
