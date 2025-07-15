@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button"
 import axiosInstance from "@/app/utils/axiosInstance"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import AuthChecker from "@/app/components/layout/Authentication"
 
 
 const userProfile = () => {
@@ -33,6 +34,7 @@ const userProfile = () => {
     })
     useEffect(()=>{
         if(typeof window !== 'undefined'){
+            
             if(localStorage.getItem('jwtToken')!==null){
                 getUserProfile()
             }

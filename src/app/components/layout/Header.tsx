@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import userData from "@/app/(main)/StateManagement/userData";
 import { FaUser } from "react-icons/fa6";
 import axiosInstance from "@/app/utils/axiosInstance";
+import { toast } from "sonner";
 
 type HeaderProps = {
   headerColor?: [string, string]; // [backgroundColor, textColor]
@@ -106,7 +107,12 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
     routers.push('/addCart')
   }
   const handleWishlistPage = async () => {
-    routers.push('/wishlist')
+    if(localStorage.getItem('jwtToken')!==null){
+      routers.push('/wishlist')
+    }
+    else{
+      toast.error("Please login to access wishlist")
+    }
   }
 
   useEffect(() => {

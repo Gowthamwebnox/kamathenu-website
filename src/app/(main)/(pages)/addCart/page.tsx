@@ -7,7 +7,8 @@ import { TiDelete } from "react-icons/ti";
 import axiosInstance from "@/app/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
+import { useRouter } from "next/navigation";
+    
 export default function AddCart() {
     const [currentUser, setCurrentUser] = useState<string | null>(null)
     const [cartData, setCartData] = useState<any[]>([])
@@ -15,15 +16,21 @@ export default function AddCart() {
     const [discount, setDiscount] = useState<number>(0)
     const [platformFee, setPlatformFee] = useState<number>(0)
     const [totalAmount, setTotalAmount] = useState<number>(0)
-    
+    const router=useRouter()
     useEffect(() => {
+
         if (typeof window !== 'undefined') {
+            if(localStorage.getItem('jwtToken')!==null){
             const userId = localStorage.getItem('currentUserId')
             setCurrentUser(userId)
             if (userId) {
                 getCartData(userId)
             }
-        }
+            }
+            else{
+                router.push('/auth/signin')
+            }
+        }   
     }, [])
 
     const getCartData = async (userId: string) => {
