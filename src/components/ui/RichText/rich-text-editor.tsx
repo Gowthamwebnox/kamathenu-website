@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { createEditor, Descendant, Editor, Element as SlateElement, Transforms, Text, Range } from 'slate';
+import { createEditor, Descendant, Editor, Element as SlateElement, Transforms, Text } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps, RenderLeafProps } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { Bold, Italic, Underline, Code, Heading1, Heading2, List, ListOrdered } from 'lucide-react';
