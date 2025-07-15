@@ -28,8 +28,9 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 // import ProductEditor from "@/components/common/ProductEditor";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import dynamic from 'next/dynamic';
+import axiosInstance from "@/app/utils/axiosInstance";
 
 // Dynamically import RichTextEditor with SSR disabled
 const RichTextEditor = dynamic(
@@ -57,24 +58,24 @@ const RichTextEditorSection = ({ content, setContent, isEditMode }: {
   return <RichTextEditor initialValue={content} onChange={setContent} />;
 };
 
-interface SubCategory {
-  id: string;
-  name: string;
-  description: string;
-  parentCategoryId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// interface SubCategory {
+//   id: string;
+//   name: string;
+//   description: string;
+//   parentCategoryId: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
 interface Category {
   id: string;
   name: string;
   description: string;
-  parentCategoryId: string | null;
+  // parentCategoryId: string | null;
   createdAt: string;
   updatedAt: string;
-  subCategories: SubCategory[];
-  parentCategory: Category | null;
+  // subCategories: SubCategory[];
+  // parentCategory: Category | null;
 }
 
 interface InputFieldProps {
@@ -316,8 +317,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
                 type="button"
                 onClick={() => removeFile(index)}
                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                aria-label="Remove file"
-              >
+                aria-label="Remove file">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -333,33 +333,18 @@ const ProductForm: React.FC = () => {
     sellerId: "",
     categoryId: "",
     name: "",
-    productSKU: "",
     description: "",
-    brand: "",
     aboutProduct: "",
     isApproved: false,
-    hsnCode: "",
+    packageDetails: "",
+    productOutput: "",
+    deliveryDetails: "",
+    deliveryInstruction: "",
+    price: "",
     GST: {
       percentage: 0
     },
-    variants: [] as {
-      productVariantSKU: string;
-      title: string;
-      variantType: string;
-      variantValue: string;
-      productWeight: number;
-      additionalPrice: number;
-      description: string;
-      stockQuantity: number;
-      price: number;
-      images: { imageUrl: string; isPrimary: boolean }[];
-      discounts: {
-        discountType: string;
-        discountValue: number;
-        startDate: string;
-        endDate: string;
-      }[];
-    }[],
+    images: [] as { imageUrl: string; isPrimary: boolean }[],
   });
 
   const [content, setContent] = useState<string>(
@@ -367,10 +352,10 @@ const ProductForm: React.FC = () => {
   );
 
   // const { data, status } = useSession();
-  const status="authenticated"
+  var status="authenticated"
   const data={
     user:{
-      sellerId:"123"
+      sellerId:""
     }
   }
   useEffect(() => {
@@ -382,30 +367,13 @@ const ProductForm: React.FC = () => {
     }
   }, [data, status]);
 
-  const [newVariant, setNewVariant] = useState({
-    title: "",
-    productVariantSKU: "",
-    description: "",
-    price: 0,
-    stockQuantity: 0,
-    variantType: "",
-    variantValue: "",
-    productWeight: 0,
-    additionalPrice: 0,
-    images: [] as { imageUrl: string; isPrimary: boolean }[],
-    discounts: [] as {
-      discountType: string;
-      discountValue: number;
-      startDate: string;
-      endDate: string;
-    }[],
-  });
+  // Removed newVariant state since we're not using variants anymore
 
   const [isPublished, setIsPublished] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [filteredSubCategories, setFilteredSubCategories] = useState<
-    SubCategory[]
-  >([]);
+  // const [filteredSubCategories, setFilteredSubCategories] = useState<
+  //   SubCategory[]
+  // >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [newDiscount, setNewDiscount] = useState({
     discountType: "",
@@ -419,11 +387,28 @@ const ProductForm: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response:any = await axios.get("/api/category");
-        setCategories(response?.data?.data);
+        const response:any = await axiosInstance.get<Category[]>('/seller/fetchCategory');
+        
+        setCategories(response?.data?.categories || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
-        setCategories([]);
+        // Fallback to mock data if API fails
+        setCategories([
+          {
+            id: "1",
+            name: "Electronics",
+            description: "Electronic devices and accessories",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: "2", 
+            name: "Clothing",
+            description: "Apparel and fashion items",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }
+        ]);
       }
     };
 
@@ -445,40 +430,49 @@ const ProductForm: React.FC = () => {
       [name]: value,
     }));
 
-    if (name === "categoryId") {
-      setFormData((prev) => ({
-        ...prev,
-        subCategoryId: "",
-      }));
+    // if (name === "categoryId") {
+    //   setFormData((prev) => ({
+    //     ...prev,
+    //     subCategoryId: "",
+    //   }));
 
-      const selectedCategory = categories.find(
-        (category) => category.id === value
-      );
+    //   // const selectedCategory = categories.find(
+    //   //   (category) => category.id === value
+    //   // );
 
-      if (selectedCategory && selectedCategory.subCategories) {
-        setFilteredSubCategories(selectedCategory.subCategories);
-      } else {
-        setFilteredSubCategories([]);
-      }
-    }
+    //   // if (selectedCategory && selectedCategory.subCategories) {
+    //   //   setFilteredSubCategories(selectedCategory.subCategories);
+    //   // } else {
+    //   //   setFilteredSubCategories([]);
+    //   // }
+    // }
   };
 
-  // Variant image handling
-  const handleVariantFilesUploaded = (urls: string[]) => {
-    const isFirstImages = newVariant.images.length === 0;
+  // Removed variant image handling functions since we're not using variants anymore
+
+  const handleAboutProductChange = (content: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      aboutProduct: JSON.stringify(content),
+    }));
+  };
+
+  // Image handling functions for product images
+  const handleProductImagesUploaded = (urls: string[]) => {
+    const isFirstImages = formData.images.length === 0;
     const newImages = urls.map((url, index) => ({
       imageUrl: url,
       isPrimary: isFirstImages && index === 0,
     }));
 
-    setNewVariant((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       images: [...prev.images, ...newImages],
     }));
   };
 
-  const handleVariantFileRemoved = (url: string) => {
-    setNewVariant((prev) => {
+  const handleProductImageRemoved = (url: string) => {
+    setFormData((prev) => {
       const remainingImages = prev.images.filter((img) => img.imageUrl !== url);
 
       if (
@@ -495,8 +489,8 @@ const ProductForm: React.FC = () => {
     });
   };
 
-  const handleVariantSetPrimaryImage = (imageUrl: string) => {
-    setNewVariant((prev) => ({
+  const handleProductSetPrimaryImage = (imageUrl: string) => {
+    setFormData((prev) => ({
       ...prev,
       images: prev.images.map((img) => ({
         ...img,
@@ -505,107 +499,53 @@ const ProductForm: React.FC = () => {
     }));
   };
 
-  const handleAboutProductChange = (content: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      aboutProduct: JSON.stringify(content),
-    }));
-  };
+  // const handleRemoveVariant = (index: number) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     variants: prev.variants.filter((_, i) => i !== index),
+  //   }));
+  // };
 
-  const handleAddVariant = () => {
-    if (
-      newVariant.variantType &&
-      newVariant.variantValue &&
-      newVariant.price > 0 &&
-      newVariant.stockQuantity > 0 &&
-      newVariant.title
-    ) {
-      setFormData((prev) => ({
-        ...prev,
-        variants: [
-          ...prev.variants,
-          {
-            productVariantSKU: newVariant.productVariantSKU,
-            title: newVariant.title,
-            description: newVariant.description,
-            price: newVariant.price,
-            stockQuantity: newVariant.stockQuantity,
-            variantType: newVariant.variantType,
-            variantValue: newVariant.variantValue,
-            productWeight: newVariant.productWeight,
-            additionalPrice: newVariant.additionalPrice,
-            images: newVariant.images,
-            discounts: newVariant.discounts,
-          },
-        ],
-      }));
+  // const handleAddDiscount = () => {
+  //   if (newDiscount.discountType && newDiscount.discountValue > 0) {
+  //     const startDate = newDiscount.startDate
+  //       ? new Date(newDiscount.startDate).toISOString()
+  //       : new Date().toISOString();
 
-      // Reset the newVariant state after adding
-      setNewVariant({
-        title: "",
-        productVariantSKU: "",
-        description: "",
-        price: 0,
-        stockQuantity: 0,
-        variantType: "",
-        variantValue: "",
-        productWeight: 0,
-        additionalPrice: 0,
-        images: [],
-        discounts: [],
-      });
-    } else {
-      alert("Please fill in all required variant fields correctly.");
-    }
-  };
+  //     const endDate = newDiscount.endDate
+  //       ? new Date(newDiscount.endDate).toISOString()
+  //       : new Date(new Date().setDate(new Date().getDate() + 7)).toISOString();
 
-  const handleRemoveVariant = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      variants: prev.variants.filter((_, i) => i !== index),
-    }));
-  };
+  //     setNewVariant((prev) => ({
+  //       ...prev,
+  //       discounts: [
+  //         ...prev.discounts,
+  //         {
+  //           discountType: newDiscount.discountType,
+  //           discountValue: newDiscount.discountValue,
+  //           startDate: startDate,
+  //           endDate: endDate,
+  //         },
+  //       ],
+  //     }));
 
-  const handleAddDiscount = () => {
-    if (newDiscount.discountType && newDiscount.discountValue > 0) {
-      const startDate = newDiscount.startDate
-        ? new Date(newDiscount.startDate).toISOString()
-        : new Date().toISOString();
+  //     setNewDiscount({
+  //       discountType: "",
+  //       discountValue: 0,
+  //       startDate: "",
+  //       endDate: "",
+  //     });
+  //   } else {
+  //     alert("Please fill in all required discount fields correctly.");
+  //   }
+  // };
 
-      const endDate = newDiscount.endDate
-        ? new Date(newDiscount.endDate).toISOString()
-        : new Date(new Date().setDate(new Date().getDate() + 7)).toISOString();
-
-      setNewVariant((prev) => ({
-        ...prev,
-        discounts: [
-          ...prev.discounts,
-          {
-            discountType: newDiscount.discountType,
-            discountValue: newDiscount.discountValue,
-            startDate: startDate,
-            endDate: endDate,
-          },
-        ],
-      }));
-
-      setNewDiscount({
-        discountType: "",
-        discountValue: 0,
-        startDate: "",
-        endDate: "",
-      });
-    } else {
-      alert("Please fill in all required discount fields correctly.");
-    }
-  };
-
-  const handleRemoveDiscount = (index: number) => {
-    setNewVariant((prev) => ({
-      ...prev,
-      discounts: prev.discounts.filter((_, i) => i !== index),
-    }));
-  };
+  // const handleRemoveDiscount = (index: number) => {
+  //   setNewVariant((prev) => ({
+  //     ...prev,
+  //     discounts: prev.discounts.filter((_, i) => i !== index),
+  //   }));
+  // };
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -617,8 +557,8 @@ const ProductForm: React.FC = () => {
         return;
       }
 
-      if (formData.variants.length === 0) {
-        alert("Please add at least one variant.");
+      if (formData.images.length === 0) {
+        alert("Please add at least one image.");
         setIsLoading(false);
         return;
       }
@@ -627,64 +567,48 @@ const ProductForm: React.FC = () => {
         sellerId: formData.sellerId,
         categoryId: formData.categoryId,
         name: formData.name,
-        productSKU: formData.productSKU,
         description: formData.description,
-        brand: formData.brand,
         aboutProduct: content,
         isApproved: isPublished,
-        hsnCode: formData.hsnCode,
-        GST:  formData.GST.percentage ? {
-          
+        packageDetails: formData.packageDetails,
+        productOutput: formData.productOutput,
+        deliveryDetails: formData.deliveryDetails,
+        deliveryInstruction: formData.deliveryInstruction,
+        price: formData.price,
+        GST: formData.GST.percentage ? {
           percentage: formData.GST.percentage
         } : undefined,
-        variants: formData.variants.map((variant) => ({
-          title: variant.title,
-          productVariantSKU: variant.productVariantSKU,
-          description: variant.description || "",
-          price: variant.price || 0,
-          stockQuantity: variant.stockQuantity || 0,
-          variantType: variant.variantType,
-          variantValue: variant.variantValue,
-          productWeight: variant.productWeight,
-          additionalPrice: variant.additionalPrice || 0,
-          images: variant.images,
-          discounts: variant.discounts,
-        })),
+        images: formData.images,
       };
 
-      const response:any = await axios.post("/api/seller/products", productData);
-      console.log("Product Created:", response?.data);
-      router.push("/seller/products");
+      // Mock API call for now - replace with actual API when ready
+      console.log("Product Data to be sent:", productData);
+      // const response: any = await axiosInstance.post("/seller/products", productData);
+      // console.log("Product Created:", response?.data);
+      // router.push("/seller/products");
+      
+      // For now, just show success message
+      alert("Product created successfully! (Mock implementation)");
+      router.push("/seller");
 
       setFormData({
         sellerId: "",
         categoryId: "",
         name: "",
-        productSKU: "",
         description: "",
-        brand: "",
-        aboutProduct: "{}",
+        aboutProduct: "<p>Hello world! This is a <strong>rich text editor</strong> built with <em>HeroUI</em>.</p>",
         isApproved: false,
-        hsnCode: "",
+        packageDetails: "",
+        productOutput: "",
+        deliveryDetails: "",
+        deliveryInstruction: "",
+        price: "",
         GST: {
-          
           percentage: 0,
         },
-        variants: [],
-      });
-      setNewVariant({
-        title: "",
-        productVariantSKU: "",
-        description: "",
-        price: 0,
-        stockQuantity: 0,
-        variantType: "",
-        variantValue: "",
-        productWeight: 0,
-        additionalPrice: 0,
         images: [],
-        discounts: [],
       });
+      // Removed setNewVariant since we're not using variants anymore
     } catch (error: any) {
       console.error(
         "Error creating product:",
@@ -725,13 +649,13 @@ const ProductForm: React.FC = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <InputField
+              {/* <InputField
                 name="productSKU"
                 label="Enter Product SKU"
                 placeholder="Product SKU"
                 value={formData.productSKU}
                 onChange={handleChange}
-              />
+              /> */}
               <InputField
                 name="name"
                 label="Enter Product name"
@@ -746,23 +670,40 @@ const ProductForm: React.FC = () => {
                 value={formData.description}
                 onChange={handleChange}
               />
+
               <InputField
-                name="brand"
-                label="Product Brand"
-                placeholder="Product Brand"
-                value={formData.brand}
+                name="packageDetails"
+                label="Package Details"
+                placeholder="Enter package details"
+                type="textarea"
+                value={formData.packageDetails}
                 onChange={handleChange}
               />
               <InputField
-                name="hsnCode"
-                label="HSN Code"
-                placeholder="Enter HSN Code"
-                value={formData.hsnCode}
+                name="productOutput"
+                label="Product Output"
+                placeholder="Enter product output"
+                type="textarea"
+                value={formData.productOutput}
                 onChange={handleChange}
               />
-              <div className="grid grid-cols-2 gap-4">
-                
-                <div>
+              <InputField
+                name="deliveryDetails"
+                label="Delivery Details"
+                placeholder="Enter delivery details"
+                type="textarea"
+                value={formData.deliveryDetails}
+                onChange={handleChange}
+              />
+              <InputField
+                name="deliveryInstruction"
+                label="Delivery Instructions"
+                placeholder="Enter delivery instructions"
+                type="textarea"
+                value={formData.deliveryInstruction}
+                onChange={handleChange}
+              />
+              <div>
                   <label className="text-sm text-gray-600 mb-1 block">
                     GST Percentage
                   </label>
@@ -783,40 +724,160 @@ const ProductForm: React.FC = () => {
                     step="0.01"
                   />
                 </div>
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label className="text-sm text-gray-600 mb-1 block">
+                <div>
+                <label className="text-sm text-gray-600 mb-1 block">
                 Category
               </label>
-              <Select
+              <Select 
                 value={formData.categoryId}
                 onValueChange={(value: string) =>
                   handleSelectChange("categoryId", value)
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full p-1" >
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
-                <SelectContent className="w-full">
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                                  <SelectContent className="w-full">
+                    {Array.isArray(categories) && categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
               </Select>
+                </div>
+             
+            </div>
+
+            <div className="w-full">
+              
+              <div className="mb-6">
+              <h4 className="text-lg font-medium mb-4">Product Discounts</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">
+                    Discount Type
+                  </label>
+                  <Select
+                    value={newDiscount.discountType}
+                    onValueChange={(value) =>
+                      setNewDiscount((prev) => ({
+                        ...prev,
+                        discountType: value,
+                      }))
+                    }
+                  >
+                    <SelectTrigger className="w-full p-1" >
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                      <SelectItem value="amount">Fixed Amount</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">
+                    Discount Value
+                  </label>
+                  <Input
+                    type="number"
+                    value={newDiscount.discountValue}
+                    onChange={(e) =>
+                      setNewDiscount((prev) => ({
+                        ...prev,
+                        discountValue: Number(e.target.value),
+                      }))
+                    }
+                    placeholder="Enter value"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">
+                    Start Date
+                  </label>
+                  <Input
+                    type="date"
+                    value={newDiscount.startDate}
+                    onChange={(e) =>
+                      setNewDiscount((prev) => ({
+                        ...prev,
+                        startDate: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">
+                    End Date
+                  </label>
+                  <Input
+                    type="date"
+                    value={newDiscount.endDate}
+                    onChange={(e) =>
+                      setNewDiscount((prev) => ({
+                        ...prev,
+                        endDate: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+              {/* <Button
+                type="button"
+                onClick={handleAddDiscount}
+                disabled={
+                  !newDiscount.discountType || newDiscount.discountValue <= 0
+                }
+              >
+                Add Discount
+              </Button> */}
+
+              {/* {newVariant.discounts.length > 0 && (
+                <div className="mt-4">
+                  <h5 className="text-md font-medium mb-2">Added Discounts</h5>
+                  <div className="space-y-2">
+                    {newVariant.discounts.map((discount, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
+                        <div>
+                          <span className="font-medium">
+                            {discount.discountType}:
+                          </span>{" "}
+                          {discount.discountValue}
+                          {discount.discountType === "percentage" ? "%" : "$"}
+                          <span className="ml-2 text-gray-600">
+                            {new Date(discount.startDate).toLocaleDateString()}{" "}
+                            -{new Date(discount.endDate).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveDiscount(index)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )} */}
+            </div>
             </div>
           </CardContent>
         </Card>
 
         <Card className="mb-8">
           <CardContent className="pt-2">
-            <h3 className="text-2xl font-bold mb-6">Product Variants</h3>
+            <h3 className="text-2xl font-bold mb-6">Images</h3>
 
             {/* Variant Basic Info */}
-            <div className="space-y-4 mb-6">
+            {/* <div className="space-y-4 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="text-sm text-gray-600 mb-1 block">
@@ -955,11 +1016,71 @@ const ProductForm: React.FC = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* Variant Images */}
-            <div className="mb-6">
-              <h4 className="text-lg font-medium mb-4">Variant Images</h4>
+                          {/* Product Images */}
+              <div className="mb-6">
+                <h4 className="text-lg font-medium mb-4">Product Images</h4>
+                <FileUpload
+                  onFilesUploaded={handleProductImagesUploaded}
+                  existingFiles={formData.images.map((img) => img.imageUrl)}
+                  onFileRemoved={handleProductImageRemoved}
+                />
+
+                {formData.images.length > 0 && (
+                  <div className="mt-6">
+                    <h5 className="text-md font-medium mb-4">
+                      Select Primary Image
+                    </h5>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                      {formData.images.map((img, index) => (
+                        <div
+                          key={index}
+                          className="relative group cursor-pointer"
+                        >
+                          <div
+                            className={`relative h-24 w-full rounded-lg overflow-hidden border-2 ${
+                              img.isPrimary
+                                ? "border-blue-500"
+                                : "border-gray-200"
+                            }`}
+                          >
+                            <Image
+                              src={img.imageUrl}
+                              alt={`Product Image ${index + 1}`}
+                              fill
+                              className="object-cover"
+                              onClick={() =>
+                                handleProductSetPrimaryImage(img.imageUrl)
+                              }
+                            />
+                            {img.isPrimary && (
+                              <div className="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                                Primary
+                              </div>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            className={`mt-2 w-full text-center text-sm ${
+                              img.isPrimary
+                                ? "text-blue-600"
+                                : "text-blue-600 hover:text-blue-800"
+                            }`}
+                            onClick={() =>
+                              handleProductSetPrimaryImage(img.imageUrl)
+                            }
+                          >
+                            {img.isPrimary ? "Primary Image" : "Set as Primary"}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            {/* <div className="mb-6">
+              <h4 className="text-lg font-medium mb-4">Product LayoutImages </h4>
               <FileUpload
                 onFilesUploaded={handleVariantFilesUploaded}
                 existingFiles={newVariant.images.map((img) => img.imageUrl)}
@@ -1017,128 +1138,10 @@ const ProductForm: React.FC = () => {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
+            
 
-            {/* Variant Discounts */}
-            <div className="mb-6">
-              <h4 className="text-lg font-medium mb-4">Variant Discounts</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <div>
-                  <label className="text-sm text-gray-600 mb-1 block">
-                    Discount Type
-                  </label>
-                  <Select
-                    value={newDiscount.discountType}
-                    onValueChange={(value) =>
-                      setNewDiscount((prev) => ({
-                        ...prev,
-                        discountType: value,
-                      }))
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="percentage">Percentage</SelectItem>
-                      <SelectItem value="amount">Fixed Amount</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600 mb-1 block">
-                    Discount Value
-                  </label>
-                  <Input
-                    type="number"
-                    value={newDiscount.discountValue}
-                    onChange={(e) =>
-                      setNewDiscount((prev) => ({
-                        ...prev,
-                        discountValue: Number(e.target.value),
-                      }))
-                    }
-                    placeholder="Enter value"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600 mb-1 block">
-                    Start Date
-                  </label>
-                  <Input
-                    type="date"
-                    value={newDiscount.startDate}
-                    onChange={(e) =>
-                      setNewDiscount((prev) => ({
-                        ...prev,
-                        startDate: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600 mb-1 block">
-                    End Date
-                  </label>
-                  <Input
-                    type="date"
-                    value={newDiscount.endDate}
-                    onChange={(e) =>
-                      setNewDiscount((prev) => ({
-                        ...prev,
-                        endDate: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <Button
-                type="button"
-                onClick={handleAddDiscount}
-                disabled={
-                  !newDiscount.discountType || newDiscount.discountValue <= 0
-                }
-              >
-                Add Discount
-              </Button>
-
-              {newVariant.discounts.length > 0 && (
-                <div className="mt-4">
-                  <h5 className="text-md font-medium mb-2">Added Discounts</h5>
-                  <div className="space-y-2">
-                    {newVariant.discounts.map((discount, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                      >
-                        <div>
-                          <span className="font-medium">
-                            {discount.discountType}:
-                          </span>{" "}
-                          {discount.discountValue}
-                          {discount.discountType === "percentage" ? "%" : "$"}
-                          <span className="ml-2 text-gray-600">
-                            {new Date(discount.startDate).toLocaleDateString()}{" "}
-                            -{new Date(discount.endDate).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleRemoveDiscount(index)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <Button
+            {/* <Button
               type="button"
               onClick={handleAddVariant}
               disabled={!newVariant.variantType || !newVariant.variantValue}
@@ -1209,7 +1212,7 @@ const ProductForm: React.FC = () => {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
           </CardContent>
         </Card>
 

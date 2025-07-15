@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import {dashboardImge} from "../../../../public/assets/SellerDashBoard/Group 933.svg"
+// import {dashboardImge} from "../../../../public/assets/SellerDashBoard/Group 933.svg"
 import { ArrowUpRight, ArrowDownLeft, Minus, MoreHorizontal, ChevronsUpDown} from "lucide-react";
 import { ChartLine } from 'lucide-react';
 
