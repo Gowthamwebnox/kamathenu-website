@@ -27,8 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSession } from "next-auth/react";
-import axios from "axios";
+// import { useSession } from "next-auth/react";
+import axiosInstance from "@/app/utils/axiosInstance";
 
 type SellerProduct = {
   id: string;
@@ -84,12 +84,12 @@ const useDebounce = <T,>(value: T, delay: number = 500): T => {
 const ProductsPage = () => {
   const router = useRouter();
   // const { data: session, status } = useSession();
-  const status="loading"
-  const session={
-    user:{
-      sellerId:"123"
+  const status = "authenticated";
+  const session = {
+    user: {
+      sellerId: "c6fe18bd-0e74-47f9-b8e1-83f1f93b9760"
     }
-  }
+  };
   const [sellerProducts, setSellerProducts] = useState<SellerProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -101,9 +101,12 @@ const ProductsPage = () => {
   // Debounce the search term
   const debouncedSearchTerm = useDebounce(searchTerm);
 
-  const fetchProducts = useCallback(async () => {
-    if (status === "loading") return;
-    
+  useEffect(() => {
+    fetchProducts();
+  }, [debouncedSearchTerm]);
+
+  const fetchProducts = async () => {
+    console.log("fetchProducts");
     if (status !== "authenticated" || !session?.user?.sellerId) {
       setError("Please login as a seller to view products");
       setLoading(false);
@@ -114,36 +117,94 @@ const ProductsPage = () => {
     setError(null);
 
     try {
-      const response:any = await axios.get(`/api/seller/products`, {
-        params: {
-          sellerid: session.user.sellerId,
-          search: debouncedSearchTerm || undefined
-        }
-      });
-
-      if (response?.data?.status === 'success') {   
-        setSellerProducts(response?.data?.data);
-        setFilteredProducts(response?.data?.data);
+      console.log("fetchProducts🔥🔥🔥");
+      const response: any = await axiosInstance.get(`/seller/fetchSellerProduct/${session.user.sellerId}`);
+      console.log("response🔥🔥🔥", response);
+      
+      if (response?.status === 200) {   
+        setSellerProducts(response?.data);
+        setFilteredProducts(response?.data);
       } else {
         throw new Error(response?.data?.message || 'Failed to fetch products');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error fetching products:", err);
-      setError(err instanceof Error ? err.message : 'An error occurred while fetching products');
+      
+      // Handle network errors specifically
+      if (err.code === 'ERR_NETWORK' || err.message?.includes('CONNECTION_REFUSED')) {
+        setError('Unable to connect to server. Please check if the backend server is running.');
+        
+        // Provide fallback mock data for development
+        const mockData: SellerProduct[] = [
+          {
+            id: '1',
+            name: 'Sample Product 1',
+            description: 'This is a sample product for testing',
+            isApproved: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            productSKU: 'SKU001',
+            hsnCode: 'HSN001',
+            brand: 'Sample Brand',
+            variants: [
+              {
+                id: 'v1',
+                price: '999.00',
+                stockQuantity: 50,
+                ProductVariantImage: [
+                  {
+                    imageUrl: 'https://via.placeholder.com/150',
+                    isPrimary: true
+                  }
+                ]
+              }
+            ],
+            order: 5
+          },
+          {
+            id: '2',
+            name: 'Sample Product 2',
+            description: 'Another sample product for testing',
+            isApproved: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            productSKU: 'SKU002',
+            hsnCode: 'HSN002',
+            brand: 'Sample Brand',
+            variants: [
+              {
+                id: 'v2',
+                price: '1499.00',
+                stockQuantity: 25,
+                ProductVariantImage: [
+                  {
+                    imageUrl: 'https://via.placeholder.com/150',
+                    isPrimary: true
+                  }
+                ]
+              }
+            ],
+            order: 2
+          }
+        ];
+        
+        setSellerProducts(mockData);
+        setFilteredProducts(mockData);
+      } else {
+        setError(err instanceof Error ? err.message : 'An error occurred while fetching products');
+      }
     } finally {
       setLoading(false);
     }
-  }, [session, status, debouncedSearchTerm]);
+  }
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+ 
 
   // Calculate pagination values
   const totalPages = Math.ceil(filteredProducts.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+  const currentProducts = filteredProducts?.slice(startIndex, endIndex);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -197,34 +258,7 @@ const ProductsPage = () => {
     </TableRow>
   );
 
-  // Show authentication error or loading state
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <div className="space-y-4 text-center">
-          <Skeleton className="h-12 w-12 rounded-full mx-auto" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-[200px]" />
-            <Skeleton className="h-4 w-[150px] mx-auto" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (status === "unauthenticated") {
-    return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-foreground">Access Denied</h1>
-          <p className="text-muted-foreground">Please login as a seller to view products</p>
-          <Button onClick={() => router.push('/login')}>
-            Login
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // Since status is always "authenticated" in this mock setup, we don't need these checks
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -277,43 +311,28 @@ const ProductsPage = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   type="text"
-                  placeholder="Search products, brands, or SKU..."
+                  placeholder="Search products"
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1); // Reset to first page when searching
                   }}
                   className="pl-10"
-                  disabled={loading || status !== "authenticated"}
+                  disabled={loading}
                 />
               </div>
             </div>
-            {/* <div className="flex gap-2">
+            <div className="flex gap-2">
               <Button variant="outline" size="sm" disabled={loading}>
                 <Filter className="w-4 h-4 mr-2" />
                 Filter
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" disabled={loading}>
-                    Sort by
-                    <ChevronDown className="w-4 h-4 ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Name A-Z</DropdownMenuItem>
-                  <DropdownMenuItem>Name Z-A</DropdownMenuItem>
-                  <DropdownMenuItem>Price Low to High</DropdownMenuItem>
-                  <DropdownMenuItem>Price High to Low</DropdownMenuItem>
-                  <DropdownMenuItem>Recently Added</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div> */}
+            </div>
           </div>
         </div>
         {/* Summary Stats */}
         {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ">
             <div className="bg-card p-4 rounded-lg border">
               <div className="text-2xl font-bold text-foreground">{filteredProducts.length}</div>
               <div className="text-sm text-muted-foreground">Total Products</div>
@@ -328,14 +347,14 @@ const ProductsPage = () => {
               <div className="text-2xl font-bold text-orange-600">
                 {filteredProducts.filter(p => !p.isApproved).length}
               </div>
-              <div className="text-sm text-muted-foreground">Draft</div>
+              <div className="text-sm text-muted-foreground">Yet to Publish</div>
             </div>
-            <div className="bg-card p-4 rounded-lg border">
+            {/* <div className="bg-card p-4 rounded-lg border">
               <div className="text-2xl font-bold text-blue-600">
                 {filteredProducts.reduce((sum, p) => sum + (p.variants[0]?.stockQuantity || 0), 0)}
               </div>
               <div className="text-sm text-muted-foreground">Total Stock</div>
-            </div>
+            </div> */}
           </div>
         )}
 
@@ -345,16 +364,13 @@ const ProductsPage = () => {
           <Table>
               <TableHeader className="sticky top-0 bg-card z-10 shadow-sm">
               <TableRow className="bg-muted/50">
-              <TableHead>SKU</TableHead>
                 <TableHead className="w-16"></TableHead>
-                <TableHead className="min-w-[200px]">Product</TableHead>
-                <TableHead>HSN Code</TableHead>             
-                <TableHead>Brand</TableHead>
+                <TableHead className="min-w-[150px]">Product Image</TableHead>
+                <TableHead>Product</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead className="text-center">Stock</TableHead>
                 <TableHead className="text-center">Orders</TableHead>
                 <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="w-12">Actions</TableHead>
+                <TableHead className="w-12">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -365,21 +381,19 @@ const ProductsPage = () => {
                 ))
               ) : (
                   currentProducts.map((product) => {
-                  const primaryVariant = product.variants[0];
-                  const primaryImage = primaryVariant?.ProductVariantImage?.find(img => img.isPrimary)?.imageUrl 
-                    || primaryVariant?.ProductVariantImage?.[0]?.imageUrl;
-                  const discountInfo = getDiscountInfo(primaryVariant);
+                  // const primaryVariant = product?.variants[0];
+                  // const primaryImage = primaryVariant?.ProductVariantImage?.find(img => img.isPrimary)?.imageUrl 
+                  //   || primaryVariant?.ProductVariantImage?.[0]?.imageUrl;
+                  // const discountInfo = getDiscountInfo(primaryVariant);
 
                   return (
-                    <TableRow key={product.id} className="hover:bg-muted/30 transition-colors">
-                       <TableCell>
-                        <span className="font-mono text-sm text-muted-foreground">
-                          {product.productSKU}
-                        </span>
+                    <TableRow key={product.id} className="hover:bg-muted/30 transition-colors ">
+                      <TableCell className="w-16">
                       </TableCell>
+                       
                       <TableCell>
                         <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
-                          {primaryImage ? (
+                          {/* {primaryImage ? (
                             <img
                               src={primaryImage}
                               alt={product.name}
@@ -389,10 +403,10 @@ const ProductsPage = () => {
                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                               }}
                             />
-                          ) : null}
-                          <div className={`w-full h-full bg-muted flex items-center justify-center text-muted-foreground text-xs ${primaryImage ? 'hidden' : ''}`}>
-                            No Image
-                          </div>
+                          ) : null} */}
+                          {/* ${'hidden' ? 'hidden' : ''} */}
+                          <img src={product?.images[0]?.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                          
                         </div>
                       </TableCell>
                       <TableCell>
@@ -405,39 +419,18 @@ const ProductsPage = () => {
                               {product.description}
                             </div>
                           )}
-                          {discountInfo && (
-                            <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
-                              {discountInfo}
-                            </Badge>
-                          )}
+                          
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm">{product.hsnCode}</span>
+                        <span className="text-sm">{product?.price}</span>
                       </TableCell>
-                      <TableCell>
-                        <span className="text-sm">{product.brand}</span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="font-semibold text-foreground">
-                          {formatPrice(primaryVariant?.price || "0")}
-                        </div>
+                      <TableCell className=" text-center">
+                        <span className="text-sm">0</span>
                       </TableCell>
                       <TableCell className="text-center">
-                        <Badge 
-                          variant={primaryVariant?.stockQuantity > 10 ? "default" : primaryVariant?.stockQuantity > 0 ? "secondary" : "destructive"}
-                          className="font-mono"
-                        >
-                          {primaryVariant?.stockQuantity || 0}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <span className="font-medium">{product.order || 0}</span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant={product.isApproved ? "default" : "secondary"}>
-                          {product.isApproved ? "Published" : "Draft"}
-                        </Badge>
+                          {product.isApproved ? <span className="border-1 border-white p-2 bg-green-300 rounded-[14px] font-normal">Published</span> :<span className="border-1 border-white p-2 bg-red-300 rounded-[14px] font-normal">Yet To Published</span>}
+                        
                       </TableCell>
                      
                       <TableCell>

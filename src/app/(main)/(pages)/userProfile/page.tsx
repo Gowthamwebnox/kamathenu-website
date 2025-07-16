@@ -35,11 +35,11 @@ const userProfile = () => {
     useEffect(()=>{
         if(typeof window !== 'undefined'){
             
-            if(localStorage.getItem('jwtToken')!==null){
-                getUserProfile()
+            if(localStorage.getItem('jwtToken')==null){
+                router.push('/auth/signin')
             }
             else{
-                router.push('/auth/signin')
+                getUserProfile()
             }
         }
     },[router])
