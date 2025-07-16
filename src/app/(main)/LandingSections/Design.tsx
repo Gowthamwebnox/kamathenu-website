@@ -148,9 +148,9 @@ export default function FeaturedProducts() {
 
           {categories.map((category) => (
             <TabsContent key={category} value={category}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-5 xl:gap-8 mb-8 h-[500px]">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-5 xl:gap-8 mb-8 ">
                 {designCategoryData.map((items: any, index: any) => (
-                  <div  key={index + 1} className="flex cursor-pointer flex-col border border-gray-300 shadow-lg rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative">
+                  <div  key={index + 1} className="flex cursor-pointer flex-col border border-gray-300 shadow-lg rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative lg:h-[540px]">
                     <img
                       src={items.images[0].imageUrl[0]}
                       alt="design_home_1"
@@ -210,14 +210,17 @@ export default function FeaturedProducts() {
               </div>
 
 
-              {showMore && <Button className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 " style={{ borderColor: '#D8A526' }}>
-                <div className="flex items-center gap-1 cursor-pointer" onClick={()=>setLimit(limit+5)}><span className="text-[18px] text-white"  >See More</span> <IoIosArrowRoundForward className=" size-8 sm:size-12  font-bold "  /></div>
-              </Button>}
+              
 
 
             </TabsContent>
           ))}
         </Tabs>
+        <div className="flex justify-center">
+          {showMore && <Button className="bg-[#D8A526] text-white border  hover:bg-white hover:text-[#D8A526] font-semibold py-3 lg:py-6  " style={{ borderColor: '#D8A526' }}>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={()=>setLimit(limit+5)}><span className="text-[18px] text-white"  >See More</span> <IoIosArrowRoundForward className=" size-8 sm:size-12  font-bold "  /></div>
+              </Button>}
+        </div>
       </div>
     </div>
   );
