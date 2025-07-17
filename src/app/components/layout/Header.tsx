@@ -33,7 +33,7 @@ interface UserResponse {
   updatedAt: string;
 }
 
-export default function Header({ headerColor = ["none", "none"] }: HeaderProps) {
+export default function Header({ headerColor = ["", ""] }: HeaderProps) {
 
   const [user, setUser] = useState<UserResponse | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
@@ -221,7 +221,11 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
             <div className="space-y-3">
               <div 
                 onClick={() => { handleHomePage(); closeMobileMenu(); }}
-                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold  "
+                style={{
+                  
+                  color: headerColor[0] || "white",
+                }}
               >
                 Home
               </div>
