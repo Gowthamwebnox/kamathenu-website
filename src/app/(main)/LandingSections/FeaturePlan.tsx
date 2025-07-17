@@ -137,9 +137,11 @@ const FeaturePlan = () => {
               </div>
 
       </div>
-      {showMore && <Button className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 " style={{ borderColor: '#D8A526' }}>
-        <div className="flex items-center gap-1 cursor-pointer " onClick={() => setLimit(limit + 5)}><span className="text-[19px]"  >See More</span> <IoIosArrowRoundForward className=" size-12" /></div>
-      </Button>}
+      <div className="flex justify-center">
+          {showMore && <Button className="bg-[#D8A526] text-white border  hover:bg-white hover:text-[#D8A526] font-semibold py-3 lg:py-6  " style={{ borderColor: '#D8A526' }}>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={()=>setLimit(limit+5)}><span className="text-[18px] text-white"  >See More</span> <IoIosArrowRoundForward className=" size-8 sm:size-12  font-bold "  /></div>
+              </Button>}
+        </div>
     </>
 
   );
