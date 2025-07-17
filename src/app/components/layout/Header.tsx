@@ -224,38 +224,58 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
                 className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold  "
                 style={{
                   
-                  color: headerColor[0] || "white",
+                  color: headerColor[1] || "black",
                 }}
               >
                 Home
               </div>
               <div 
                 onClick={() => { handleAboutPage(); closeMobileMenu(); }}
-                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold"
+                style={{
+                  
+                  color: headerColor[1] || "black",
+                }}
               >
                 About Us
               </div>
               <div 
                 onClick={() => { handleShopPlanPage(); closeMobileMenu(); }}
-                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold "
+                style={{
+                  
+                  color: headerColor[1] || "black",
+                }}
               >
                 Shop Plans
               </div>
               <div 
                 onClick={() => { handleContactPage(); closeMobileMenu(); }}
-                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold "
+                style={{
+                  
+                  color: headerColor[1] || "black",
+                }}
               >
                 Contact Us
               </div>
               <div 
                 onClick={() => { handleWishlistPage(); closeMobileMenu(); }}
-                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold "
+                style={{
+                  
+                  color: headerColor[1] || "black",
+                }}
               >
                 Wishlist
               </div>
               <div 
                 onClick={() => { handleBecomeSellerPage(); closeMobileMenu(); }}
-                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold"
+                style={{
+                  
+                  color: headerColor[1] || "black",
+                }}
               >
                 Become a Seller
               </div>
