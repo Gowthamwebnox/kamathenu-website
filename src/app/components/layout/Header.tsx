@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import kamathenuLogo from "../../../../public/assets/kamathenu Images/kamathenuLogo.png";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import userData from "@/app/(main)/StateManagement/userData";
@@ -36,6 +37,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
 
   const [user, setUser] = useState<UserResponse | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   useEffect(() => {
     // Check if we're on the client side
@@ -135,6 +137,14 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
   const handleUserProfile = () => {
     routers.push('/userProfile')
   }
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
   return (
     <header
       className={`transition-transform duration-500 ease-in-out w-full z-50 text-white backdrop-blur-md opacity-90 ${showHeader ? "translate-y-0" : "-translate-y-full"
@@ -147,7 +157,7 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
         left: 0,
       }}
     >
-      <div className=" flex items-center justify-between p-4">
+      <div className="flex items-center justify-between p-4">
         <div>
           <Image
             src={kamathenuLogo}
@@ -155,49 +165,100 @@ export default function Header({ headerColor = ["none", "none"] }: HeaderProps) 
             className="w-[73.73px] h-[53px]"
           />
         </div>
+        
+        {/* Desktop Navigation */}
         <div className="hidden md:flex gap-[50px]">
-          <h2 onClick={handleHomePage} className="cursor-pointer ">Home</h2>
-          <h2 onClick={handleAboutPage} className="cursor-pointer ">About Us</h2>
-          <h2 onClick={handleShopPlanPage} className="cursor-pointer ">Shop Plans</h2>
-          <h2 onClick={handleContactPage} className="cursor-pointer ">Contact Us</h2>
-          <h2 onClick={handleWishlistPage} className="cursor-pointer ">Wishlist</h2>
-          <h2 onClick={handleBecomeSellerPage} className="cursor-pointer ">Become a Seller</h2>
+          <h2 onClick={handleHomePage} className="cursor-pointer hover:opacity-80 transition-opacity">Home</h2>
+          <h2 onClick={handleAboutPage} className="cursor-pointer hover:opacity-80 transition-opacity">About Us</h2>
+          <h2 onClick={handleShopPlanPage} className="cursor-pointer hover:opacity-80 transition-opacity">Shop Plans</h2>
+          <h2 onClick={handleContactPage} className="cursor-pointer hover:opacity-80 transition-opacity">Contact Us</h2>
+          <h2 onClick={handleWishlistPage} className="cursor-pointer hover:opacity-80 transition-opacity">Wishlist</h2>
+          <h2 onClick={handleBecomeSellerPage} className="cursor-pointer hover:opacity-80 transition-opacity">Become a Seller</h2>
         </div>
+
+        {/* Right side items */}
         <div className="flex items-center gap-2">
-          {/* {showLogin && <Button
-            className="bg-white text-[#D8A526] border hover:bg-[#D8A526] hover:text-white"
-            style={{ borderColor: "#D8A526" }}
-          >
-            Log in
-          </Button>}
-          {showLogin && <Button
-            className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
-            style={{ borderColor: "#D8A526" }}>
-            Sign in
-          </Button>}
-          {!showLogin && <h1 className="text-white font-bold text-lg">{currentUser}</h1>}
-          {!showLogin && <Button
-            className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526]"
-            style={{ borderColor: "#D8A526" }} onClick={()=>handleLogout()}
-          >
-            Log out
-          </Button>} */}
-          {/* Toshow the userName */}
-          {/* {userId!==null?getUserData?.name:'UserProfile'} */}
           <div className="flex items-center gap-2">
             <div onClick={handleUserProfile}>
-              <FaUser size={25} className="cursor-pointer" />
+              <FaUser size={25} className="cursor-pointer hover:opacity-80 transition-opacity" />
             </div>
-            <div>
+            <div className="hidden sm:block">
               {typeof window !== 'undefined' && localStorage.getItem("jwtToken") !== null && user && user?.firstName
                 ? user.firstName
                 : "Account"}
             </div>
           </div>
-          <div className="w-[1px] h-9 bg-white opacity-50 mx-2"></div>
-          <MdOutlineShoppingCart className="size-6 cursor-pointer" onClick={handleAddCartPage} />
+          <div className="w-[1px] h-9 bg-white opacity-50 mx-2 hidden sm:block"></div>
+          <MdOutlineShoppingCart className="size-6 cursor-pointer hover:opacity-80 transition-opacity" onClick={handleAddCartPage} />
+          
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMobileMenu}
+            className="md:hidden p-2 rounded-md hover:bg-white/10 transition-colors"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden  backdrop-blur-sm border-t border-white/20">
+          <div className="px-4 py-6 space-y-4">
+            <div className="flex items-center gap-3 pb-4 border-b border-white/20">
+              <FaUser size={20} />
+              <span className="font-bold">
+                {typeof window !== 'undefined' && localStorage.getItem("jwtToken") !== null && user && user?.firstName
+                  ? user.firstName
+                  : "Account"}
+              </span>
+            </div>
+            
+            <div className="space-y-3">
+              <div 
+                onClick={() => { handleHomePage(); closeMobileMenu(); }}
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+              >
+                Home
+              </div>
+              <div 
+                onClick={() => { handleAboutPage(); closeMobileMenu(); }}
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+              >
+                About Us
+              </div>
+              <div 
+                onClick={() => { handleShopPlanPage(); closeMobileMenu(); }}
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+              >
+                Shop Plans
+              </div>
+              <div 
+                onClick={() => { handleContactPage(); closeMobileMenu(); }}
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+              >
+                Contact Us
+              </div>
+              <div 
+                onClick={() => { handleWishlistPage(); closeMobileMenu(); }}
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+              >
+                Wishlist
+              </div>
+              <div 
+                onClick={() => { handleBecomeSellerPage(); closeMobileMenu(); }}
+                className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold text-black"
+              >
+                Become a Seller
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

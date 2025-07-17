@@ -155,7 +155,7 @@ export default function FeaturedProducts() {
                       src={items.images[0].imageUrl[0]}
                       alt="design_home_1"
                       className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover"
-                      onClick={() => router.push(`/product/${items.id}?name=${encodeURIComponent(items.category.name)}`)}
+                      onClick={() => router.push(`/product/${items?.id}?name=${encodeURIComponent(items?.category?.name)}`)}
                     />
                     <div className="p-[10px] flex flex-col gap-4">
                     <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] px-2 sm:px-3 font-semibold">
@@ -167,7 +167,7 @@ export default function FeaturedProducts() {
                         alt="constructor_person"
                         className="w-[12px] h-[18px] sm:w-[13%] sm:h-[38px]  object-center rounded-[50%]"
                       />
-                      <h1 className="text-[12px] sm:text-[14px]">{items.seller.sellerName}</h1>
+                      <h1 className="text-[12px] sm:text-[14px]">{items?.seller?.sellerName}</h1>
                       <h2 className="text-[12px] sm:text-[14px] text-gray-400 font-normal">
                         ({items.seller.storeDescription})
                       </h2>
@@ -175,7 +175,7 @@ export default function FeaturedProducts() {
 
                     <div className="ml-3">
                     <StarRatings
-                      rating={items.reviews[0].rating}
+                      rating={items?.reviews[0]?.rating}
                       starRatedColor='#EACD3C'
                       numberOfStars={5}
                       name='rating'

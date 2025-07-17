@@ -31,6 +31,7 @@ import { Card, CardContent } from "@/components/ui/card";
 // import { useSession } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import axiosInstance from "@/app/utils/axiosInstance";
+import { toast, Toaster } from "sonner";
 
 // Dynamically import RichTextEditor with SSR disabled
 const RichTextEditor = dynamic(
@@ -345,6 +346,10 @@ const ProductForm: React.FC = () => {
       percentage: 0
     },
     images: [] as { imageUrl: string; isPrimary: boolean }[],
+    productDiscountType: "",
+    productDiscountValue: 0,
+    productDiscountStartDate: "",
+    productDiscountEndDate: "",
   });
 
   const [content, setContent] = useState<string>(
@@ -355,17 +360,17 @@ const ProductForm: React.FC = () => {
   var status="authenticated"
   const data={
     user:{
-      sellerId:""
+      sellerId:"c6fe18bd-0e74-47f9-b8e1-83f1f93b9760"
     }
   }
-  useEffect(() => {
-    if (status === "authenticated" && data?.user?.sellerId) {
-      setFormData((prev) => ({
-        ...prev,
-        sellerId: data.user.sellerId,
-      }));
-    }
-  }, [data, status]);
+  // useEffect(() => {
+  //   if (status === "authenticated" && data?.user?.sellerId) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       sellerId: data.user.sellerId,
+  //     }));
+  //   }
+  // });
 
   // Removed newVariant state since we're not using variants anymore
 
@@ -385,6 +390,12 @@ const ProductForm: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+        if (status === "authenticated" && data?.user?.sellerId) {
+      setFormData((prev) => ({
+        ...prev,
+        sellerId: data.user.sellerId,
+      }));
+    }
     const fetchCategories = async () => {
       try {
         const response:any = await axiosInstance.get<Category[]>('/seller/fetchCategory');
@@ -579,17 +590,20 @@ const ProductForm: React.FC = () => {
           percentage: formData.GST.percentage
         } : undefined,
         images: formData.images,
+        productDiscountType: newDiscount.discountType,
+        productDiscountValue: newDiscount.discountValue,
+        productDiscountStartDate: newDiscount.startDate,
+        productDiscountEndDate: newDiscount.endDate,
       };
 
       // Mock API call for now - replace with actual API when ready
       console.log("Product Data to be sent:", productData);
-      // const response: any = await axiosInstance.post("/seller/products", productData);
+      const response: any = await axiosInstance.post("/seller/sellerNewProduct", productData);
       // console.log("Product Created:", response?.data);
       // router.push("/seller/products");
-      
+      toast.success("Product created successfully!");
       // For now, just show success message
-      alert("Product created successfully! (Mock implementation)");
-      router.push("/seller");
+
 
       setFormData({
         sellerId: "",
@@ -607,6 +621,10 @@ const ProductForm: React.FC = () => {
           percentage: 0,
         },
         images: [],
+        productDiscountType: "",
+        productDiscountValue: 0,
+        productDiscountStartDate: "",
+        productDiscountEndDate: "",
       });
       // Removed setNewVariant since we're not using variants anymore
     } catch (error: any) {
@@ -670,6 +688,7 @@ const ProductForm: React.FC = () => {
                 value={formData.description}
                 onChange={handleChange}
               />
+              
 
               <InputField
                 name="packageDetails"
@@ -746,6 +765,13 @@ const ProductForm: React.FC = () => {
                   </SelectContent>
               </Select>
                 </div>
+                <InputField
+                name="price"
+                label="Product Price"
+                placeholder="price"
+                value={formData.price}
+                onChange={handleChange}
+              />
              
             </div>
 

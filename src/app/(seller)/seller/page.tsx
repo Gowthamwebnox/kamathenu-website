@@ -147,7 +147,8 @@ const AnalysisPage = () => {
         return [
             {
                 title: "Total Users",
-                value: `${dashboardData?.totalUsers}`,
+                value: 23,
+                // `${dashboardData?.totalUsers}`
                 percentage: "70.5%",
                 color: "text-green-500 bg-green-100",
                 icon: <ArrowUpRight size={16} className="text-green-500" />,
@@ -156,7 +157,8 @@ const AnalysisPage = () => {
             },
             {
                 title: "Total Orders",
-                value: `${dashboardData?.totalOrders}`,
+                value: 123,
+                // `${dashboardData?.totalOrders}`
                 percentage: "70.5%",
                 color: "text-red-500 bg-red-100",
                 icon: <ChartLine size={16} className="text-red-500" />,
@@ -165,7 +167,8 @@ const AnalysisPage = () => {
             },
             {
                 title: "Total Sales",
-                value: `₹${dashboardData?.totalSales.toLocaleString('en-IN')}`,
+                value: 13,
+                // `₹${dashboardData?.totalSales.toLocaleString('en-IN')}`
                 percentage: `${dashboardData?.analyticsReport?.companyFinanceGrowth || 0}%`,
                 color: "text-yellow-500 bg-yellow-100",
                 icon: <ArrowUpRight size={16} className="text-yellow-500" />,
@@ -174,25 +177,27 @@ const AnalysisPage = () => {
             },
             {
                 title: "Total Refunds",
-                value: `₹${dashboardData?.totalRefund.toLocaleString('en-IN')}`,
+                value: 12,
+                // `₹${dashboardData?.totalRefund.toLocaleString('en-IN')}`
                 percentage: "0%",
                 color: "text-red-500 bg-red-100",
                 icon: <ArrowDownLeft size={16} className="text-red-500" />,
                 extra: "This year",
                 extraColor: "text-red-500",
             },
-            {
-                title: "Shipping Charges",
-                value: `₹${dashboardData?.totalShippingCharge.toLocaleString('en-IN')}`,
-                percentage: "0%",
-                color: "text-blue-500 bg-blue-100",
-                icon: <Minus size={16} className="text-blue-500" />,
-                extra: "All time",
-                extraColor: "text-blue-500",
-            },
+            // {
+            //     title: "Shipping Charges",
+            //     value: `₹${dashboardData?.totalShippingCharge.toLocaleString('en-IN')}`,
+            //     percentage: "0%",
+            //     color: "text-blue-500 bg-blue-100",
+            //     icon: <Minus size={16} className="text-blue-500" />,
+            //     extra: "All time",
+            //     extraColor: "text-blue-500",
+            // },
             {
                 title: "Total GST",
-                value: `₹${dashboardData?.totalGST.toLocaleString('en-IN')}`,
+                value: 1.2,
+                // `₹${dashboardData?.totalGST.toLocaleString('en-IN')}`
                 percentage: "0%",
                 color: "text-purple-500 bg-purple-100",
                 icon: <Minus size={16} className="text-purple-500" />,

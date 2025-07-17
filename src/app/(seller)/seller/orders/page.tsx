@@ -76,119 +76,38 @@ interface OrderAPIResponse {
 interface OrderAPIItem {
   id: string;
   orderId: string;
+  productId: string;
   sellerId: string;
-  quantity: number;
   priceAtPurchase: string;
   createdAt: string;
   updatedAt: string;
-  userId: string;
-  productVariantId: string;
+  userId: string | null;
   status: string;
-  discountAmountAtPurchase: string;
-  gstAmountAtPurchase: string;
-  courierServiceId: number;
-  shippingCharge: string;
-  shipmentId: string;
-  draftShipmentsId: string | null;
-  gstAtPurches: string;
-  statusCode: string | null;
-  isRefunded: boolean;
-  refundId: string | null;
-  refundStatus: string;
-  refundedAmount: string | null;
-  cancellationReason: string | null;
+  User: any | null;
+  product: {
+    id: string;
+    categoryId: string;
+    name: string;
+    description: string;
+    isApproved: boolean;
+    createdAt: string;
+    updatedAt: string;
+    aboutProduct: {
+      about: string;
+    };
+    sellerId: string;
+    price: string | null;
+  };
   order: {
     id: string;
     userId: string;
     totalAmount: string;
     orderStatus: string;
-    paymentRefId: string;
-    paymentStatus: string;
-    shippingAddressId: string;
-    createdAt: string;
-    updatedAt: string;
-    orderRefId: string | null;
-    shippingAddress: {
-      id: string;
-      userId: string;
-      fullName: string | null;
-      email: string | null;
-      street: string;
-      city: string;
-      state: string;
-      zipCode: string;
-      country: string;
-      phone: string;
-      landmark: string | null;
-      createdAt: string;
-      updatedAt: string;
-    };
-    user: {
-      id: string;
-      name: string;
-      email: string;
-    };
-  };
-  OrderItemPayment: Array<{
-    id: string;
-    orderItemId: string;
-    paymentId: string;
-    amount: string;
+    paymentRefId: string | null;
     paymentStatus: string;
     createdAt: string;
     updatedAt: string;
-    paymentType: string;
-    reason: string | null;
-    payment: {
-      id: string;
-      orderId: string;
-      paymentGateway: string;
-      paymentStatus: string;
-      transactionId: string;
-      amount: string;
-      paymentDate: string;
-      createdAt: string;
-      updatedAt: string;
-      paymentGatewayOrderId: string;
-    };
-  }>;
-  productVariant: {
-    id: string;
-    productId: string;
-    variantType: string;
-    variantValue: string;
-    additionalPrice: string;
-    createdAt: string;
-    updatedAt: string;
-    description: string;
-    price: string;
-    stockQuantity: number;
-    title: string;
-    productVariantSKU: string;
-    productWeight: string;
-    product: {
-      id: string;
-      name: string;
-      productSKU: string;
-      images: any[];
-    };
-    ProductVariantImage: Array<{
-      id: string;
-      productVariantId: string;
-      imageUrl: string;
-      isPrimary: boolean;
-      createdAt: string;
-    }>;
-    discounts: any[];
   };
-  OrderTracking: Array<{
-    id: string;
-    updatedAt: string;
-    remarks: string;
-    orderItemId: string;
-    status: string;
-    statusCode: string | null;
-  }>;
 }
 
 interface Tab {
@@ -197,48 +116,22 @@ interface Tab {
   icon: React.ReactNode;
 }
 
-// Helper function to get variant-specific image
-const getVariantImage = (item: OrderAPIItem) => {
-  const productVariant = item.productVariant;
-  const product = item.productVariant?.product;
-
-  if (!product) return "/placeholder.png";
-
-  if (
-    productVariant?.ProductVariantImage &&
-    productVariant.ProductVariantImage.length > 0
-  ) {
-    const primaryImage = productVariant.ProductVariantImage.find(
-      (img) => img.isPrimary
-    );
-    return (
-      primaryImage?.imageUrl ||
-      productVariant.ProductVariantImage?.[0]?.imageUrl
-    );
-  }
-
-  const primaryProductImage = product.images?.find((img: any) => img.isPrimary);
-  return (
-    primaryProductImage?.imageUrl ||
-    product.images?.[0]?.imageUrl ||
-    "/placeholder.png"
-  );
+// Helper function to get product image (placeholder for now)
+const getProductImage = (item: OrderAPIItem) => {
+  // Since your API doesn't include images yet, return placeholder
+  return "/placeholder.png";
 };
 
-// Helper function to get variant details
-const getVariantDetails = (item: OrderAPIItem) => {
-  const productVariant = item.productVariant;
-  const product = item.productVariant?.product;
+// Helper function to get product details
+const getProductDetails = (item: OrderAPIItem) => {
+  const product = item.product;
 
-  if (!product) return { title: "", variantInfo: "" };
+  if (!product) return { title: "Unnamed Product", description: "" };
 
-  const title = productVariant?.title || product.name || "Unnamed Product";
-  const variantInfo =
-    productVariant?.variantType && productVariant?.variantValue
-      ? `${productVariant.variantType}: ${productVariant.variantValue}`
-      : "";
+  const title = product.name || "Unnamed Product";
+  const description = product.description || "";
 
-  return { title, variantInfo };
+  return { title, description };
 };
 
 // Status option component for the dialog
@@ -348,10 +241,10 @@ const Productspage = () => {
   const [orderCounts, setOrderCounts] = useState({
     All: 0,
     pending: 0,
-    shipped: 0,
+    // shipped: 0,
     delivered: 0,
     cancelled: 0,
-    cancellRequested: 0,
+    // cancellRequested: 0,
   });
   const [isVisible, setIsVisible] = useState<string | null>(null);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -402,84 +295,96 @@ const Productspage = () => {
       count: orderCounts.pending,
       icon: statusIcons.pending,
     },
-    {
-      name: "shipped",
-      count: orderCounts.shipped,
-      icon: statusIcons.shipped,
-    },
+    // {
+    //   name: "shipped",
+    //   count: orderCounts.shipped,
+    //   icon: statusIcons.shipped,
+    // },
     {
       name: "delivered",
       count: orderCounts.delivered,
       icon: statusIcons.delivered,
     },
-    {
-      name: "cancellRequested",
-      count: orderCounts.cancellRequested,
-      icon: statusIcons.cancellRequested,
-    },
+    // {
+    //   name: "cancellRequested",
+    //   count: orderCounts.cancellRequested,
+    //   icon: statusIcons.cancellRequested,
+    // },
     {
       name: "cancelled",
       count: orderCounts.cancelled,
       icon: statusIcons.cancelled,
     },
   ];
-
+  var pending=0;
+  var delivered=0;
+  var cancelled=0;
   // Fetch orders from API with query params
   const getOrders = async () => {
     try {
       setLoading(true);
-      const params: any = {
-        limit: rowsPerPage,
-        offset: (currentPage - 1) * rowsPerPage,
-      };
-      if (activeTab !== "All") params.status = activeTab;
-      if (searchTerm) params.search = searchTerm;
-      const query = new URLSearchParams(params).toString();
       const response:any = await axiosInstance.get(`/seller/fetchSellerOrders/${"c6fe18bd-0e74-47f9-b8e1-83f1f93b9760"}`);
-      const { data } = response;
-      if (data.code === 200) {
-        const counts = data.data.count;
+      console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
+      
+      if (response.status === 200) {
+        // Your API returns a single order item, so we'll wrap it in an array
+        const orderItem = response.data 
+        const orderItemsData = response.data;
+        orderItemsData.map((item: any) => {
+          
+          if(item.status === "pending"){
+            pending++;
+          }
+          if(item.status === "delivered"){
+            delivered++;
+          }
+          if(item.status === "cancelled"){
+            cancelled++;
+          }
+        })
+        
+        console.log("🔥🔥🔥🔥🔥🔥orderItemsData🔥🔥🔥🔥🔥🔥", orderItemsData.length)
         
         setOrderCounts({
-          All: counts.total,
-          pending: counts.pending,
-          shipped: counts.shipped,
-          delivered: counts.delivered,
-          cancelled: counts.cancelled,
-          cancellRequested: counts.cancellRequested || 0,
+          All:response.data.length, 
+          pending: pending,
+          // shipped: orderItem.status === "shipped" ? 1 : 0,
+          delivered: delivered,
+          cancelled: cancelled,
+          // cancellRequested: orderItem.status === "cancellRequested" ? 1 : 0,
         });
-        setOrderItems(data.data.orderItems || []);
-        const formattedOrders = data.data.orderItems.map(
-          (item: OrderAPIItem) => {
+        setOrderItems(orderItemsData);
+        
+        const formattedOrders = orderItemsData.map(
+          (item: any) => {
             const createdAt = new Date(item.createdAt);
-          const date = createdAt.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
+            const date = createdAt.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
             });
-          const time = createdAt.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
+            const time = createdAt.toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "2-digit",
             });
-            const productImage = getVariantImage(item);
-            // const { title, variantInfo } = getVariantDetails(item);
-          return {
-            id: item.id,
-            orderId: item.orderId,
-            productId: item.productVariant?.productId || "",
-            productName: title,
-            productImage: productImage,
-            productDescription: "",
-            customer:
-              item.order?.user?.name || item.order?.shippingAddress?.fullName || "Unknown",
-            email:
-              item.order?.user?.email || item.order?.shippingAddress?.email || "No email",
-            date,
-            time,
-            items: item.quantity,
-            price: `₹${item.priceAtPurchase}`,
-            status: item.status,
-            variantInfo: variantInfo,
+            
+            // const productImage = getProductImage(item);
+            const { title, description } = getProductDetails(item);
+            
+            return {
+              id: item.id,
+              orderId: item.orderId,
+              productId: item.productId,
+              productName: title,
+              productImage: item.product.images[0].imageUrl[0],
+              productDescription: item.product.description,
+              customer: "Customer", // Since User is null in your response
+              email: "customer@example.com", // Since User is null in your response
+              date,
+              time,
+              items: 1, // Default to 1 since quantity is not in your response
+              price: `₹${item.priceAtPurchase}`,
+              status: item.status,
             };
           }
         );
@@ -489,6 +394,7 @@ const Productspage = () => {
         setOrderItems([]);
       }
     } catch (error) {
+      console.error("Error fetching orders:", error);
       setOrders([]);
       setOrderItems([]);
     } finally {
@@ -501,12 +407,11 @@ const Productspage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, currentPage, rowsPerPage, searchTerm]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(orderCounts[activeTab as keyof typeof orderCounts] / rowsPerPage)
-  );
+  // Client-side pagination to limit displayed data
+  const totalPages = Math.max(1, Math.ceil(orders.length / rowsPerPage));
   const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedOrders = orders; // Already paginated from API
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedOrders = orders.slice(startIndex, endIndex);
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -606,7 +511,7 @@ const Productspage = () => {
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
       setStatusLoading(true);
-      const response = await axios.patch(`/api/seller/orders/${orderId}`, {
+      const response:any = await axios.patch(`/api/seller/orders/${orderId}`, {
         status: newStatus,
       });
 
@@ -641,7 +546,7 @@ const Productspage = () => {
   };
 
   // Calculate refund amounts
-  const calculateRefundAmounts = (orderItem: OrderAPIItem) => {
+  const calculateRefundAmounts = (orderItem: any) => {
     const itemPrice = Number.parseFloat(orderItem.priceAtPurchase);
     const gstAmount = Number.parseFloat(orderItem.gstAmountAtPurchase || "0");
     const shippingCharge = Number.parseFloat(orderItem.shippingCharge || "0");
@@ -692,15 +597,15 @@ const Productspage = () => {
     const [refundAmount, setRefundAmount] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const orderItem = cancelDialogOrder;
+    const orderItem:any = cancelDialogOrder;
     if (!orderItem) return null;
 
     const refundAmounts = calculateRefundAmounts(orderItem);
-    const primaryImage =
-      orderItem.productVariant.ProductVariantImage.find((img) => img.isPrimary)
-        ?.imageUrl ||
-      orderItem.productVariant.ProductVariantImage[0]?.imageUrl ||
-      "/placeholder.svg";
+    // const primaryImage =
+    //   orderItem.productVariant.ProductVariantImage.find((img) => img.isPrimary)
+    //     ?.imageUrl ||
+    //   orderItem.productVariant.ProductVariantImage[0]?.imageUrl ||
+    //   "/placeholder.svg";
 
     // Handle cancellation with refund
     const handleCancelWithRefund = async () => {
@@ -712,7 +617,7 @@ const Productspage = () => {
           Number.parseFloat(refundAmount) ||
           calculateRefundAmounts(cancelDialogOrder).refundableAmount;
 
-        const response = await axios.post(
+        const response:any = await axios.post(
           `/api/user/orders/${cancelDialogOrder.id}/cancel`,
           {
             cancelType: "withRefund",
@@ -746,7 +651,7 @@ const Productspage = () => {
 
       setIsProcessing(true);
       try {
-        const response = await axios.post(
+        const response:any = await axios.post(
           `/api/user/orders/${cancelDialogOrder.id}/cancel`,
           {
             cancelType: "withoutRefund",
@@ -772,379 +677,380 @@ const Productspage = () => {
       }
     };
 
-    return (
-      <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
-        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="space-y-3">
-            <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <AlertTriangle className="h-6 w-6 text-orange-500" />
-              Cancel Order & Process Refund
-            </DialogTitle>
-            <p className="text-gray-600">
-              Review the order details and choose the appropriate cancellation
-              option
-            </p>
-          </DialogHeader>
+  //   return (
+  //     <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+  //       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+  //         <DialogHeader className="space-y-3">
+  //           <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+  //             <AlertTriangle className="h-6 w-6 text-orange-500" />
+  //             Cancel Order & Process Refund
+  //           </DialogTitle>
+  //           <p className="text-gray-600">
+  //             Review the order details and choose the appropriate cancellation
+  //             option
+  //           </p>
+  //         </DialogHeader>
 
-          <div className="space-y-6">
-            {/* Order Overview Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Package className="h-5 w-5" />
-                  Order Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col lg:flex-row gap-6">
-                  {/* Product Image */}
-                  <div className="flex-shrink-0">
-                    <img
-                      src={primaryImage || "/placeholder.svg"}
-                      alt={orderItem.productVariant.title}
-                      className="w-32 h-32 object-cover rounded-lg border border-gray-200 shadow-sm"
-                    />
-                  </div>
+  //         <div className="space-y-6">
+  //           {/* Order Overview Card */}
+  //           <Card>
+  //             {/* <CardHeader>
+  //               <CardTitle className="flex items-center gap-2 text-lg">
+  //                 <Package className="h-5 w-5" />
+  //                 Order Details
+  //               </CardTitle>
+  //             </CardHeader> */}
+  //             <CardContent>
+  //               <div className="flex flex-col lg:flex-row gap-6">
+  //                 {/* Product Image */}
+  //                 <div className="flex-shrink-0">
+  //                   <img
+  //                     src={primaryImage || "/placeholder.svg"}
+  //                     alt={orderItem.productVariant.title}
+  //                     className="w-32 h-32 object-cover rounded-lg border border-gray-200 shadow-sm"
+  //                   />
+  //                 </div>
 
-                  {/* Product & Order Info */}
-                  <div className="flex-1 space-y-4">
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-900">
-                        {orderItem.productVariant.title}
-                      </h3>
-                      <p className="text-gray-600 mt-1">
-                        {orderItem.productVariant.description ? orderItem.productVariant.description : ""}
-                      </p>
-                      {orderItem.productVariant.variantType && (
-                        <Badge variant="secondary" className="mt-2">
-                          {orderItem.productVariant.variantType}:{" "}
-                          {orderItem.productVariant.variantValue}
-                        </Badge>
-                      )}
-                    </div>
+  //                 {/* Product & Order Info */}
+  //                 <div className="flex-1 space-y-4">
+  //                   <div>
+  //                     <h3 className="text-xl font-semibold text-gray-900">
+  //                       {orderItem.productVariant.title}
+  //                     </h3>
+  //                     <p className="text-gray-600 mt-1">
+  //                       {orderItem.productVariant.description ? orderItem.productVariant.description : ""}
+  //                     </p>
+  //                     {orderItem.productVariant.variantType && (
+  //                       <Badge variant="secondary" className="mt-2">
+  //                         {orderItem.productVariant.variantType}:{" "}
+  //                         {orderItem.productVariant.variantValue}
+  //                       </Badge>
+  //                     )}
+  //                   </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div>
-                        <p className="text-sm text-gray-500">Order ID</p>
-                        <p className="font-medium text-sm break-all">
-                          {orderItem.id}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">SKU</p>
-                        <p className="font-medium">
-                          {orderItem.productVariant.productVariantSKU}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Quantity</p>
-                        <p className="font-medium">{orderItem.quantity}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Status</p>
-                        <Badge
-                          className={
-                            badgeStyles[orderItem.status]
-                          }
-                        >
-                          {orderItem.status.charAt(0).toUpperCase() +
-                            orderItem.status.slice(1)}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+  //                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+  //                     <div>
+  //                       <p className="text-sm text-gray-500">Order ID</p>
+  //                       <p className="font-medium text-sm break-all">
+  //                         {orderItem.id}
+  //                       </p>
+  //                     </div>
+  //                     <div>
+  //                       <p className="text-sm text-gray-500">SKU</p>
+  //                       <p className="font-medium">
+  //                         {orderItem.productVariant.productVariantSKU}
+  //                       </p>
+  //                     </div>
+  //                     <div>
+  //                       <p className="text-sm text-gray-500">Quantity</p>
+  //                       <p className="font-medium">{orderItem.quantity}</p>
+  //                     </div>
+  //                     <div>
+  //                       <p className="text-sm text-gray-500">Status</p>
+  //                       <Badge
+  //                         className={
+  //                           badgeStyles[orderItem.status]
+  //                         }
+  //                       >
+  //                         {orderItem.status.charAt(0).toUpperCase() +
+  //                           orderItem.status.slice(1)}
+  //                       </Badge>
+  //                     </div>
+  //                   </div>
+  //                 </div>
+  //               </div>
+  //             </CardContent>
+  //           </Card>
 
-            {/* Customer Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <User className="h-5 w-5" />
-                  Customer Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-gray-500">Customer Name</p>
-                    <p className="font-medium">{orderItem.order.user?.name || orderItem.order.shippingAddress.fullName || ""}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">{orderItem.order.user?.email || orderItem.order.shippingAddress.email || ""}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="font-medium">
-                      {orderItem.order.shippingAddress.phone}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Order Date</p>
-                    <p className="font-medium">
-                      {new Date(orderItem.createdAt).toLocaleDateString(
-                        "en-GB",
-                        {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )}
-                    </p>
-                  </div>
-                </div>
+  //           {/* Customer Information */}
+  //           <Card>
+  //             <CardHeader>
+  //               <CardTitle className="flex items-center gap-2 text-lg">
+  //                 <User className="h-5 w-5" />
+  //                 Customer Information
+  //               </CardTitle>
+  //             </CardHeader>
+  //             <CardContent>
+  //               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  //                 <div>
+  //                   <p className="text-sm text-gray-500">Customer Name</p>
+  //                   <p className="font-medium">{orderItem.order.user?.name || orderItem.order.shippingAddress.fullName || ""}</p>
+  //                 </div>
+  //                 <div>
+  //                   <p className="text-sm text-gray-500">Email</p>
+  //                   <p className="font-medium">{orderItem.order.user?.email || orderItem.order.shippingAddress.email || ""}</p>
+  //                 </div>
+  //                 <div>
+  //                   <p className="text-sm text-gray-500">Phone</p>
+  //                   <p className="font-medium">
+  //                     {orderItem.order.shippingAddress.phone}
+  //                   </p>
+  //                 </div>
+  //                 <div>
+  //                   <p className="text-sm text-gray-500">Order Date</p>
+  //                   <p className="font-medium">
+  //                     {new Date(orderItem.createdAt).toLocaleDateString(
+  //                       "en-GB",
+  //                       {
+  //                         day: "2-digit",
+  //                         month: "short",
+  //                         year: "numeric",
+  //                         hour: "2-digit",
+  //                         minute: "2-digit",
+  //                       }
+  //                     )}
+  //                   </p>
+  //                 </div>
+  //               </div>
 
-                <Separator className="my-4" />
+  //               <Separator className="my-4" />
 
-                <div>
-                  <p className="text-sm text-gray-500 mb-2">Shipping Address</p>
-                  <p className="text-sm">
-                    {orderItem.order.shippingAddress.street},{" "}
-                    {orderItem.order.shippingAddress.city},{" "}
-                    {orderItem.order.shippingAddress.state} -{" "}
-                    {orderItem.order.shippingAddress.zipCode},{" "}
-                    {orderItem.order.shippingAddress.country}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+  //               <div>
+  //                 <p className="text-sm text-gray-500 mb-2">Shipping Address</p>
+  //                 {/* <p className="text-sm">
+  //                   {orderItem.order.shippingAddress.street},{" "}
+  //                   {orderItem.order.shippingAddress.city},{" "}
+  //                   {orderItem.order.shippingAddress.state} -{" "}
+  //                   {orderItem.order.shippingAddress.zipCode},{" "}
+  //                   {orderItem.order.shippingAddress.country}
+  //                 </p> */}
+  //               </div>
+  //             </CardContent>
+  //           </Card>
 
-            {/* Payment & Refund Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <CreditCard className="h-5 w-5" />
-                  Payment & Refund Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {/* Payment Breakdown */}
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-3">Payment Breakdown</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Item Price:</span>
-                        <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.itemPrice.toFixed(2)}</span>
-                      </div>
-                      {refundAmounts.discountAmount > 0 && (
-                        <div className="flex justify-between text-green-600">
-                          <span>Discount Applied:</span>
-                          <span>
-                            -<span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.discountAmount.toFixed(2)}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex justify-between">
-                        <span>GST ({orderItem.gstAtPurches}%):</span>
-                        <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.gstAmount.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Shipping Charges:</span>
-                        <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.shippingCharge.toFixed(2)}</span>
-                      </div>
-                      <Separator />
-                      <div className="flex justify-between font-semibold">
-                        <span>Total Paid:</span>
-                        <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.totalPaid.toFixed(2)}</span>
-                      </div>
-                    </div>
-                  </div>
+  //           {/* Payment & Refund Information */}
+  //           <Card>
+  //             <CardHeader>
+  //               <CardTitle className="flex items-center gap-2 text-lg">
+  //                 <CreditCard className="h-5 w-5" />
+  //                 Payment & Refund Details
+  //               </CardTitle>
+  //             </CardHeader>
+  //             <CardContent>
+  //               <div className="space-y-4">
+  //                 {/* Payment Breakdown */}
+  //                 <div className="bg-gray-50 p-4 rounded-lg">
+  //                   <h4 className="font-semibold mb-3">Payment Breakdown</h4>
+  //                   <div className="space-y-2 text-sm">
+  //                     <div className="flex justify-between">
+  //                       <span>Item Price:</span>
+  //                       <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.itemPrice.toFixed(2)}</span>
+  //                     </div>
+  //                     {refundAmounts.discountAmount > 0 && (
+  //                       <div className="flex justify-between text-green-600">
+  //                         <span>Discount Applied:</span>
+  //                         <span>
+  //                           -<span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.discountAmount.toFixed(2)}
+  //                         </span>
+  //                       </div>
+  //                     )}
+  //                     <div className="flex justify-between">
+  //                       <span>GST ({orderItem.gstAtPurches}%):</span>
+  //                       <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.gstAmount.toFixed(2)}</span>
+  //                     </div>
+  //                     <div className="flex justify-between">
+  //                       <span>Shipping Charges:</span>
+  //                       <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.shippingCharge.toFixed(2)}</span>
+  //                     </div>
+  //                     <Separator />
+  //                     <div className="flex justify-between font-semibold">
+  //                       <span>Total Paid:</span>
+  //                       <span><span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.totalPaid.toFixed(2)}</span>
+  //                     </div>
+  //                   </div>
+  //                 </div>
 
-                  {/* Refund Information */}
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-3 text-blue-900">
-                      Refund Information
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      {refundAmounts.alreadyRefunded > 0 && (
-                        <div className="flex justify-between text-orange-600">
-                          <span>Already Refunded:</span>
-                          <span>
-                            <span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.alreadyRefunded.toFixed(2)}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex justify-between font-semibold text-blue-900">
-                        <span>Refundable Amount (excluding GST & Shipping):</span>
-                        <span>
-                          <span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.refundableAmount.toFixed(2)}
-                        </span>
-                      </div>
-                      {orderItem.isRefunded && (
-                        <div className="flex items-center gap-2 text-green-600 mt-2">
-                          <Check className="h-4 w-4" />
-                          <span className="text-sm">
-                            Refund Status: {orderItem.refundStatus}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+  //                 {/* Refund Information */}
+  //                 <div className="bg-blue-50 p-4 rounded-lg">
+  //                   <h4 className="font-semibold mb-3 text-blue-900">
+  //                     Refund Information
+  //                   </h4>
+  //                   <div className="space-y-2 text-sm">
+  //                     {refundAmounts.alreadyRefunded > 0 && (
+  //                       <div className="flex justify-between text-orange-600">
+  //                         <span>Already Refunded:</span>
+  //                         <span>
+  //                           <span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.alreadyRefunded.toFixed(2)}
+  //                         </span>
+  //                       </div>
+  //                     )}
+  //                     <div className="flex justify-between font-semibold text-blue-900">
+  //                       <span>Refundable Amount (excluding GST & Shipping):</span>
+  //                       <span>
+  //                         <span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.refundableAmount.toFixed(2)}
+  //                       </span>
+  //                     </div>
+  //                     {orderItem.isRefunded && (
+  //                       <div className="flex items-center gap-2 text-green-600 mt-2">
+  //                         <Check className="h-4 w-4" />
+  //                         <span className="text-sm">
+  //                           Refund Status: {orderItem.refundStatus}
+  //                         </span>
+  //                       </div>
+  //                     )}
+  //                   </div>
+  //                 </div>
 
-                  {/* Payment Method Info */}
-                  {orderItem.OrderItemPayment.length > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-semibold mb-3">Payment Method</h4>
-                      <div className="text-sm space-y-1">
-                        <p>
-                          <span className="text-gray-600">Gateway:</span>{" "}
-                          {orderItem.OrderItemPayment[0].payment.paymentGateway}
-                        </p>
-                        <p>
-                          <span className="text-gray-600">Transaction ID:</span>{" "}
-                          {orderItem.OrderItemPayment[0].payment.transactionId}
-                        </p>
-                        <p>
-                          <span className="text-gray-600">Payment Status:</span>
-                          <Badge variant="secondary" className="ml-2">
-                            {
-                              orderItem.OrderItemPayment[0].payment
-                                .paymentStatus
-                            }
-                          </Badge>
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+  //                 {/* Payment Method Info */}
+  //                 {orderItem.OrderItemPayment.length > 0 && (
+  //                   <div className="bg-gray-50 p-4 rounded-lg">
+  //                     <h4 className="font-semibold mb-3">Payment Method</h4>
+  //                     <div className="text-sm space-y-1">
+  //                       <p>
+  //                         <span className="text-gray-600">Gateway:</span>{" "}
+  //                         {orderItem.OrderItemPayment[0].payment.paymentGateway}
+  //                       </p>
+  //                       <p>
+  //                         <span className="text-gray-600">Transaction ID:</span>{" "}
+  //                         {orderItem.OrderItemPayment[0].payment.transactionId}
+  //                       </p>
+  //                       <p>
+  //                         <span className="text-gray-600">Payment Status:</span>
+  //                         <Badge variant="secondary" className="ml-2">
+  //                           {
+  //                             orderItem.OrderItemPayment[0].payment
+  //                               .paymentStatus
+  //                           }
+  //                         </Badge>
+  //                       </p>
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //               </div>
+  //             </CardContent>
+  //           </Card>
 
-            {/* Cancellation Form */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Cancellation Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="reason">Cancellation Reason *</Label>
-                  <Textarea
-                    id="reason"
-                    placeholder="Please provide a reason for cancellation..."
-                    value={cancellationReason}
-                    onChange={(e) => setCancellationReason(e.target.value)}
-                    className="mt-1"
-                    rows={3}
-                  />
-                </div>
+  //           {/* Cancellation Form */}
+  //           <Card>
+  //             <CardHeader>
+  //               <CardTitle className="text-lg">Cancellation Details</CardTitle>
+  //             </CardHeader>
+  //             <CardContent className="space-y-4">
+  //               <div>
+  //                 <Label htmlFor="reason">Cancellation Reason *</Label>
+  //                 <Textarea
+  //                   id="reason"
+  //                   placeholder="Please provide a reason for cancellation..."
+  //                   value={cancellationReason}
+  //                   onChange={(e) => setCancellationReason(e.target.value)}
+  //                   className="mt-1"
+  //                   rows={3}
+  //                 />
+  //               </div>
 
-                <div>
-                  <Label htmlFor="refundAmount">
-                    Custom Refund Amount (Optional)
-                  </Label>
-                  <div className="mt-1 relative">
-                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <input
-                      id="refundAmount"
-                      type="number"
-                      placeholder={`Default: ₹${refundAmounts.refundableAmount.toFixed(2)}`}
-                      value={refundAmount}
-                      onChange={(e) => setRefundAmount(e.target.value)}
-                      max={refundAmounts.refundableAmount}
-                      min="0"
-                      step="0.01"
-                      className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Leave empty to refund the full refundable amount (<span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.refundableAmount.toFixed(2)})
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+  //               <div>
+  //                 <Label htmlFor="refundAmount">
+  //                   Custom Refund Amount (Optional)
+  //                 </Label>
+  //                 <div className="mt-1 relative">
+  //                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+  //                   <input
+  //                     id="refundAmount"
+  //                     type="number"
+  //                     placeholder={`Default: ₹${refundAmounts.refundableAmount.toFixed(2)}`}
+  //                     value={refundAmount}
+  //                     onChange={(e) => setRefundAmount(e.target.value)}
+  //                     max={refundAmounts.refundableAmount}
+  //                     min="0"
+  //                     step="0.01"
+  //                     className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+  //                   />
+  //                 </div>
+  //                 <p className="text-xs text-gray-500 mt-1">
+  //                   Leave empty to refund the full refundable amount (<span className="inline-block align-middle mr-0.5">₹</span>{refundAmounts.refundableAmount.toFixed(2)})
+  //                 </p>
+  //               </div>
+  //             </CardContent>
+  //           </Card>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
-              <Button
-                onClick={handleCancelWithRefund}
-                disabled={isProcessing}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                {isProcessing ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Cancel with Refund (<span className="inline-block align-middle mr-0.5">₹</span>
-                    {(
-                      Number.parseFloat(refundAmount) ||
-                      refundAmounts.refundableAmount
-                    ).toFixed(2)}
-                    )
-                  </>
-                )}
-              </Button>
+  //           {/* Action Buttons */}
+  //           <div className="flex flex-col sm:flex-row gap-3 pt-4">
+  //             <Button
+  //               onClick={handleCancelWithRefund}
+  //               disabled={isProcessing}
+  //               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+  //             >
+  //               {isProcessing ? (
+  //                 <>
+  //                   <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+  //                   Processing...
+  //                 </>
+  //               ) : (
+  //                 <>
+  //                   <CreditCard className="h-4 w-4 mr-2" />
+  //                   Cancel with Refund (<span className="inline-block align-middle mr-0.5">₹</span>
+  //                   {(
+  //                     Number.parseFloat(refundAmount) ||
+  //                     refundAmounts.refundableAmount
+  //                   ).toFixed(2)}
+  //                   )
+  //                 </>
+  //               )}
+  //             </Button>
 
-              <Button
-                onClick={handleCancelWithoutRefund}
-                disabled={isProcessing}
-                variant="destructive"
-                className="flex-1"
-              >
-                {isProcessing ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <X className="h-4 w-4 mr-2" />
-                    Cancel without Refund
-                  </>
-                )}
-              </Button>
+  //             <Button
+  //               onClick={handleCancelWithoutRefund}
+  //               disabled={isProcessing}
+  //               variant="destructive"
+  //               className="flex-1"
+  //             >
+  //               {isProcessing ? (
+  //                 <>
+  //                   <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+  //                   Processing...
+  //                 </>
+  //               ) : (
+  //                 <>
+  //                   <X className="h-4 w-4 mr-2" />
+  //                   Cancel without Refund
+  //                 </>
+  //               )}
+  //             </Button>
 
-              <Button
-                onClick={() => {
-                  setCancelDialogOpen(false);
-                  setCancellationReason("");
-                  setRefundAmount("");
-                }}
-                variant="outline"
-                disabled={isProcessing}
-              >
-                Close
-              </Button>
-            </div>
+  //             <Button
+  //               onClick={() => {
+  //                 setCancelDialogOpen(false);
+  //                 setCancellationReason("");
+  //                 setRefundAmount("");
+  //               }}
+  //               variant="outline"
+  //               disabled={isProcessing}
+  //             >
+  //               Close
+  //             </Button>
+  //           </div>
 
-            {/* Warning Notice */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                <div className="text-sm">
-                  <p className="font-semibold text-yellow-800">
-                    Important Notice:
-                  </p>
-                  <ul className="mt-2 space-y-1 text-yellow-700">
-                    <li>
-                      • Cancellation with refund will initiate the refund
-                      process immediately
-                    </li>
-                    <li>
-                      • Refunds typically take 3-7 business days to reflect in
-                      customer's account
-                    </li>
-                    <li>• Cancellation without refund is irreversible</li>
-                    <li>
-                      • Customer will be notified via email about the
-                      cancellation
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
+  //           {/* Warning Notice */}
+  //           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+  //             <div className="flex items-start gap-3">
+  //               <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+  //               <div className="text-sm">
+  //                 <p className="font-semibold text-yellow-800">
+  //                   Important Notice:
+  //                 </p>
+  //                 <ul className="mt-2 space-y-1 text-yellow-700">
+  //                   <li>
+  //                     • Cancellation with refund will initiate the refund
+  //                     process immediately
+  //                   </li>
+  //                   <li>
+  //                     • Refunds typically take 3-7 business days to reflect in
+  //                     customer's account
+  //                   </li>
+  //                   <li>• Cancellation without refund is irreversible</li>
+  //                   <li>
+  //                     • Customer will be notified via email about the
+  //                     cancellation
+  //                   </li>
+  //                 </ul>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </DialogContent>
+  //     </Dialog>
+      
+  //   );
   };
 
   return (
@@ -1271,7 +1177,9 @@ const Productspage = () => {
                     <TableRowSkeleton columns={9} key={idx} />
                   ))
                 ) : paginatedOrders.length > 0 ? (
-                  paginatedOrders.map((order, index) => (
+                  console.log("🔥🔥🔥🔥🔥🔥paginatedOrders🔥🔥🔥🔥🔥🔥", paginatedOrders),
+                  paginatedOrders.map((order:any, index:any) => (
+                    
                     <React.Fragment key={order.id}>
                       <tr className="hover:bg-gray-50 transition-colors">
                         <td className="py-4 px-4">
@@ -1316,7 +1224,7 @@ const Productspage = () => {
                         </td>
                         <td className="py-4 px-4 font-medium text-blue-700">
                           {orderItems && (() => {
-                            const item = orderItems.find((i) => i.id === order.id);
+                            const item:any = orderItems.find((i:any) => i.id === order.id);
                             if (item && item.isRefunded && item.refundedAmount) {
                               return (
                                 <div className="flex flex-col gap-1">
@@ -1414,50 +1322,94 @@ const Productspage = () => {
                         <tr>
                           <td colSpan={9} className="p-4 bg-gray-50">
                             <div className="p-4 bg-white rounded-lg border border-gray-200">
-                              <div className="flex flex-col md:flex-row gap-4">
-                                <img
-                                  src={order.productImage || "/placeholder.svg"}
-                                  alt={order.productName}
-                                  className="w-24 h-24 object-contain rounded-lg border border-gray-200"
-                                />
-                                <div className="flex-1">
-                                  <h3 className="font-semibold text-lg mb-1">
-                                    {order.productName}
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                {/* Product Details */}
+                                <div className="space-y-4">
+                                  <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
+                                    Product Details
                                   </h3>
-                                  {order.variantInfo && (
-                                    <p className="text-sm text-gray-700 bg-gray-50 inline-block px-2 py-1 rounded-md mb-2">
-                                      {order.variantInfo}
-                                    </p>
-                                  )}
-                                  <p className="text-gray-600 mb-3">
-                                    {order.productDescription}
-                                  </p>
-                                  <div className="flex flex-wrap gap-4">
-                                    <div>
-                                      <p className="text-xs text-gray-500">
-                                        Price
+                                  <div className="flex gap-4">
+                                    <img
+                                      src={order.productImage || "/placeholder.svg"}
+                                      alt={order.productName}
+                                      className="w-32 h-32 object-contain rounded-lg border border-gray-200"
+                                    />
+                                    <div className="flex-1">
+                                      <h4 className="font-semibold text-lg mb-2">
+                                        {order.productName}
+                                      </h4>
+                                      <p className="text-gray-600 mb-3">
+                                        {order.productDescription}
                                       </p>
-                                      <p className="font-medium">
-                                        {order.price}
-                                      </p>
+                                      <div className="space-y-2">
+                                        <div className="flex justify-between">
+                                          <span className="text-sm text-gray-500">Product ID:</span>
+                                          <span className="font-medium text-sm">{order.productId}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-sm text-gray-500">Price:</span>
+                                          <span className="font-medium text-green-600">{order.price}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-sm text-gray-500">Quantity:</span>
+                                          <span className="font-medium">{order.items}</span>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500">
-                                        Quantity
-                                      </p>
-                                      <p className="font-medium">
-                                        {order.items}
-                                      </p>
+                                  </div>
+                                </div>
+
+                                {/* Order Details */}
+                                <div className="space-y-4">
+                                  <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
+                                    Order Details
+                                  </h3>
+                                  <div className="space-y-3">
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-500">Order ID:</span>
+                                      <span className="font-medium text-sm">{order.orderId}</span>
                                     </div>
-                                    <div>
-                                      <p className="text-xs text-gray-500">
-                                        Order ID
-                                      </p>
-                                      <p className="font-medium">{order.id}</p>
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-500">Order Item ID:</span>
+                                      <span className="font-medium text-sm">{order.id}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-500">Order Date:</span>
+                                      <span className="font-medium">{order.date} at {order.time}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-500">Status:</span>
+                                      <Badge className={badgeStyles[order.status]}>
+                                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                      </Badge>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-500">Customer:</span>
+                                      <span className="font-medium">{order.customer}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-sm text-gray-500">Email:</span>
+                                      <span className="font-medium text-sm">{order.email}</span>
                                     </div>
                                   </div>
                                 </div>
                               </div>
+
+                              {/* Additional Product Information */}
+                              {(() => {
+                                const orderItem = orderItems.find(item => item.id === order.id);
+                                if (orderItem?.product?.aboutProduct?.about) {
+                                  return (
+                                    <div className="mt-6 pt-4 border-t">
+                                      <h4 className="font-semibold text-gray-900 mb-2">About Product</h4>
+                                      <p className="text-gray-600 text-sm">
+                                        {orderItem.product.aboutProduct.about}
+                                      </p>
+                                    </div>
+                                  );
+                                }
+                                return null;
+                              })()}
                             </div>
                           </td>
                         </tr>
@@ -1581,3 +1533,4 @@ const Productspage = () => {
 };
 
 export default Productspage;
+

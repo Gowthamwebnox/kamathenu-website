@@ -80,7 +80,7 @@ interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
 
 function TabsList({ children, className, ...props }: TabsListProps) {
   return (
-    <div className="relative w-[30%]">
+    <div className="relative w-[70%] lg:w-[30%]">
       <div 
         className={cn(
           "flex  w-full flex-nowrap overflow-x-auto scrollbar-none pt-4 pb-1 ",
