@@ -30,7 +30,7 @@ export default function DesignShopPlan() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   // const [isLoading, setIsLoading] = useState(false);
-  var setIsLoading=false
+  
   const [wishlist, setWishlist] = useState<{[key:string]:boolean}>({});
   const [limit,setLimit]=useState(1);
   const router = useRouter();
@@ -55,7 +55,7 @@ export default function DesignShopPlan() {
 
   const handleDesignHome = async (category?: string,limit?:number) => {
     try {
-      setIsLoading(true);
+      
       const selectedCategory = category || activeCategory;
       const payload = {
         categoryName: selectedCategory,
@@ -68,7 +68,7 @@ export default function DesignShopPlan() {
       console.log("🔥🔥🔥🔥🔥🔥designCategoryData🔥🔥🔥🔥🔥🔥", response.data);
       const initialWishlist:{[key:string]:boolean}={};
       response.data.forEach((item:any)=>{
-        initialWishlist[item.id]=item?.wishlist[0]?.productId===item?.id;
+        initialWishlist[item.id]=item?.wishlist?.[0]?.productId===item?.id;
       })
       setDesignCategoryData(response.data);
       setWishlist(initialWishlist);
@@ -241,7 +241,7 @@ export default function DesignShopPlan() {
                     className="flex flex-col border border-gray-300 rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative"
                   >
                     <img
-                      src={items.images[0].imageUrl[0]}
+                      src={items.images?.[0]?.imageUrl?.[0] || '/assets/kamathenu Images/Design/design_home_1.jpg'}
                       alt="design_home_1"
                       className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover cursor-pointer"
                       onClick={() => router.push(`/product/${items.id}?name=${encodeURIComponent(items.name)}`)}
@@ -251,20 +251,20 @@ export default function DesignShopPlan() {
                     </h1>
                     <div className="flex items-center gap-1 sm:gap-2 px-2">
                       <img
-                        src={items.seller.profileImage}
+                        src={items.seller?.profileImage || '/assets/kamathenu Images/Design/constructor_person.png'}
                         alt="constructor_person"
                         className="w-[12px] h-[18px] sm:w-[13%] sm:h-[38px] object-cover object-center rounded-[50%]"
                       />
                       <h1 className="text-[12px] sm:text-[14px]">
-                        {items.seller.sellerName}
+                        {items.seller?.sellerName || 'Unknown Seller'}
                       </h1>
                       <h2 className="text-[12px] sm:text-[14px] text-gray-400 font-normal">
-                        ({items.seller.storeDescription})
+                        ({items.seller?.storeDescription || 'No description'})
                       </h2>
                     </div>
                     <div className="flex px-2 gap-1 items-center">
                       <StarRatings
-                        rating={items.reviews[0].rating}
+                        rating={items.reviews?.[0]?.rating || 0}
                         starRatedColor='#EACD3C'
                         numberOfStars={5}
                         name='rating'
@@ -272,19 +272,19 @@ export default function DesignShopPlan() {
                         starSpacing="1px"
                       />
                       <h1 className="ml-1 text-gray-400 text-[13px] sm:text-[15px]">
-                        ({items.reviews[0].rating})
+                        ({items.reviews?.[0]?.rating || 0})
                       </h1>
                     </div>
                     <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 justify-between mx-2">
                       <div>
                         <div className="text-gray-400 line-through flex items-center">
                           <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">
-                            ₹ {items.variants[0].discountPrice}
+                            ₹ {items.variants?.[0]?.discountPrice || 0}
                           </span>
                         </div>
                         <div className="text-[#D8A526] flex items-center">
                           <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">
-                            ₹ {items.variants[0].price}
+                            ₹ {items.variants?.[0]?.price || 0}
                           </span>
                         </div>
                       </div>
@@ -297,7 +297,7 @@ export default function DesignShopPlan() {
                       </div>
                     </div>
                     <div className="absolute top-2 right-2">
-                      <FaHeart className={`size-4 sm:size-5 ${wishlist[items.id] ? 'text-yellow-500' : 'text-white'}`}  onClick={()=>handleWishlist(items.id,items?.wishlist[0]?.productId,items?.wishlist[0]?.id)}/>
+                      <FaHeart className={`size-4 sm:size-5 ${wishlist[items.id] ? 'text-yellow-500' : 'text-white'}`}  onClick={()=>handleWishlist(items.id,items?.wishlist?.[0]?.productId || '',items?.wishlist?.[0]?.id || '')}/>
                     </div>
                   </div>
                 ))}

@@ -166,8 +166,7 @@ const ProductDetails = () => {
               <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    productDetails !== null &&
-                    productDetails.images[0].imageUrl[1]
+                    productDetails?.images?.[0]?.imageUrl?.[1] || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png'
                   }
                   alt="img1"
                   className="border rounded-[3px] w-[100%] h-[100%] object-center"
@@ -180,8 +179,7 @@ const ProductDetails = () => {
               <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    productDetails !== null &&
-                    productDetails.images[0].imageLayerout[0]
+                    productDetails?.images?.[0]?.imageLayerout?.[0] || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png'
                   }
                   alt="img1"
                   className="border rounded-[3px] w-[100%] h-[100%]"
@@ -194,8 +192,7 @@ const ProductDetails = () => {
               <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    productDetails !== null &&
-                    productDetails.images[0].imageLayerout[1]
+                    productDetails?.images?.[0]?.imageLayerout?.[1] || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png'
                   }
                   alt="img1"
                   className="border rounded-[3px] w-[100%] h-[100%]"
@@ -209,8 +206,7 @@ const ProductDetails = () => {
             <div className="w-full col-span-6 md:col-span-4 lg:col-span-3">
               <img
                 src={
-                  productDetails !== null &&
-                  productDetails.images[0].imageUrl[0]
+                  productDetails?.images?.[0]?.imageUrl?.[0] || '/assets/kamathenu Images/Design/design_home_1.jpg'
                 }
                 alt="design_home_1"
                 className="h-[504px] border rounded-[11px] w-[100%] object-cover"
@@ -219,24 +215,22 @@ const ProductDetails = () => {
 
             <div className="col-span-6  md:col-span-6 lg:col-span-2 flex flex-col gap-5">
               <h1 className="text-[33px] font-semibold">
-                {productDetails !== null && productDetails.name}
+                {productDetails?.name || 'Product Name Not Available'}
               </h1>
               <div className="flex items-center gap-3 px-2">
                 <img
                   src={
-                    productDetails !== null &&
-                    productDetails.seller.profileImage
+                    productDetails?.seller?.profileImage || '/assets/kamathenu Images/Design/constructor_person.png'
                   }
                   alt="constructor_person"
                   className="w-[11%] h-[31px] rounded-[50%]"
                 />
                 <h1 className="text-[19px]">
-                  {productDetails !== null && productDetails.seller.sellerName}
+                  {productDetails?.seller?.sellerName || 'Unknown Seller'}
                 </h1>
                 <h2 className="text-[19px] text-gray-400 font-normal">
                   (
-                  {productDetails !== null &&
-                    productDetails.seller.storeDescription}
+                  {productDetails?.seller?.storeDescription || 'No description'}
                   )
                 </h2>
               </div>
@@ -244,13 +238,13 @@ const ProductDetails = () => {
               <div className="flex px-2 gap-1 items-center">
                 {[
                   ...Array(
-                    productDetails !== null && productDetails.reviews[0].rating
+                    productDetails?.reviews?.[0]?.rating || 0
                   ),
                 ].map((_, i) => (
                   <IoIosStar key={i} className="text-[#EACD3C] size-9" />
                 ))}
                 <h1 className="ml-1 text-gray-400 text-[15px]">
-                  ({productDetails !== null && productDetails.reviews[0].rating}
+                  ({productDetails?.reviews?.[0]?.rating || 0}
                   )
                 </h1>
               </div>
@@ -258,18 +252,17 @@ const ProductDetails = () => {
               <div>
                 <div className="text-gray-400 line-through flex items-center text-[27px] font-normal">
                   ₹{" "}
-                  {productDetails !== null && productDetails.variants[0].price}
+                  {productDetails?.variants?.[0]?.price || 0}
                 </div>
                 <div className="text-[#D8A526] flex items-center text-[33px] font-semibold">
                   ₹{" "}
-                  {productDetails !== null &&
-                    productDetails.variants[0].discountPrice}
+                  {productDetails?.variants?.[0]?.discountPrice || 0}
                 </div>
               </div>
 
               <div className="w-[73%]">
                 <p className="text-[19px]">
-                  {productDetails !== null && productDetails.description}
+                  {productDetails?.description || 'No description available'}
                 </p>
               </div>
 
@@ -366,10 +359,9 @@ const ProductDetails = () => {
                           About this Design:
                         </h3>
                         <ul className="list-disc list-inside w-[90%] text-gray-700 space-y-2">
-                          {productDetails !== null &&
-                            productDetails?.productDetails?.designInformation?.aboutDesign?.map(
-                              (line: any, idx: any) => <li key={idx}>{line}</li>
-                            )}
+                          {productDetails?.productDetails?.designInformation?.aboutDesign?.map(
+                            (line: any, idx: any) => <li key={idx}>{line}</li>
+                          ) || <li>No design information available</li>}
                         </ul>
                       </>
                     )}
@@ -379,21 +371,18 @@ const ProductDetails = () => {
                         <div className="flex items-center space-x-4 mb-4">
                           <img
                             src={
-                              productDetails !== null &&
-                              productDetails.seller.profileImage
+                              productDetails?.seller?.profileImage || '/assets/kamathenu Images/Design/constructor_person.png'
                             }
                             alt="Designer"
                             className="w-12 h-12 rounded-full"
                           />
                           <div>
                             <h3 className="text-lg font-semibold">
-                              {productDetails !== null &&
-                                productDetails.seller.sellerName}
+                              {productDetails?.seller?.sellerName || 'Unknown Designer'}
                             </h3>
                             <p className="text-gray-500 text-sm">
                               (
-                              {productDetails !== null &&
-                                productDetails.seller.storeDescription}
+                              {productDetails?.seller?.storeDescription || 'No description'}
                               )
                             </p>
                           </div>
@@ -402,21 +391,19 @@ const ProductDetails = () => {
                           About this Designer:
                         </h4>
                         <p className=" mb-4 text-[18px] font-normal text-gray-400">
-                          {productDetails !== null &&
-                            productDetails.description}
+                          {productDetails?.description || 'No description available'}
                         </p>
                         <h4 className="font-medium mb-2">Tools:</h4>
                         <div className="flex space-x-2">
-                          {productDetails !== null &&
-                            productDetails?.productDetails[0]?.packageDetails?.toolImage?.map(
-                              (ele: any, ind: any) => (
-                                <img
-                                  src={ele}
-                                  alt="tool"
-                                  className="w-8 h-10"
-                                />
-                              )
-                            )}
+                          {productDetails?.productDetails?.[0]?.packageDetails?.toolImage?.map(
+                            (ele: any, ind: any) => (
+                              <img
+                                src={ele}
+                                alt="tool"
+                                className="w-8 h-10"
+                              />
+                            )
+                          ) || <span className="text-gray-500">No tools available</span>}
                         </div>
                       </>
                     )}
@@ -427,12 +414,10 @@ const ProductDetails = () => {
                           Package file Details:
                         </h4>
                         <p className="text-gray-700 mb-2 text-[18px] font-normal">
-                          {productDetails !== null &&
-                            productDetails.description}
+                          {productDetails?.description || 'No package details available'}
                         </p>
                         <p className="text-gray-700 mb-2 text-[18px] font-normal">
-                          {productDetails !== null &&
-                            productDetails.description}
+                          {productDetails?.description || 'No additional details available'}
                         </p>
                       </>
                     )}
@@ -443,14 +428,10 @@ const ProductDetails = () => {
                           Package Delivery Details:
                         </h4>
                         <p className="text-gray-700 mb-2 text-[18px] font-normal">
-                          {productDetails !== null &&
-                            productDetails.productDetails[0].deliveryDetails
-                              .deliveryDescription}
+                          {productDetails?.productDetails?.[0]?.deliveryDetails?.deliveryDescription || 'No delivery description available'}
                         </p>
                         <p className="text-gray-700 text-[18px] font-normal">
-                          {productDetails !== null &&
-                            productDetails.productDetails[0].deliveryDetails
-                              .deliveryDescription}
+                          {productDetails?.productDetails?.[0]?.deliveryDetails?.deliveryDescription || 'No additional delivery information'}
                         </p>
                       </>
                     )}
@@ -461,29 +442,26 @@ const ProductDetails = () => {
                           Customer Reviews
                         </h1>
                         <div className="flex items-center space-x-2 mb-4">
-                          <div className="flex">
-                            {Array(
-                              productDetails !== null &&
-                                productDetails.reviews[0].rating
-                            )
-                              .fill(0)
-                              .map((_, i) => (
-                                <IoIosStar
-                                  key={i}
-                                  className="text-yellow-500 w-5 h-5"
-                                />
-                              ))}
-                          </div>
-                          <span className="text-gray-600">
-                            (
-                            {productDetails !== null &&
-                              productDetails.reviews[0].rating}{" "}
-                            out of 5)
-                          </span>
+                                                  <div className="flex">
+                          {Array(
+                            productDetails?.reviews?.[0]?.rating || 0
+                          )
+                            .fill(0)
+                            .map((_, i) => (
+                              <IoIosStar
+                                key={i}
+                                className="text-yellow-500 w-5 h-5"
+                              />
+                            ))}
+                        </div>
+                        <span className="text-gray-600">
+                          (
+                          {productDetails?.reviews?.[0]?.rating || 0}{" "}
+                          out of 5)
+                        </span>
                         </div>
                         <p className="text-gray-500 mb-4">
-                          {productDetails !== null &&
-                            productDetails.reviews.length}{" "}
+                          {productDetails?.reviews?.length || 0}{" "}
                           reviews
                         </p>
                         {["5", "4", "3", "2", "1"].map((score) => (
@@ -537,10 +515,9 @@ const ProductDetails = () => {
                           Design Features:
                         </h3>
                         <ul className="list-disc list-inside w-[90%] text-gray-700 space-y-2">
-                          {productDetails !== null &&
-                            productDetails.productDetails?.designInformation?.designFeature?.map(
-                              (line: any, idx: any) => <li key={idx}>{line}</li>
-                            )}
+                          {productDetails?.productDetails?.designInformation?.designFeature?.map(
+                            (line: any, idx: any) => <li key={idx}>{line}</li>
+                          ) || <li>No design features available</li>}
                         </ul>
                       </>
                     )}
@@ -549,10 +526,9 @@ const ProductDetails = () => {
                       <>
                         <h4 className="font-medium mb-4">Expertise:</h4>
                         <ul className="list-disc list-inside text-gray-700 space-y-2">
-                          {productDetails !== null &&
-                            productDetails.productDetails?.designDeatils?.expertise?.map(
-                              (exp: any, i: any) => <li key={i}>{exp}</li>
-                            )}
+                          {productDetails?.productDetails?.designDeatils?.expertise?.map(
+                            (exp: any, i: any) => <li key={i}>{exp}</li>
+                          ) || <li>No expertise information available</li>}
                         </ul>
                       </>
                     )}
@@ -561,10 +537,9 @@ const ProductDetails = () => {
                       <>
                         <h4 className="font-medium mb-4">What do you Get?</h4>
                         <ul className="list-disc list-inside text-gray-700 space-y-2">
-                          {productDetails !== null &&
-                            t.productDetails?.packageDetails?.get?.map(
-                              (line: any, idx: any) => <li key={idx}>{line}</li>
-                            )}
+                          {t?.productDetails?.[0]?.packageDetails?.get?.map(
+                            (line: any, idx: any) => <li key={idx}>{line}</li>
+                          ) || <li>No package details available</li>}
                         </ul>
                       </>
                     )}
@@ -575,10 +550,9 @@ const ProductDetails = () => {
                           Delivery Instructions:
                         </h4>
                         <ul className="list-disc list-inside text-gray-700 space-y-2">
-                          {productDetails !== null &&
-                            productDetails.productDetails[0].deliveryDetails.deliveryInstructions?.map(
-                              (line: any, idx: any) => <li key={idx}>{line}</li>
-                            )}
+                          {productDetails?.productDetails?.[0]?.deliveryDetails?.deliveryInstructions?.map(
+                            (line: any, idx: any) => <li key={idx}>{line}</li>
+                          ) || <li>No delivery instructions available</li>}
                         </ul>
                       </>
                     )}
@@ -586,32 +560,31 @@ const ProductDetails = () => {
                     {t === "Reviews" && (
                       // Placeholder to show 2 review cards side by side — you can expand this
                       <div className="space-y-4">
-                        {productDetails !== null &&
-                          productDetails.reviews.map((ele: any, ind: any) => (
-                            <div
-                              key={ind}
-                              className="bg-gray-50 p-4 rounded-lg"
-                            >
-                              <p className="text-gray-700 italic mb-2">
-                                {ele.reviewText}
-                              </p>
-                              <div className="flex items-center space-x-2">
-                                <div className="flex">
-                                  {Array(ele.rating)
-                                    .fill(0)
-                                    .map((_, j) => (
-                                      <IoIosStar
-                                        key={j}
-                                        className="text-yellow-500 w-4 h-4"
-                                      />
-                                    ))}
-                                </div>
-                                <span className="text-gray-800 font-medium">
-                                  {ele.user.name}
-                                </span>
+                        {productDetails?.reviews?.map((ele: any, ind: any) => (
+                          <div
+                            key={ind}
+                            className="bg-gray-50 p-4 rounded-lg"
+                          >
+                            <p className="text-gray-700 italic mb-2">
+                              {ele?.reviewText || 'No review text'}
+                            </p>
+                            <div className="flex items-center space-x-2">
+                              <div className="flex">
+                                {Array(ele?.rating || 0)
+                                  .fill(0)
+                                  .map((_, j) => (
+                                    <IoIosStar
+                                      key={j}
+                                      className="text-yellow-500 w-4 h-4"
+                                    />
+                                  ))}
                               </div>
+                              <span className="text-gray-800 font-medium">
+                                {ele?.user?.name || 'Anonymous'}
+                              </span>
                             </div>
-                          ))}
+                          </div>
+                        )) || <p className="text-gray-500">No reviews available</p>}
                       </div>
                     )}
                   </div>
@@ -642,44 +615,44 @@ const ProductDetails = () => {
                     >
                       <div className="flex flex-col  rounded-t-[15px] border border-gray-400 gap-4 relative">
                         <img
-                          src={item.images[0].imageUrl[0]}
+                          src={item.images?.[0]?.imageUrl?.[0] || '/assets/kamathenu Images/Design/design_home_1.jpg'}
                           alt="image"
                           className="w-full h-[234px] border rounded-t-[11px]"
                         />
                         <h1 className="text-[21px] px-3 font-semibold">
-                          {item.name}
+                          {item.name || 'Product Name'}
                         </h1>
                         <div className="flex items-center gap-3 px-2">
                           <img
-                            src={item.seller.profileImage}
+                            src={item.seller?.profileImage || '/assets/kamathenu Images/Design/constructor_person.png'}
                             alt="constructor_person"
                             className="w-[13%] h-[21px] rounded-full"
                           />
                           <h1 className="text-[14px]">
-                            {item.seller.sellerName}
+                            {item.seller?.sellerName || 'Unknown Seller'}
                           </h1>
                           <h2 className="text-[14px] text-gray-400 font-normal">
-                            {item.seller.storeDescription}
+                            {item.seller?.storeDescription || 'No description'}
                           </h2>
                         </div>
                         <div className="flex px-2 gap-1 items-center">
-                          {[...Array(item.reviews[0].rating)].map((_, i) => (
+                          {[...Array(item.reviews?.[0]?.rating || 0)].map((_, i) => (
                             <IoIosStar
                               key={i}
                               className="text-[#EACD3C] size-4"
                             />
                           ))}
                           <h1 className="ml-1 text-gray-400 text-[15px]">
-                            ({item.reviews[0].rating})
+                            ({item.reviews?.[0]?.rating || 0})
                           </h1>
                         </div>
                         <div className="flex p-2 gap-6 items-center">
                           <div>
                             <div className="text-gray-400 line-through text-[21px] font-semibold">
-                              ₹ {item.variants[0].price}
+                              ₹ {item.variants?.[0]?.price || 0}
                             </div>
                             <div className="text-[#D8A526] text-[28px] font-semibold">
-                              ₹ {item.variants[0].discountPrice}
+                              ₹ {item.variants?.[0]?.discountPrice || 0}
                             </div>
                           </div>
                           <img

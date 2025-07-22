@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ChevronLeft, X, Upload } from "lucide-react";
 import { S3Storage } from "@/lib/s3";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,7 +30,7 @@ import { Card, CardContent } from "@/components/ui/card";
 // import { useSession } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import axiosInstance from "@/app/utils/axiosInstance";
-import { toast, Toaster } from "sonner";
+import { toast} from "sonner";
 
 // Dynamically import RichTextEditor with SSR disabled
 const RichTextEditor = dynamic(

@@ -289,7 +289,7 @@ export default function ShopwithConfidence() {
 
 
                       <h1 className="text-[15px] md:text-[28px] lg:text-[15px] text-gray-600 mb-5 text-right font-semibold">
-                        Up to {getIndependentHousePlans.length > 0 ? `${getIndependentHousePlans[0].discounts[0].discountValue}${getIndependentHousePlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
+                        Up to {getIndependentHousePlans.length > 0 ? `${getIndependentHousePlans[0]?.discounts[0]?.discountValue}${getIndependentHousePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                           : '20%'} offer
                       </h1>
                       <Button
@@ -337,7 +337,7 @@ export default function ShopwithConfidence() {
                   {ele.name}
                 </h1>
                 <h2 className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[25px] text-[#1A1A1AB2] font-semibold">
-                  Up to {ele.discounts[0].discountValue} {ele.discounts[0].discountType === 'percentage' ? '%' : '₹'} offer
+                  Up to {ele?.discounts[0]?.discountValue} {ele?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'} offer
                 </h2>
                 <Button className="bg-[#DADADA] w-fit text-black border border-black group-hover:bg-[#D8A526] group-hover:text-white group-hover:border-[#D8A526] rounded-[23px] text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px] px-3 sm:px-4 py-2 sm:py-3">
                   Shop now

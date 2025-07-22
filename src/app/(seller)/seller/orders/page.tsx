@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-
+import { FaFilePdf, FaTrash } from "react-icons/fa6";
 import {
   ChevronDown,
   MoreVertical,
@@ -18,7 +18,7 @@ import {
   Edit,
   Truck,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import axios from "axios";
 import {
@@ -36,6 +36,8 @@ import { Label } from "@/components/ui/label";
 import ShipmentDialog, { Shipment } from "@/components/ui/ShipmentDialog";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import axiosInstance from "@/app/utils/axiosInstance";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Order {
   id: string;
@@ -84,6 +86,7 @@ interface OrderAPIItem {
   userId: string | null;
   status: string;
   User: any | null;
+  designUrl: string;
   product: {
     id: string;
     categoryId: string;
@@ -260,6 +263,9 @@ const Productspage = () => {
   const [shipmentDialogOpen, setShipmentDialogOpen] = useState(false);
   const [shipmentDialogData, setShipmentDialogData] = useState<Shipment | null>(null);
   const [orderItems, setOrderItems] = useState<OrderAPIItem[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Debounce search input
   useEffect(() => {
@@ -310,11 +316,11 @@ const Productspage = () => {
     //   count: orderCounts.cancellRequested,
     //   icon: statusIcons.cancellRequested,
     // },
-    {
-      name: "cancelled",
-      count: orderCounts.cancelled,
-      icon: statusIcons.cancelled,
-    },
+    // {
+    //   name: "cancelled",
+    //   count: orderCounts.cancelled,
+    //   icon: statusIcons.cancelled,
+    // },
   ];
   var pending=0;
   var delivered=0;
@@ -385,6 +391,7 @@ const Productspage = () => {
               items: 1, // Default to 1 since quantity is not in your response
               price: `₹${item.priceAtPurchase}`,
               status: item.status,
+              designUrl: item.designDocument,
             };
           }
         );
@@ -1053,6 +1060,77 @@ const Productspage = () => {
   //   );
   };
 
+  // Add this function to handle file upload
+  const router=useRouter()
+  const handleUploadDesign = async (e: React.ChangeEvent<HTMLInputElement>, orderId: string) => {
+    const file = e.target.files?.[0];
+    console.log("🔥🔥🔥🔥🔥🔥file🔥🔥🔥🔥🔥🔥", file)
+    console.log("🔥🔥🔥🔥🔥🔥orderId🔥🔥🔥🔥🔥🔥", orderId)
+    if (!file) return;
+    setUploading(true);
+    setUploadedUrl(null);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/uploadDesign', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      console.log("🔥🔥🔥🔥🔥🔥data🔥🔥🔥🔥🔥🔥", data)
+      const payload={
+        orderId: orderId,
+        designUrl: data.url,
+        orderStauts:'delivered'
+      }
+      const resposnse=await axiosInstance.put(`/seller/updateOrder/${orderId}`, payload)
+      console.log("🔥🔥🔥🔥🔥🔥resposnse🔥🔥🔥🔥🔥🔥", resposnse)
+      if(resposnse.status==200){
+        window.location.reload()
+        // router.push('/seller/orders')
+      }
+      if (data.url) {
+        setUploadedUrl(data.url);
+      } else {
+        alert(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      alert('Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDeleteDesign = async (orderId: string) => {
+    
+
+    try {
+      // TODO: Replace with your actual API endpoint
+
+      const payload={
+        orderId: orderId,
+        designUrl: '',
+        orderStauts:'pending'
+      }
+      const resposnse=await axiosInstance.put(`/seller/updateOrder/${orderId}`, payload);
+      console.log("🔥🔥🔥🔥🔥🔥resposnse🔥🔥🔥🔥🔥🔥", resposnse)
+      if(resposnse.status==200){
+        toast.success("Design deleted successfully");
+        window.location.reload()
+        // router.push('/seller/orders')
+      }
+
+      // setOrderItems((prev) =>
+      //   prev.map((item) =>
+      //     item.id === orderId ? { ...item, designUrl: '' } : item
+      //   )
+      // );
+    } catch (error) {
+      alert("Failed to delete the design.");
+    }
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen p-4 md:p-8">
       <div className="mx-auto">
@@ -1113,7 +1191,7 @@ const Productspage = () => {
           <div className="mt-4 flex items-center gap-2 w-full">
             <input
               type="text"
-              placeholder="Search orders, products, SKU..."
+              placeholder="Search orders..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:ring-blue-500 focus:border-blue-500 text-sm"
@@ -1223,7 +1301,7 @@ const Productspage = () => {
                           {order.price}
                         </td>
                         <td className="py-4 px-4 font-medium text-blue-700">
-                          {orderItems && (() => {
+                          {/* {orderItems && (() => {
                             const item:any = orderItems.find((i:any) => i.id === order.id);
                             if (item && item.isRefunded && item.refundedAmount) {
                               return (
@@ -1234,7 +1312,7 @@ const Productspage = () => {
                               );
                             }
                             return <span className="text-gray-400">-</span>;
-                          })()}
+                          })()} */}
                         </td>
                         <td className="py-4 px-4">
                           <span
@@ -1264,7 +1342,8 @@ const Productspage = () => {
                                 }`}
                               />
                             </button>
-                            <DropdownMenu>
+                                
+                            {/* <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <button className="p-1.5 rounded-md hover:bg-gray-100 transition-colors">
                               <MoreVertical className="h-5 w-5 text-gray-600" />
@@ -1312,8 +1391,9 @@ const Productspage = () => {
                                 }}>
                                   <Truck className="w-4 h-4 mr-2" /> Shipment
                                 </DropdownMenuItem> */}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                              {/* </DropdownMenuContent>
+                            </DropdownMenu> */} 
+
                           </div>
                         </td>
                       </tr>
@@ -1396,11 +1476,13 @@ const Productspage = () => {
                               </div>
 
                               {/* Additional Product Information */}
-                              {(() => {
+                              <div className="mt-6 pt-4 border-t flex justify-between items-center">
+                                <div className="">
+                                   {(() => {
                                 const orderItem = orderItems.find(item => item.id === order.id);
                                 if (orderItem?.product?.aboutProduct?.about) {
                                   return (
-                                    <div className="mt-6 pt-4 border-t">
+                                    <div>
                                       <h4 className="font-semibold text-gray-900 mb-2">About Product</h4>
                                       <p className="text-gray-600 text-sm">
                                         {orderItem.product.aboutProduct.about}
@@ -1410,6 +1492,68 @@ const Productspage = () => {
                                 }
                                 return null;
                               })()}
+                                </div>
+                                {
+                                  order.designUrl
+                                    ? (
+                                      <div className="mt-2 text-green-600 text-xs break-all flex items-center gap-2">
+                                        <a
+                                          href={order.designUrl}
+                                          download={`design_${order.id}.pdf`}
+                                          style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            padding: 0,
+                                            cursor: 'pointer',
+                                            display: 'inline-flex',
+                                            alignItems: 'center'
+                                          }}
+                                          title="Download Design"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          <FaFilePdf size={40} />
+                                        </a>
+                                        <button
+                                          type="button"
+                                          onClick={() => handleDeleteDesign(order.id)}
+                                          style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            padding: 0,
+                                            cursor: 'pointer',
+                                            display: 'inline-flex',
+                                            alignItems: 'center'
+                                          }}
+                                          title="Delete Design"
+                                        >
+                                          <FaTrash size={18} color="red" />
+                                        </button>
+                                      </div>
+                                    )
+                                    : (
+                                      <div>
+                                        <Button className='cursor-pointer' onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                                          {uploading ? 'Uploading...' : 'Upload Design'}
+                                        </Button>
+                                        <input
+                                          type="file"
+                                          ref={fileInputRef}
+                                          style={{ display: 'none' }}
+                                          accept="image/*,application/pdf"
+                                          onChange={(e) => handleUploadDesign(e, order.id)}
+                                        />
+                                        {/* {uploadedUrl && (
+                                          <div className="mt-2 text-green-600 text-xs break-all">
+                                            Uploaded: <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">{uploadedUrl}</a>
+                                          </div>
+                                        )} */}
+                                      </div>
+                                    )
+                                }
+                                
+                              </div>
+                              
                             </div>
                           </td>
                         </tr>
@@ -1526,8 +1670,8 @@ const Productspage = () => {
       {/* Status Update Dialog */}
       <StatusUpdateDialog />
       {/* Cancel/Refund Dialog */}
-      <CancelDialog />
-      <ShipmentDialog open={shipmentDialogOpen} onOpenChange={setShipmentDialogOpen} shipment={shipmentDialogData} />
+      {/* <CancelDialog /> */}
+      {/* <ShipmentDialog open={shipmentDialogOpen} onOpenChange={setShipmentDialogOpen} shipment={shipmentDialogData} /> */}
     </div>
   );
 };
