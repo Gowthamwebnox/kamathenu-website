@@ -112,7 +112,7 @@ const DesignUploading = () => {
       </div>
 
       {/* Desktop Layout (md and lg) - Same as original */}
-      <div className='hidden md:block'>
+      <div className='hidden md:block overflow-hidden'>
         <div className="relative mt-[13%] flex items-center">
           <div className="flex justify-center items-center">
             {/* Background Image */}

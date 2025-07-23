@@ -1,28 +1,33 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-const userData=create( persist(
-    (set) => ({
-        userData: null,
-        userId:null,
-        setUserData: (userData: string) => set({ userData }),
-        setUserId:(userId:string)=>set({userId}),
-    }),
-    {
-        name: "user-data-storage", // name of localStorage key
-        storage: {
-            getItem: (name) => {
-                const item = sessionStorage.getItem(name);
-                return item ? JSON.parse(item) : null;
-            },
-            setItem: (name, value) => {
-                sessionStorage.setItem(name, JSON.stringify(value));
-            },
-            removeItem: (name) => {
-                sessionStorage.removeItem(name);
-            },
-        },
-    }
-))
+interface UserdataInterface{
+    userId:string;
+    userName:string;
+    userEmail:string;
+    token:string;
+    userRole:string;
+}
 
-export default userData;
+type userStore={
+    userData:UserdataInterface|null;
+    setUserData:(userData:UserdataInterface)=>void;
+    clearUserData:()=>void;
+}
+
+
+const userDataStore=create<userStore>()(
+    persist(
+        (set)=>({
+            userData:null,
+            setUserData:(userData:UserdataInterface)=>set({userData}),
+            clearUserData:()=>set({userData:null})
+        }),
+        {
+            name:'userData-storage',
+            storage:createJSONStorage(()=>localStorage),
+        }
+    )
+)
+
+export default userDataStore;

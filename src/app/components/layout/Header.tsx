@@ -67,7 +67,13 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
   console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊", currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-
+  const [getUserData,setUserData]=useState({
+    userId:null,
+    userName:null,
+    userEmail:null,
+    userRole:null,
+    token:null
+  })
   // const [getUserData, setUserData] = useState<any>()
   // const [showUserName, setShowUserName] = useState(false)
 
@@ -79,8 +85,18 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
   }, [])
 
   const fetchUserData = async () => {
+    var getLoaclData=localStorage.getItem('userData-storage')
+    getLoaclData=JSON.parse(getLoaclData || '{}')
+      setUserData({
+        userId:getLoaclData?.state?.userData?.userId,
+        userName:getLoaclData?.state?.userData?.userName,
+        userEmail:getLoaclData?.state?.userData?.userEmail,
+        userRole:getLoaclData?.state?.userData?.userRole,
+        token:getLoaclData?.state?.userData?.token
+      })
+
     if (typeof window !== 'undefined') {
-      const userId = localStorage.getItem('currentUserId')
+      const userId = getUserData.userId
       if (userId) {
         const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
         console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
@@ -109,7 +125,8 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
     routers.push('/addCart')
   }
   const handleWishlistPage = async () => {
-    if(localStorage.getItem('jwtToken')!==null){
+    if(getUserData.token){
+      console.log("getUserData",getUserData)
       routers.push('/wishlist')
     }
     else{
@@ -183,9 +200,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
               <FaUser size={25} className="cursor-pointer hover:opacity-80 transition-opacity" />
             </div>
             <div className="hidden sm:block">
-              {typeof window !== 'undefined' && localStorage.getItem("jwtToken") !== null && user && user?.firstName
-                ? user.firstName
-                : "Account"}
+            {typeof window !== 'undefined' && getUserData.token !== null ? getUserData.userName : "Account"}
             </div>
           </div>
           <div className="w-[1px] h-9 bg-white opacity-50 mx-2 hidden sm:block"></div>
@@ -212,9 +227,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
             <div className="flex items-center gap-3 pb-4 border-b border-white/20">
               <FaUser size={20} />
               <span className="font-bold">
-                {typeof window !== 'undefined' && localStorage.getItem("jwtToken") !== null && user && user?.firstName
-                  ? user.firstName
-                  : "Account"}
+                {typeof window !== 'undefined' && getUserData.token !== null ? getUserData.userName : "Account"}
               </span>
             </div>
             

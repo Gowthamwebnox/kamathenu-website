@@ -17,13 +17,15 @@ import { Button } from "@/components/ui/button"
 import axiosInstance from "@/app/utils/axiosInstance"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import AuthChecker from "@/app/components/layout/Authentication"
+// import AuthChecker from "@/app/components/layout/Authentication"
+import userDataStore from "../../StateManagement/userData"
 
 
 const userProfile = () => {
     const router=useRouter()
+    const{userData,clearUserData}=userDataStore()
     const [activeTab, setActiveTab] = useState("orders");
-    const [userData, setUserData] = useState<any>()
+    const [userDatas, setUserDatas] = useState<any>()
     const [userProfile, setUserProfile] = useState({
         firstName:"",
         lastName:"",
@@ -32,10 +34,22 @@ const userProfile = () => {
 
 
     })
+    var getUserData=localStorage.getItem('userData-storage')
+    getUserData=JSON.parse(getUserData || '{}')
+    console.log(getUserData)
+    const[getLocalData,setLocalData]=useState({
+       userId:getUserData?.state?.userData?.userId,
+       userName:getUserData?.state?.userData?.userName,
+       userEmail:getUserData?.state?.userData?.userEmail,
+       userRole:getUserData?.state?.userData?.userRole,
+       token:getUserData?.state?.userData?.token,
+
+    })
+    console.log(getLocalData)
     useEffect(()=>{
         if(typeof window !== 'undefined'){
             
-            if(localStorage.getItem('jwtToken')==null){
+            if(getLocalData.token==null){
                 router.push('/auth/signin')
             }
             else{
@@ -46,10 +60,10 @@ const userProfile = () => {
 
     const getUserProfile=async()=>{
         if(typeof window !== 'undefined'){
-            const userId=localStorage.getItem('currentUserId')
+            const userId=getLocalData.userId
             if(userId){
                 const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
-                setUserData(response.data)
+                setUserDatas(response.data)
                 setUserProfile({
                     firstName:response.data.firstName,
                     lastName:response.data.lastName,
@@ -65,7 +79,7 @@ const userProfile = () => {
     
     const handleUpdateProfile=async()=>{
         if(typeof window !== 'undefined'){
-            const userId=localStorage.getItem('currentUserId')
+            const userId=getLocalData.userId
             if(userId){
                 const response:any= await axiosInstance.put(`auth/updateUser/${userId}`,userProfile)
                 if(response.status===200){
@@ -76,9 +90,10 @@ const userProfile = () => {
     }
     const handleLogout=async()=>{
         if(typeof window !== 'undefined'){
-            localStorage.removeItem('jwtToken')
-            localStorage.removeItem('currentUserId')
-            localStorage.removeItem('currentUser')
+            // localStorage.removeItem('jwtToken')
+            // localStorage.removeItem('currentUserId')
+            // localStorage.removeItem('currentUser')
+            clearUserData()
             window.location.reload()
         }
       }
@@ -92,11 +107,11 @@ const userProfile = () => {
 
                     <div className="flex items-center gap-2 border-2 py-5 px-4 rounded-t-lg">
                         <div className="flex items-center ">
-                            <img src={userData?.image} alt="userProfile" className="w-16 h-16 rounded-full object-center" />
+                            <img src={userDatas?.image} alt="userProfile" className="w-16 h-16 rounded-full object-center" />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <h1>{userData?.name}</h1>
-                            <h1>{userData?.email}</h1>
+                            <h1>{userDatas?.name}</h1>
+                            <h1>{userDatas?.email}</h1>
                         </div>
                     </div>
                     <div className="border-2 rounded-b-lg flex">
@@ -149,8 +164,8 @@ const userProfile = () => {
                                                     <img src={userProfileLogo.src} alt="userProfile" className="w-16 h-16 rounded-full object-center" />
                                                 </div>
                                                 <div className="flex flex-col gap-1">
-                                                    <h1>{userData?.name}</h1>
-                                                    <h1>{userData?.email}</h1>
+                                                    <h1>{userDatas?.name}</h1>
+                                                    <h1>{userDatas?.email}</h1>
                                                 </div>
                                             </div>
                                             <div>
