@@ -103,8 +103,13 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
       }
     }
   }
-  const handleBecomeSellerPage = async () => {
-    routers.push('/becomeSeller')
+  const handleBecomeSellerPage = async (userRole:string | null) => {
+    if(userRole == "SELLER"){ 
+      routers.push('/seller')
+    }
+    else{
+      routers.push('/becomeSeller')
+    }
   }
   const handleAboutPage = async () => {
     routers.push('/about')
@@ -188,7 +193,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
           <h2 onClick={handleShopPlanPage} className="cursor-pointer hover:opacity-80 transition-opacity">Shop Plans</h2>
           <h2 onClick={handleContactPage} className="cursor-pointer hover:opacity-80 transition-opacity">Contact Us</h2>
           <h2 onClick={handleWishlistPage} className="cursor-pointer hover:opacity-80 transition-opacity">Wishlist</h2>
-          <h2 onClick={handleBecomeSellerPage} className="cursor-pointer hover:opacity-80 transition-opacity">{
+          <h2 onClick={()=>handleBecomeSellerPage(getUserData.userRole)} className="cursor-pointer hover:opacity-80 transition-opacity">{
                 getUserData.userRole == "SELLER" ? "Seller Dashboard" : "Become a Seller"
               }</h2>
         </div>
@@ -283,7 +288,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
                 Wishlist
               </div>
               <div 
-                onClick={() => { handleBecomeSellerPage(); closeMobileMenu(); }}
+                onClick={() => { ()=>handleBecomeSellerPage(getUserData.userRole); closeMobileMenu(); }}
                 className="cursor-pointer py-2 hover:bg-white/10 rounded-md px-2 transition-colors font-bold"
                 style={{
                   
