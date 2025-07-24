@@ -99,7 +99,10 @@ type DashboardData = {
 const AnalysisPage = () => {
     // const { data: session } = useSession();
     // const username = session?.user?.name;
-    const username = "John Doe";
+    // const username = "John Doe";
+    const getUserData=localStorage.getItem("userData-storage")
+    const userData=JSON.parse(getUserData || "{}")
+    const username=userData.state.userData.userName
     
     // State for dashboard data
     const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);

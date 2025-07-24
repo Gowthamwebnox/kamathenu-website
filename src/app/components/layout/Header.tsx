@@ -61,10 +61,8 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
   const currentUser = (userData.getState() as any).userData
   // Only set localStorage on client side
   if (typeof window !== 'undefined') {
-    localStorage.setItem('currentUserId', (userData.getState() as any).userId)
   }
 
-  console.log("currentUser🔥🔥🔥🔥🔥🎊🎊🎊🎊🎊", currentUser)
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [getUserData,setUserData]=useState({
@@ -190,7 +188,9 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
           <h2 onClick={handleShopPlanPage} className="cursor-pointer hover:opacity-80 transition-opacity">Shop Plans</h2>
           <h2 onClick={handleContactPage} className="cursor-pointer hover:opacity-80 transition-opacity">Contact Us</h2>
           <h2 onClick={handleWishlistPage} className="cursor-pointer hover:opacity-80 transition-opacity">Wishlist</h2>
-          <h2 onClick={handleBecomeSellerPage} className="cursor-pointer hover:opacity-80 transition-opacity">Become a Seller</h2>
+          <h2 onClick={handleBecomeSellerPage} className="cursor-pointer hover:opacity-80 transition-opacity">{
+                getUserData.userRole == "SELLER" ? "Seller Dashboard" : "Become a Seller"
+              }</h2>
         </div>
 
         {/* Right side items */}
@@ -289,8 +289,9 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
                   
                   color: headerColor[1] || "black",
                 }}
-              >
-                Become a Seller
+              >{
+                getUserData.userRole == "SELLER" ? "Seller Dashboard" : "Become a Seller"
+              }
               </div>
             </div>
           </div>
