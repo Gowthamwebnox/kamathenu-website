@@ -293,7 +293,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
                 style={{
                   
                   color: headerColor[1] || "black",
-                }}
+                }}  
               >{
                 getUserData.userRole == "SELLER" ? "Seller Dashboard" : "Become a Seller"
               }

@@ -17,6 +17,7 @@ import {
 import { BarChart, Bar, Cell } from "recharts";
 // import { useSession } from "next-auth/react"
 import DashboardLoader from "@/components/ui/DashboardLoader";
+import axiosInstance from "@/app/utils/axiosInstance";
 
 interface OrderItem {
     id: string;
@@ -69,43 +70,58 @@ type MonthlyReportDay = {
     value: number;
 };
 
-type DashboardData = {
-    totalUsers: number;
-    totalOrders: number;
-    totalSales: number;
-    totalRefund: number;
-    totalShippingCharge: number;
-    totalGST: number;
-    incomeOverview: {
-        weekly: IncomeDataPoint[];
-        monthly: IncomeDataPoint[];
-    };
-    monthlyReport: {
-        week: MonthlyReportDay[];
-    };
-    analyticsReport: {
-        companyFinanceGrowth: number;
-        companyExpensesRatio: number;
-        businessRiskCases: string;
-    };
-    salesReport: {
-        thisYear: number;
-        lastYear: number;
-        thisMonth: number;
-        lastMonth: number;
-    };
-};
+// type DashboardData = {
+//     totalUsers: number;
+//     totalOrders: number;
+//     totalSales: number;
+//     totalRefund: number;
+//     totalShippingCharge: number;
+//     totalGST: number;
+//     incomeOverview: {
+//         weekly: IncomeDataPoint[];
+//         monthly: IncomeDataPoint[];
+//     };
+//     monthlyReport: {
+//         week: MonthlyReportDay[];
+//     };
+//     analyticsReport: {
+//         companyFinanceGrowth: number;
+//         companyExpensesRatio: number;
+//         businessRiskCases: string;
+//     };
+//     salesReport: {
+//         thisYear: number;
+//         lastYear: number;
+//         thisMonth: number;
+//         lastMonth: number;
+//     };
+// };
 
 const AnalysisPage = () => {
     // const { data: session } = useSession();
     // const username = session?.user?.name;
     // const username = "John Doe";
-    const getUserData=localStorage.getItem("userData-storage")
-    const userData=JSON.parse(getUserData || "{}")
-    const username=userData.state.userData.userName
+    const [userData, setUserData] = useState<any>({});
+    const [username, setUsername] = useState("Seller");
+    
+    useEffect(() => {
+        // Only access localStorage on the client side
+        if (typeof window !== 'undefined') {
+            const getUserData = localStorage.getItem("userData-storage");
+            if (getUserData) {
+                try {
+                    const parsedData = JSON.parse(getUserData);
+                    setUserData(parsedData);
+                    setUsername(parsedData?.state?.userData?.userName || "Seller");
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                }
+            }
+        }
+    }, []);
     
     // State for dashboard data
-    const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+    const [dashboardData, setDashboardData] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [orders, setOrders] = useState<OrderItem[]>([]);
@@ -140,8 +156,15 @@ const AnalysisPage = () => {
         //     }
         // };
         
-        // fetchDashboardData();
+        fetchDashboardData();
+        
     }, []);
+
+    const fetchDashboardData=async()=>{
+        const response=await axiosInstance.get(`/seller/sellerDashboard/${userData.state.userData.sellerId}`)
+        console.log(response.data)
+        setDashboardData(response.data)
+    }
 
     // Stats cards data using API data
     const createStatCards = () => {
@@ -150,7 +173,7 @@ const AnalysisPage = () => {
         return [
             {
                 title: "Total Users",
-                value: 23,
+                value: dashboardData?.user,
                 // `${dashboardData?.totalUsers}`
                 percentage: "70.5%",
                 color: "text-green-500 bg-green-100",
@@ -160,7 +183,7 @@ const AnalysisPage = () => {
             },
             {
                 title: "Total Orders",
-                value: 123,
+                value: dashboardData?.sellerOrder,
                 // `${dashboardData?.totalOrders}`
                 percentage: "70.5%",
                 color: "text-red-500 bg-red-100",
@@ -170,7 +193,7 @@ const AnalysisPage = () => {
             },
             {
                 title: "Total Sales",
-                value: 13,
+                value: dashboardData?.sellerProduct,
                 // `₹${dashboardData?.totalSales.toLocaleString('en-IN')}`
                 percentage: `${dashboardData?.analyticsReport?.companyFinanceGrowth || 0}%`,
                 color: "text-yellow-500 bg-yellow-100",
@@ -178,16 +201,16 @@ const AnalysisPage = () => {
                 extra: dashboardData?.salesReport ? `₹${dashboardData?.salesReport.thisYear.toLocaleString('en-IN')}` : "₹0",
                 extraColor: "text-yellow-500",
             },
-            {
-                title: "Total Refunds",
-                value: 12,
-                // `₹${dashboardData?.totalRefund.toLocaleString('en-IN')}`
-                percentage: "0%",
-                color: "text-red-500 bg-red-100",
-                icon: <ArrowDownLeft size={16} className="text-red-500" />,
-                extra: "This year",
-                extraColor: "text-red-500",
-            },
+            // {
+            //     title: "Total Refunds",
+            //     value: 12,
+            //     // `₹${dashboardData?.totalRefund.toLocaleString('en-IN')}`
+            //     percentage: "0%",
+            //     color: "text-red-500 bg-red-100",
+            //     icon: <ArrowDownLeft size={16} className="text-red-500" />,
+            //     extra: "This year",
+            //     extraColor: "text-red-500",
+            // },
             // {
             //     title: "Shipping Charges",
             //     value: `₹${dashboardData?.totalShippingCharge.toLocaleString('en-IN')}`,
@@ -197,16 +220,16 @@ const AnalysisPage = () => {
             //     extra: "All time",
             //     extraColor: "text-blue-500",
             // },
-            {
-                title: "Total GST",
-                value: 1.2,
-                // `₹${dashboardData?.totalGST.toLocaleString('en-IN')}`
-                percentage: "0%",
-                color: "text-purple-500 bg-purple-100",
-                icon: <Minus size={16} className="text-purple-500" />,
-                extra: "All time",
-                extraColor: "text-purple-500",
-            }
+            // {
+            //     title: "Total GST",
+            //     value: 1.2,
+            //     // `₹${dashboardData?.totalGST.toLocaleString('en-IN')}`
+            //     percentage: "0%",
+            //     color: "text-purple-500 bg-purple-100",
+            //     icon: <Minus size={16} className="text-purple-500" />,
+            //     extra: "All time",
+            //     extraColor: "text-purple-500",
+            // }
         ];
     };
 
@@ -532,7 +555,7 @@ const AnalysisPage = () => {
                 </div>
 
                 <div className="space-y-4">
-      <div className="p-4">
+      {/* <div className="p-4">
         <div className="flex flex-row items-center justify-between">
           <p className="font-medium text-xl text-gray-800">Recent Orders</p>
           <div className="flex space-x-3 text-gray-400 font-medium text-sm">
@@ -636,7 +659,7 @@ const AnalysisPage = () => {
             </table>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
             </div>
         </>

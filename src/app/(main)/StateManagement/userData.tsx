@@ -7,6 +7,7 @@ interface UserdataInterface{
     userEmail:string;
     token:string;
     userRole:string;
+    sellerId:string;
 }
 
 type userStore={
@@ -15,6 +16,17 @@ type userStore={
     clearUserData:()=>void;
 }
 
+// Helper function to safely get localStorage
+const getStorage = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage;
+  }
+  return {
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+  };
+};
 
 const userDataStore=create<userStore>()(
     persist(
@@ -25,7 +37,7 @@ const userDataStore=create<userStore>()(
         }),
         {
             name:'userData-storage',
-            storage:createJSONStorage(()=>localStorage),
+            storage:createJSONStorage(()=>getStorage()),
         }
     )
 )

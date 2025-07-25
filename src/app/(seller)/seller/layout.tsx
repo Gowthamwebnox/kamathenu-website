@@ -10,14 +10,31 @@ import Link from "next/link";
 import { useSession } from "next-auth/react"
 import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 
 // Create a separate component for the authenticated content
 function AuthenticatedContent({ children }: { children: React.ReactNode }) {
+  const [userData, setUserData] = useState<any>({});
   const { data: session } = useSession();
-  const username = session?.user?.name || "Seller";
   const router = useRouter();
 
+  useEffect(() => {
+    // Only access localStorage on the client side
+    if (typeof window !== 'undefined') {
+      const getUserData = localStorage.getItem("userData-storage");
+      if (getUserData) {
+        try {
+          const parsedData = JSON.parse(getUserData);
+          setUserData(parsedData);
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      }
+    }
+  }, []);
+
+  const username = userData?.state?.userData?.userName || "Seller";
 
   const handleProfileClick = () => {
     router.push("/seller/settings");

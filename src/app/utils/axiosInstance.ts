@@ -10,9 +10,12 @@ console.log(process.env.NEXT_PUBLIC_BASE_URL +">>>>>>>><<<<<<<<<<<<<<<<<<")
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jwtToken');
-    if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    // Only access localStorage on the client side
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('jwtToken');
+      if (token && config.headers) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
     }
     console.log('Request:',  config.data);
     

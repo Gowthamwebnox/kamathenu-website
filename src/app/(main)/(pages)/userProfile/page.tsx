@@ -34,17 +34,33 @@ const userProfile = () => {
 
 
     })
-    var getUserData=localStorage.getItem('userData-storage')
-    getUserData=JSON.parse(getUserData || '{}')
-    console.log(getUserData)
     const[getLocalData,setLocalData]=useState({
-       userId:getUserData?.state?.userData?.userId,
-       userName:getUserData?.state?.userData?.userName,
-       userEmail:getUserData?.state?.userData?.userEmail,
-       userRole:getUserData?.state?.userData?.userRole,
-       token:getUserData?.state?.userData?.token,
-
+       userId: '',
+       userName: '',
+       userEmail: '',
+       userRole: '',
+       token: '',
     })
+    
+    useEffect(() => {
+        if(typeof window !== 'undefined'){
+            const getUserData = localStorage.getItem('userData-storage')
+            if(getUserData){
+                try {
+                    const parsedData = JSON.parse(getUserData)
+                    setLocalData({
+                        userId: parsedData?.state?.userData?.userId || '',
+                        userName: parsedData?.state?.userData?.userName || '',
+                        userEmail: parsedData?.state?.userData?.userEmail || '',
+                        userRole: parsedData?.state?.userData?.userRole || '',
+                        token: parsedData?.state?.userData?.token || '',
+                    })
+                } catch (error) {
+                    console.error('Error parsing user data:', error)
+                }
+            }
+        }
+    }, [])
     console.log(getLocalData)
     useEffect(()=>{
         if(typeof window !== 'undefined'){
@@ -110,8 +126,8 @@ const userProfile = () => {
                             <img src={userDatas?.image} alt="userProfile" className="w-16 h-16 rounded-full object-center" />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <h1>{userDatas?.name}</h1>
-                            <h1>{userDatas?.email}</h1>
+                            <h1>{getLocalData?.userName}</h1>
+                            <h1>{getLocalData?.userEmail}</h1>
                         </div>
                     </div>
                     <div className="border-2 rounded-b-lg flex">

@@ -51,7 +51,8 @@ const SigninForm = () => {
         userName:response.data.user.name,
         userEmail:response.data.user.email,
         token:response.data.Token,
-        userRole:response.data.user.roleId
+        userRole:response.data.user.roleId,
+        sellerId:response.data.user.sellerProfile.id,
       })
       router.push('/')
     }
