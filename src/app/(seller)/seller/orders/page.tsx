@@ -329,7 +329,10 @@ const Productspage = () => {
   const getOrders = async () => {
     try {
       setLoading(true);
-      const response:any = await axiosInstance.get(`/seller/fetchSellerOrders/${"c6fe18bd-0e74-47f9-b8e1-83f1f93b9760"}`);
+      const getUserData=localStorage.getItem("userData-storage")
+      const userData=JSON.parse(getUserData || "{}")
+
+      const response:any = await axiosInstance.get(`/seller/fetchSellerOrders/${userData.state.userData.sellerId}`);
       console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
       
       if (response.status === 200) {

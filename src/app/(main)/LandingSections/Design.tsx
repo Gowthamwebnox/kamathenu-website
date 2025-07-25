@@ -152,7 +152,7 @@ export default function FeaturedProducts() {
                 {designCategoryData.map((items: any, index: any) => (
                   <div  key={index + 1} className="flex cursor-pointer flex-col border border-gray-300 shadow-lg rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative lg:h-[540px]">
                     <img
-                      src={items.images[0].imageUrl[0]}
+                      src={items?.images[0]?.imageUrl.find((image: any) => image.isPrimary === true)?.imageUrl}
                       alt="design_home_1"
                       className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover"
                       onClick={() => router.push(`/product/${items?.id}?name=${encodeURIComponent(items?.category?.name)}`)}
@@ -186,10 +186,10 @@ export default function FeaturedProducts() {
                     <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 items-center justify-between ml-1">
                       <div>
                         <div className="text-gray-400 line-through flex items-center">
-                          <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items?.discountPrice}</span>
+                          <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items?.price}</span>
                         </div>
                         <div className="text-[#D8A526] flex items-center ">
-                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {items?.price}</span>
+                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {(items?.price-(items?.price/100*items?.discounts[0]?.discountValue))}</span>
                         </div>
                       </div>
                       <div className="">

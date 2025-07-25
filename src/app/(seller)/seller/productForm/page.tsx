@@ -356,10 +356,12 @@ const ProductForm: React.FC = () => {
   );
 
   // const { data, status } = useSession();
+  const getUserData=localStorage.getItem("userData-storage")
+  const userData=JSON.parse(getUserData || "{}")
   var status="authenticated"
   const data={
     user:{
-      sellerId:"c6fe18bd-0e74-47f9-b8e1-83f1f93b9760"
+      sellerId:userData.state.userData.sellerId
     }
   }
   // useEffect(() => {

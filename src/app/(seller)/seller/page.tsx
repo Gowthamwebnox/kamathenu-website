@@ -101,7 +101,7 @@ const AnalysisPage = () => {
     // const { data: session } = useSession();
     // const username = session?.user?.name;
     // const username = "John Doe";
-    const [userData, setUserData] = useState<any>({});
+    const [localUserData, setLocalUserData] = useState<any>({});
     const [username, setUsername] = useState("Seller");
     
     useEffect(() => {
@@ -111,13 +111,19 @@ const AnalysisPage = () => {
             if (getUserData) {
                 try {
                     const parsedData = JSON.parse(getUserData);
-                    setUserData(parsedData);
+                    console.log(parsedData.state.userData)
+                    setLocalUserData(parsedData.state.userData);
+                    if(parsedData.state.userData.sellerId){
+                      console.log(localUserData)
+                        fetchDashboardData();
+                    }
                     setUsername(parsedData?.state?.userData?.userName || "Seller");
                 } catch (error) {
                     console.error('Error parsing user data:', error);
                 }
             }
         }
+        
     }, []);
     
     // State for dashboard data
@@ -128,40 +134,41 @@ const AnalysisPage = () => {
     const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
     const [sortConfig, setSortConfig] = useState<{ key: string; ascending: boolean } | null>(null);
     
-    useEffect(() => {
-        // const fetchDashboardData = async () => {
-        //     try {
-        //         setLoading(true);
-        //         // Add seller ID to request headers
-        //         const response = await fetch('/api/seller/dashboard', {
-        //             headers: {
-        //                 'x-user': JSON.stringify({
-        //                     id: session?.user?.id,
-        //                     sellerId: session?.user?.sellerId
-        //                 })
-        //             }
-        //         });
-        //         const result = await response.json();
+    // useEffect(() => {
+    //     // const fetchDashboardData = async () => {
+    //     //     try {
+    //     //         setLoading(true);
+    //     //         // Add seller ID to request headers
+    //     //         const response = await fetch('/api/seller/dashboard', {
+    //     //             headers: {
+    //     //                 'x-user': JSON.stringify({
+    //     //                     id: session?.user?.id,
+    //     //                     sellerId: session?.user?.sellerId
+    //     //                 })
+    //     //             }
+    //     //         });
+    //     //         const result = await response.json();
                 
-        //         if (result.status === "success") {
-        //             setDashboardData(result.data);
-        //         } else {
-        //             setError(result.message || "Failed to fetch dashboard data");
-        //         }
-        //     } catch (err) {
-        //         setError("An error occurred while fetching data");
-        //         console.error(err);
-        //     } finally {
-        //         setLoading(false);
-        //     }
-        // };
+    //     //         if (result.status === "success") {
+    //     //             setDashboardData(result.data);
+    //     //         } else {
+    //     //             setError(result.message || "Failed to fetch dashboard data");
+    //     //         }
+    //     //     } catch (err) {
+    //     //         setError("An error occurred while fetching data");
+    //     //         console.error(err);
+    //     //     } finally {
+    //     //         setLoading(false);
+    //     //     }
+    //     // };
         
-        fetchDashboardData();
         
-    }, []);
+    // }, []);
 
     const fetchDashboardData=async()=>{
-        const response=await axiosInstance.get(`/seller/sellerDashboard/${userData.state.userData.sellerId}`)
+      console.log(localUserData)
+      console.log(localUserData.sellerId)
+        const response=await axiosInstance.get(`/seller/sellerDashboard/${localUserData.sellerId}`)
         console.log(response.data)
         setDashboardData(response.data)
     }

@@ -30,6 +30,20 @@ import { Textarea } from "@/components/ui/textarea";
 
 
 const ProductDetails = () => {
+   const [mainPhoto, setMainPhoto] = useState(
+  "/assets/kamathenu Images/Design/design_home_1.jpg"
+);
+const [img1, setImg1] = useState(
+  "/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png"
+);
+
+const [img2, setImg2] = useState(
+  "/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png"
+);
+
+const [img3, setImg3] = useState(
+  "/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png"
+);
   
   const { id } = useParams();
   const searchParams = useSearchParams();
@@ -51,6 +65,26 @@ const ProductDetails = () => {
       "product/particularProduct",
       payload
     );
+    var secondImage:any=[]
+    const secondaryImage= await response.data.productData.particularProduct.images[0].imageUrl.map((ele:any)=>{
+      if(ele.isPrimary===false){
+        secondImage.push(ele.imageUrl)
+      }
+    })
+    console.log("🔥🔥🔥🔥🔥🔥secondaryImage🔥🔥🔥🔥🔥🔥", secondImage)
+    setMainPhoto(response.data.productData.particularProduct.images[0].imageUrl.find((ele:any)=>ele.isPrimary===true)?.imageUrl)
+    for(let i=0;i<3;i++){
+      if(i==0){
+        setImg1(secondImage[i])
+      }
+      if(i==1){
+        setImg2(secondImage[i])
+      }
+      if(i==2){
+        setImg3(secondImage[i])
+      }
+    }
+
     setProductDetails(response.data.productData.particularProduct);
     setSimilarProducts(response.data.productData.similerProduct);
   };
@@ -65,20 +99,7 @@ const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [orderDescription, setOrderDescription] = useState("");
 
-  const [mainPhoto, setMainPhoto] = useState(
-    "/assets/kamathenu Images/Design/design_home_1.jpg"
-  );
-  const [img1, setImg1] = useState(
-    "/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png"
-  );
-
-  const [img2, setImg2] = useState(
-    "/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png"
-  );
-
-  const [img3, setImg3] = useState(
-    "/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png"
-  );
+ 
 
   const changePhoto = (alt: string) => {
     const getMainPhoto = mainPhoto;
@@ -96,8 +117,10 @@ const ProductDetails = () => {
     }
   };
   const handleAddCart = async (productId: string) => {
+    const getUserData=localStorage.getItem("userData-storage")
+    const userData=JSON.parse(getUserData || "{}")
     const payload = {
-      userId: localStorage.getItem("currentUserId"),
+      userId: userData.state.userData.userId,
       productId: productId,
     };
     const response: any = await axiosInstance.post("cart/addCart", payload);
@@ -127,24 +150,23 @@ const ProductDetails = () => {
     amount: number,
     sellerId: string
   ) => {
+    const getUserData=localStorage.getItem("userData-storage")
+    const userData=JSON.parse(getUserData || "{}")
     const userOrderData: any = [];
-
+    console.log("🔥🔥🔥🔥🔥🔥productDetails🔥🔥🔥🔥🔥🔥", productDetails)
     userOrderData.push({
       productId: productId,
       amount: amount,
       sellerId: sellerId,
     });
     const payload = {
-      userId: localStorage.getItem("currentUserId"),
+      userId: userData.state.userData.userId,
       userOrderData: userOrderData,
       totalAmount: amount,
     };
     validation();
     if (!errorValidation) {
-      const response: any = await axiosInstance.post(
-        "order/createOrder",
-        payload
-      );
+      const response: any = await axiosInstance.post("order/createOrder",payload);
       console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
 
       setShowDescription(false);
@@ -163,53 +185,53 @@ const ProductDetails = () => {
         {productDetails !== null && (
           <div className="mt-18  lg:m-20 lg:ml-51 grid grid-cols-6 items-center lg:gap-x-19 p-4 lg:p-10 gap-y-5">
             <div className="col-span-6 md:col-span-1 lg:col-span-1 flex   md:grid  gap-4  p-2   grid-cols-1 grid-rows-3 rounded-lg p-12 px-8 ">
-              <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
+              {img1&&<div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    productDetails?.images?.[0]?.imageUrl?.[1] || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png'
+                    img1 || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png'
                   }
                   alt="img1"
-                  className="border rounded-[3px] w-[100%] h-[100%] object-center"
+                  className="border rounded-[3px] w-[100%] h-[100%]  object-cover"
                   onClick={() => {
                     changePhoto("img1");
                   }}
                 />
-              </div>
+              </div>}
 
-              <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
+              {img2&&<div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    productDetails?.images?.[0]?.imageLayerout?.[0] || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png'
+                    img2 || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png'
                   }
                   alt="img1"
                   className="border rounded-[3px] w-[100%] h-[100%]"
                   onClick={() => {
-                    changePhoto("img1");
+                    changePhoto("img2");
                   }}
                 />
-              </div>
+              </div>}
 
-              <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
+              {img3&&<div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    productDetails?.images?.[0]?.imageLayerout?.[1] || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png'
+                    img3|| '/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png'
                   }
                   alt="img1"
                   className="border rounded-[3px] w-[100%] h-[100%]"
                   onClick={() => {
-                    changePhoto("img1");
+                    changePhoto("img3");
                   }}
                 />
-              </div>
+              </div>}
             </div>
 
             <div className="w-full col-span-6 md:col-span-4 lg:col-span-3">
               <img
                 src={
-                  productDetails?.images?.[0]?.imageUrl?.[0] || '/assets/kamathenu Images/Design/design_home_1.jpg'
+                  mainPhoto || '/assets/kamathenu Images/Design/design_home_1.jpg'
                 }
                 alt="design_home_1"
-                className="h-[504px] border rounded-[11px] w-[100%] object-cover"
+                className="h-[504px] border rounded-[11px] w-[100%] object-center"
               />
             </div>
 
@@ -251,12 +273,10 @@ const ProductDetails = () => {
 
               <div>
                 <div className="text-gray-400 line-through flex items-center text-[27px] font-normal">
-                  ₹{" "}
-                  {productDetails?.variants?.[0]?.price || 0}
+                  ₹{productDetails?.price}
                 </div>
                 <div className="text-[#D8A526] flex items-center text-[33px] font-semibold">
-                  ₹{" "}
-                  {productDetails?.variants?.[0]?.discountPrice || 0}
+                  ₹{productDetails?.price-(productDetails?.price/100*productDetails?.discounts[0]?.discountValue)}
                 </div>
               </div>
 
@@ -309,7 +329,7 @@ const ProductDetails = () => {
                           onClick={() => {
                             handleOrderNow(
                               productDetails?.id,
-                              productDetails?.variants[0]?.discountPrice,
+                              productDetails?.price-(productDetails?.price/100*productDetails?.discounts[0]?.discountValue),
                               productDetails?.seller?.id
                             );
                           }}

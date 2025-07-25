@@ -54,7 +54,7 @@ const SigninForm = () => {
         userRole:response.data.user.roleId,
         sellerId:response.data.user.sellerProfile.id,
       })
-      router.push('/')
+        router.push('/')
     }
   }
   const handleGoogleLogin = async () => {

@@ -19,9 +19,11 @@ export default function AddCart() {
     const router=useRouter()
     useEffect(() => {
 
-        if (typeof window !== 'undefined') {
-            if(localStorage.getItem('jwtToken')!==null){
-            const userId = localStorage.getItem('currentUserId')
+        if (typeof window !== 'undefined') {    
+            const getUserData=localStorage.getItem("userData-storage")          
+            const userData=JSON.parse(getUserData || "{}")
+            if(userData.state.userData.token){
+            const userId = userData.state.userData.userId   
             setCurrentUser(userId)
             if (userId) {
                 getCartData(userId)
@@ -42,10 +44,10 @@ export default function AddCart() {
             console.log("Full response:", response.data)
             console.log("Cart data:", response.data.cart)
             setCartData(response.data.cart || [])
-            setSubTotal(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].price), 0))
-            setDiscount(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].price), 0) - response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].discountPrice), 0))
-            setPlatformFee(response.data.cart.reduce((acc: any) => acc +2, 0))
-            setTotalAmount(response.data.cart.reduce((acc: any, item: any) => acc + parseInt(item.product.variants[0].discountPrice), 0) + response.data.cart.reduce((acc: any) => acc +2, 0))
+            setSubTotal(response.data.cart.reduce((acc: any, item: any) => acc + (Number(item.product?.price) || 0), 0))
+            setDiscount(response.data.cart.reduce((acc: any, item: any) => acc + (Number(item.product?.price) || 0), 0) - response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0) - ((Number(item.product?.price) || 0) / 100 * (Number(item.product?.discounts[0]?.discountValue) || 0))), 0))
+            setPlatformFee(response.data.cart.reduce((acc: any) => acc + 2, 0))
+            setTotalAmount(response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0) - ((Number(item.product?.price) || 0) / 100 * (Number(item.product?.discounts[0]?.discountValue) || 0))), 0) + response.data.cart.reduce((acc: any) => acc + 2, 0))
         } catch (error) {
             console.error("Error fetching cart data:", error)
             setCartData([])
@@ -72,7 +74,7 @@ export default function AddCart() {
         cartData.forEach((item:any)=>{
             userOrderData.push({
                 productId:item.product.id,
-                amount:item.product.variants[0].discountPrice,
+                amount:item.product.discounts[0]?.discountValue,
                 sellerId:item?.product?.sellerId
 
             })
@@ -102,6 +104,7 @@ export default function AddCart() {
                         <Table className="w-full border-1 border-gray-300 rounded-[10px]  ">
                             <TableHeader className="border-1 border-gray-300">
                                 <TableHead className="text-sm md:text-lg lg:text-[21px] text-gray-500 pt-4 md:pt-6 lg:pt-9 pb-2 md:pb-3 pl-4 md:pl-8 lg:pl-12 font-semibold">
+                                    
                                     {cartData.length} items in your cart
                                 </TableHead>
                                 <TableHead className="text-sm md:text-lg lg:text-[21px] text-gray-500 font-semibold hidden md:table-cell">Product Details</TableHead>
@@ -141,7 +144,7 @@ export default function AddCart() {
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-sm md:text-lg lg:text-[21px] text-gray-500 font-semibold">
-                                                ₹ {items?.product?.variants[0]?.discountPrice}
+                                                    ₹ {items?.product?.price-(items?.product?.price/100*items?.product?.discounts[0]?.discountValue)}
                                             </TableCell>
                                             <TableCell className="cursor-pointer p-2 md:p-4" onClick={() => handleRemove(items?.id)}>
                                                 <TiDelete className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8" />

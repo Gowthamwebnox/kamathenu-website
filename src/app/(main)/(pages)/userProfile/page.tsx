@@ -59,20 +59,21 @@ const userProfile = () => {
                     console.error('Error parsing user data:', error)
                 }
             }
+            if(!getLocalData.token){
+                router.push('/auth/signin')
+            }
         }
     }, [])
     console.log(getLocalData)
-    useEffect(()=>{
-        if(typeof window !== 'undefined'){
+    // useEffect(()=>{
+    //     if(typeof window !== 'undefined'){
             
-            if(getLocalData.token==null){
-                router.push('/auth/signin')
-            }
-            else{
-                getUserProfile()
-            }
-        }
-    },[router])
+           
+    //         else{
+    //             getUserProfile()
+    //         }
+    //     }
+    // },[router])
 
     const getUserProfile=async()=>{
         if(typeof window !== 'undefined'){
