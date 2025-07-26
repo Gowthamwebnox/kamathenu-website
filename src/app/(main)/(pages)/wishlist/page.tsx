@@ -14,10 +14,11 @@ export default function Wishlist() {
     getWishlistData()
   }, [])
   const getWishlistData = async () => {
-    const currentUser = localStorage.getItem('currentUserId')
+    const localData= localStorage.getItem('userData-storage')
+    const userData=JSON.parse(localData||'{}')
     try {
       const payload = {
-        userId: currentUser
+        userId: userData?.state.userData.userId``
       }
       const response: any = await axiosInstance.post('product/fetchWishlist', payload)
       setWishlistData(response.data.wishlist)

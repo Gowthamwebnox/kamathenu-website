@@ -133,7 +133,7 @@ export default function ShopwithConfidence() {
             <div className="group col-span-4 lg:col-span-2 row-span-4 rounded-lg shadow-md flex items-end justify-center bg-[#FFF4DA]">
               <div className="md:w-[60%] ">
                 <img
-                  src={getluxuryVillaPlans.length > 0 ? getluxuryVillaPlans[0].images[0].imageUrl[0]
+                  src={getluxuryVillaPlans.length > 0 ? getluxuryVillaPlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===true)?.imageUrl
                     : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
                   alt="Compact Home Plan"
                   className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[300px] lg:h-[522px] "
@@ -146,11 +146,11 @@ export default function ShopwithConfidence() {
                   </h1>
                   <h1 className="text-[12px] md:text-[24px] lg:text-[25px] font-semibold text-right">
                     {getluxuryVillaPlans.length > 0
-                      ? getluxuryVillaPlans[0].name
+                      ? getluxuryVillaPlans[0]?.name
                       : "none"}
                   </h1>
                   <h1 className="sm:text-[20px] md:text-[28px] lg:text-[32px] text-gray-600  text-right font-semibold">
-                    Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0].discounts[0].discountValue}${getluxuryVillaPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
+                    Up to {getluxuryVillaPlans.length > 0 ? `${getluxuryVillaPlans[0]?.discounts[0]?.discountValue}${getluxuryVillaPlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                       : '20%'} offer
                   </h1>
                   <Button
@@ -166,7 +166,7 @@ export default function ShopwithConfidence() {
                 <div className="sm:block hidden">
                   <img
                     src={getluxuryVillaPlans.length > 0
-                      ? getluxuryVillaPlans[0].images[0]?.imageLayerout[0]
+                      ? getluxuryVillaPlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===false)?.imageUrl
                       : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                     alt="Home3_outlook"
                     className="  opacity-90 h-[182px]"
@@ -179,23 +179,23 @@ export default function ShopwithConfidence() {
             <div className="group col-span-4 lg:col-span-1 row-span-2 rounded-lg shadow-md bg-[#FFE2C7]">
               <h1 className="sm:text-[20px] md:text-[24px] lg:text-[20px] font-semibold text-right mr-4 my-4">
                 {getCompactHomePlans.length > 0
-                  ? getCompactHomePlans[0].name : "none"}
+                  ? getCompactHomePlans[0]?.name : "none"}
               </h1>
-              <div className="  flex  items-center justify-end">
-                  <div className="md:w-[61%] ">
+              <div className="  flex  items-center justify-end  overflow-hidden">
+                  <div className="w-[100%] lg:w-[100%] relative left-[-30px] top-[22px]">
                     <img
-                      src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageUrl[1]
+                      src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===true)?.imageUrl
                         : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
                       alt="Compact Home Plan"
-                      className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[158px] lg:h-[258px] "
+                      className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[158px] lg:h-[258px]  "
                     />
                   </div>
-                  <div className=" text-[#333] flex flex-col gap-y-19  px-4 items-end overflow-hidden">
+                  <div className=" text-[#333] flex flex-col gap-y-10 w-[40%]  px-4 items-end overflow-hidden">
                     <div className="flex flex-col gap-y-5 items-end">
 
 
-                      <h1 className="text-[15px] md:text-[28px] lg:text-[15px] text-gray-600  text-right font-semibold">
-                        Up to {getCompactHomePlans.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
+                      <h1 className="text-[15px] md:text-[28px] lg:text-[14px] text-gray-600  text-right font-semibold">
+                          Up to {getCompactHomePlans.length > 0 ? `${getCompactHomePlans[0]?.discounts[0]?.discountValue}${getCompactHomePlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                           : '20%'} offer
                       </h1>
                       <Button
@@ -210,10 +210,10 @@ export default function ShopwithConfidence() {
 
                     <div className="sm:block hidden">
                       <img
-                        src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0].images[0].imageLayerout[0]
+                        src={getCompactHomePlans.length > 0 ? getCompactHomePlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===false)?.imageUrl
                           : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                         alt="Home3_outlook"
-                        className="  opacity-90 h-[82px]"
+                        className="  opacity-90 h-[100px]"
                       />
                     </div>
 
@@ -224,26 +224,26 @@ export default function ShopwithConfidence() {
             </div>
 
             {/* third card start */}
-            <div className="group col-span-4 lg:col-span-1 row-span-2 bg-[#D9E6FF] rounded-lg shadow-md ">
-              <h1 className="sm:text-[20px] md:text-[24px] lg:text-[20px] font-semibold text-right mr-4 my-4">
+            <div className="group col-span-4 lg:col-span-1 row-span-2 bg-[#D9E6FF] rounded-lg shadow-md relative overflow-hidden">
+              <h1 className="sm:text-[20px] md:text-[24px] lg:text-[20px] font-semibold text-right mr-4 my-4 relative z-10">
                 {getAppartmentPlans.length > 0
-                  ? getAppartmentPlans[0].name : "none"}
+                  ? getAppartmentPlans[0]?.name : "none"}
               </h1>
-              <div className="  flex  items-center justify-end">
-                  <div className="md:w-[61%] ">
+              <div className="flex items-center justify-end h-full relative">
+                  <div className="absolute left-[-60px] top-[-70px] w-[75%] h-[120%]">
                     <img
-                      src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0].images[0].imageUrl[1]
+                      src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===true)?.imageUrl
                         : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
                       alt="Compact Home Plan"
-                      className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[158px] lg:h-[258px]  "
+                      className="transition-transform duration-300 group-hover:scale-105 object-cover object-center h-full w-full"
                     />
                   </div>
-                  <div className=" text-[#333] flex flex-col gap-y-19  px-4 items-end overflow-hidden">
+                  <div className="text-[#333] flex flex-col gap-y-4 px-4 items-end w-[45%] relative z-10">
                     <div className="flex flex-col gap-y-5 items-end">
 
 
                       <h1 className="text-[15px] md:text-[28px] lg:text-[15px] text-gray-600  text-right font-semibold">
-                        Up to {getAppartmentPlans.length > 0 ? `${getAppartmentPlans[0].discounts[0].discountValue}${getAppartmentPlans[0].discounts[0].discountType === 'percentage' ? '%' : '₹'}`
+                        Up to {getAppartmentPlans.length > 0 ? `${getAppartmentPlans[0]?.discounts[0]?.discountValue}${getAppartmentPlans[0]?.discounts[0]?.discountType === 'percentage' ? '%' : '₹'}`
                           : '20%'} offer
                       </h1>
                       <Button
@@ -258,10 +258,10 @@ export default function ShopwithConfidence() {
 
                     <div className="sm:block hidden">
                       <img
-                        src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0].images[0].imageLayerout[0]
+                        src={getAppartmentPlans.length > 0 ? getAppartmentPlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===false)?.imageUrl
                           : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                         alt="Home3_outlook"
-                        className="  opacity-90 h-[82px]"
+                        className="  opacity-90 h-[102px]"
                       />
                     </div>
 
@@ -273,12 +273,12 @@ export default function ShopwithConfidence() {
             <div className="group col-span-4 lg:col-span-2 row-span-2 bg-[#F9C6A3] rounded-lg shadow-md ">
             <h1 className="sm:text-[20px] md:text-[24px] lg:text-[26px] font-semibold text-right mr-4 my-4">
                 {getIndependentHousePlans.length > 0
-                  ? getIndependentHousePlans[0].name : "none"}
+                  ? getIndependentHousePlans[0]?.name : "none"}
               </h1>
               <div className="  flex  items-center justify-end">
                   <div className="md:w-[90%] ">
                     <img
-                      src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].images[0].imageUrl[1]
+                      src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===true)?.imageUrl
                         : "/assets/kamathenu Images//Categories/Home/Home_1.png"}
                       alt="Compact Home Plan"
                       className="transition-transform duration-300 group-hover:scale-x-97 object-cover object-center h-[168px] lg:h-[258px] w-[80%] "
@@ -304,7 +304,7 @@ export default function ShopwithConfidence() {
 
                     <div className="sm:block hidden">
                       <img
-                        src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0].images[0].imageLayerout[0]
+                        src={getIndependentHousePlans.length > 0 ? getIndependentHousePlans[0]?.images[0]?.imageUrl.find((image:any)=>image.isPrimary===false)?.imageUrl
                           : "/assets/kamathenu Images//Categories/HomeOutlook/outLook_1.png"}
                         alt="Home3_outlook"
                         className="  opacity-90 h-[82px]"

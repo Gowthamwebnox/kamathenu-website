@@ -52,7 +52,7 @@ const SigninForm = () => {
         userEmail:response.data.user.email,
         token:response.data.Token,
         userRole:response.data.user.roleId,
-        sellerId:response.data.user.sellerProfile.id,
+        sellerId:response.data.user.sellerProfile?.id||'',
       })
         router.push('/')
     }

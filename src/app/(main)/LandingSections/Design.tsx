@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import axiosInstance from "@/app/utils/axiosInstance";
 import StarRatings from 'react-star-ratings';
+import { FaRegHeart } from "react-icons/fa";
 
 const categories = [
   "Residential Designes",
@@ -19,6 +20,8 @@ const categories = [
 
 
 export default function FeaturedProducts() {
+  const localData=localStorage.getItem('userData-storage')
+  const userData=JSON.parse(localData||'{}')
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +47,6 @@ export default function FeaturedProducts() {
 
   const handleDesignHome = async (category?: string) => {
     try {
-      // setIsLoading(true);
       const selectedCategory = category || activeCategory;
       const payload = {
         categoryName: selectedCategory,
@@ -59,7 +61,8 @@ export default function FeaturedProducts() {
       // Initialize wishlist status based on the data
       const initialWishlistStatus: {[key: string]: boolean} = {};
       response.data.forEach((item: any) => {
-        initialWishlistStatus[item.id] = item?.wishlist[0]?.productId === item?.id;
+        initialWishlistStatus[item.id] = item?.wishlist[0]?.userId === userData?.state.userData.userId;
+        console.log("🔥🔥🔥🔥🔥🔥initialWishlistStatus🔥🔥🔥🔥🔥🔥", initialWishlistStatus)
       });
       setWishlistStatus(initialWishlistStatus);
       response.data.length===limit?setShowMore(true):setShowMore(false);
@@ -71,10 +74,13 @@ export default function FeaturedProducts() {
   
   const handleWishlist = async (productId: string, wishlistProductId: string, wishlistId: string) => {
     console.log("🔥🔥🔥🔥🔥🔥wishlistId🔥🔥🔥🔥🔥🔥", wishlistId)
+    const localData=localStorage.getItem('userData-storage')
+    const userData=JSON.parse(localData||'{}')
+
     const payload = {
       productId: productId,
       wishlistProductId: wishlistProductId,
-      userId: localStorage.getItem("currentUserId"),
+      userId: userData?.state.userData.userId,
       wishlistId: wishlistId // with the help of this we can remove the product from the wishlist
     }
     console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥")
@@ -120,7 +126,7 @@ export default function FeaturedProducts() {
   // const handleFavs=()=>{
 
   // }
-  console.log("🔥🔥🔥🔥🔥🔥designCategoryData🔥🔥🔥🔥🔥🔥", designCategoryData)
+  
 
 
 
@@ -154,7 +160,7 @@ export default function FeaturedProducts() {
                     <img
                       src={items?.images[0]?.imageUrl.find((image: any) => image.isPrimary === true)?.imageUrl}
                       alt="design_home_1"
-                      className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover"
+                      className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-center"
                       onClick={() => router.push(`/product/${items?.id}?name=${encodeURIComponent(items?.category?.name)}`)}
                     />
                     <div className="p-[10px] flex flex-col gap-4">
@@ -189,7 +195,7 @@ export default function FeaturedProducts() {
                           <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items?.price}</span>
                         </div>
                         <div className="text-[#D8A526] flex items-center ">
-                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {(items?.price-(items?.price/100*items?.discounts[0]?.discountValue))}</span>
+                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {(items?.price-Math.round(items?.price/100*items?.discounts[0]?.discountValue))}</span>
                         </div>
                       </div>
                       <div className="">
@@ -198,8 +204,8 @@ export default function FeaturedProducts() {
                     </div>
                     <div className="absolute top-4 right-4">
                       <FaHeart 
-                        className={`size-4 sm:size-5 cursor-pointer transition-colors ${
-                          wishlistStatus[items.id] ? 'text-yellow-500' : 'text-white'
+                        className={`size-4 sm:size-5 cursor-pointer transition-colors   ${
+                          wishlistStatus[items.id] ? 'text-yellow-500' : 'text-gray-300'
                         }`}
                         onClick={() => handleWishlist(items.id, items.wishlist[0]?.productId, items?.wishlist[0]?.id)}
                       />

@@ -31,7 +31,9 @@ export default function DesignShopPlan() {
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   // const [isLoading, setIsLoading] = useState(false);
   
-  const [wishlist, setWishlist] = useState<{[key:string]:boolean}>({});
+  // const [wishlist, setWishlist] = useState<{[key:string]:boolean}>({});
+  
+  const [wishlistStatus, setWishlistStatus] = useState<{[key: string]: boolean}>({});
   const [limit,setLimit]=useState(1);
   const router = useRouter();
   const[showMore,setShowMore]=useState(true);
@@ -71,7 +73,7 @@ export default function DesignShopPlan() {
         initialWishlist[item.id]=item?.wishlist?.[0]?.productId===item?.id;
       })
       setDesignCategoryData(response.data);
-      setWishlist(initialWishlist);
+      setWishlistStatus(initialWishlist);
       response.data.length!==limit?setShowMore(false):setShowMore(true) 
     } catch (error) {
       console.error("Error fetching design data:", error);
@@ -82,7 +84,7 @@ export default function DesignShopPlan() {
   }
   const handleWishlist = async (productId: string, wishlistProductId: string, wishlistId: string) => {
     console.log("🔥🔥🔥🔥🔥🔥wishlistId🔥🔥🔥🔥🔥🔥", wishlistId)
-    console.log("🔥🔥🔥🔥🔥🔥wishlist🔥🔥🔥🔥🔥🔥", wishlist)
+    console.log("🔥🔥🔥🔥🔥🔥wishlist🔥🔥🔥🔥🔥🔥", wishlistStatus)
     const payload = {
       productId: productId,
       wishlistProductId: wishlistProductId,
@@ -90,23 +92,23 @@ export default function DesignShopPlan() {
       wishlistId: wishlistId // with the help of this we can remove the product from the wishlist
     }
     try {
-      if (wishlist[productId] === true) {
+      if (wishlistStatus[productId] === true) {
         console.log("🎊🎊😎😎🎊🎊")
         const response: any = await axiosInstance.post("product/removewishlistProduct", payload)
         console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         console.log("productId", productId)
-        setWishlist(prev => ({
+        setWishlistStatus(prev => ({
           ...prev,
           [productId]: false
         }));
         payload.wishlistId='';
-        console.log("🔥🔥🔥🔥🔥🔥wishlistStatus🔥🔥🔥🔥🔥🔥", wishlist)
+        console.log("🔥🔥🔥🔥🔥🔥wishlistStatus🔥🔥🔥🔥🔥🔥", wishlistStatus)
       } else {
         console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
         const response: any = await axiosInstance.post("product/addWishlistProduct", payload)
         console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
         // Update local state to remove from wishlist
-        setWishlist(prev => ({
+        setWishlistStatus(prev => ({
           ...prev,
           [productId]: true
         }));
@@ -233,88 +235,79 @@ export default function DesignShopPlan() {
 
           {categories.map((category) => (
             <TabsContent key={category} value={category}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-8 xl:gap-12 mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-5 xl:gap-8 mb-8 ">
                 {designCategoryData.map((items: any, index: any) => (
-                  <div
-                    key={index + 1}
-
-                    className="flex flex-col border border-gray-300 rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative"
-                  >
+                  <div  key={index + 1} className="flex cursor-pointer flex-col border border-gray-300 shadow-lg rounded-t-[15px] gap-2 sm:gap-3 lg:gap-4 relative lg:h-[540px]">
                     <img
-                      src={items.images?.[0]?.imageUrl?.[0] || '/assets/kamathenu Images/Design/design_home_1.jpg'}
+                      src={items?.images[0]?.imageUrl.find((image: any) => image.isPrimary === true)?.imageUrl}
                       alt="design_home_1"
-                      className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-cover cursor-pointer"
-                      onClick={() => router.push(`/product/${items.id}?name=${encodeURIComponent(items.name)}`)}
+                      className="w-full h-[140px] sm:h-[200px] lg:h-[234px] border rounded-t-[11px] object-center "
+                      onClick={() => router.push(`/product/${items?.id}?name=${encodeURIComponent(items?.category?.name)}`)}
                     />
-                    <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] h-[55px] px-2 sm:px-3 font-semibold">
+                    <div className="p-[10px] flex flex-col gap-4">
+                    <h1 className="text-[16px] sm:text-[18px] lg:text-[21px] px-2 sm:px-3 font-semibold">
                       {items.name}
                     </h1>
                     <div className="flex items-center gap-1 sm:gap-2 px-2">
                       <img
-                        src={items.seller?.profileImage || '/assets/kamathenu Images/Design/constructor_person.png'}
+                        src={items.seller.profileImage}
                         alt="constructor_person"
-                        className="w-[12px] h-[18px] sm:w-[13%] sm:h-[38px] object-cover object-center rounded-[50%]"
+                        className="w-[12px] h-[18px] sm:w-[13%] sm:h-[38px]  object-center rounded-[50%]"
                       />
-                      <h1 className="text-[12px] sm:text-[14px]">
-                        {items.seller?.sellerName || 'Unknown Seller'}
-                      </h1>
+                      <h1 className="text-[12px] sm:text-[14px]">{items?.seller?.sellerName}</h1>
                       <h2 className="text-[12px] sm:text-[14px] text-gray-400 font-normal">
-                        ({items.seller?.storeDescription || 'No description'})
+                        ({items.seller.storeDescription})
                       </h2>
                     </div>
-                    <div className="flex px-2 gap-1 items-center">
-                      <StarRatings
-                        rating={items.reviews?.[0]?.rating || 0}
-                        starRatedColor='#EACD3C'
-                        numberOfStars={5}
-                        name='rating'
-                        starDimension="35px"
-                        starSpacing="1px"
-                      />
-                      <h1 className="ml-1 text-gray-400 text-[13px] sm:text-[15px]">
-                        ({items.reviews?.[0]?.rating || 0})
-                      </h1>
+
+                    <div className="ml-3">
+                    <StarRatings
+                      rating={items?.reviews[0]?.rating}
+                      starRatedColor='#EACD3C'
+                      numberOfStars={5}
+                      name='rating'
+                      starDimension="25px"
+                      starSpacing="1px"
+                    />
                     </div>
-                    <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 justify-between mx-2">
+                    <div className="flex p-2 gap-2 sm:gap-4 lg:gap-18 items-center justify-between ml-1">
                       <div>
                         <div className="text-gray-400 line-through flex items-center">
-                          <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">
-                            ₹ {items.variants?.[0]?.discountPrice || 0}
-                          </span>
+                          <span className="flex items-center text-[16px] sm:text-[18px] lg:text-[21px] font-semibold">₹ {items?.price}</span>
                         </div>
-                        <div className="text-[#D8A526] flex items-center">
-                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">
-                            ₹ {items.variants?.[0]?.price || 0}
-                          </span>
+                        <div className="text-[#D8A526] flex items-center ">
+                          <span className="flex items-center text-[20px] sm:text-[24px] lg:text-[28px] font-semibold">₹ {(items?.price-Math.round(items?.price/100*items?.discounts[0]?.discountValue))}</span>
                         </div>
                       </div>
                       <div className="">
-                        <img
-                          src="/assets/kamathenu Images/Design/shopNow.png"
-                          alt=""
-                          className="bg-[#FFFAEF] p-1 sm:p-2 rounded-[50%] size-8 sm:size-10 lg:size-12"
-                        />
+                        <img src="/assets/kamathenu Images/Design/shopNow.png" alt="" className="bg-[#FFFAEF] p-1 sm:p-2 rounded-[50%] size-13 sm:size-14 lg:w-[60px] lg:h-[60px]" />
                       </div>
                     </div>
-                    <div className="absolute top-2 right-2">
-                      <FaHeart className={`size-4 sm:size-5 ${wishlist[items.id] ? 'text-yellow-500' : 'text-white'}`}  onClick={()=>handleWishlist(items.id,items?.wishlist?.[0]?.productId || '',items?.wishlist?.[0]?.id || '')}/>
+                    <div className="absolute top-4 right-4">
+                      <FaHeart 
+                        className={`size-4 sm:size-5 cursor-pointer transition-colors ${
+                          wishlistStatus[items.id] ? 'text-yellow-500' : 'text-white'
+                        }`}
+                        onClick={() => handleWishlist(items.id, items.wishlist[0]?.productId, items?.wishlist[0]?.id)}
+                      />
+                    </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {showMore && <Button
-                className="bg-[#D8A526] text-white border ml-[44%] hover:bg-white hover:text-[#D8A526] font-semibold py-6 "
-                style={{ borderColor: "#D8A526" }}
-              >
-                <div className="flex items-center gap-1 " onClick={()=>setLimit(limit+3)}>
-                  <span className="text-[19px]">Show More</span>{" "}
-                  <IoIosArrowRoundForward className=" size-12" />
-                </div>
-              </Button>}
+
+              
+
+
             </TabsContent>
           ))}
         </Tabs>
+        <div className="flex justify-center">
+          {showMore && <Button className="bg-[#D8A526] text-white border  hover:bg-white hover:text-[#D8A526] font-semibold py-3 lg:py-6  " style={{ borderColor: '#D8A526' }}>
+                <div className="flex items-center gap-1 cursor-pointer" onClick={()=>setLimit(limit+5)}><span className="text-[18px] text-white"  >See More</span> <IoIosArrowRoundForward className=" size-8 sm:size-12  font-bold "  /></div>
+              </Button>}
+        </div>
       </div>
     </div>
   );

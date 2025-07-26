@@ -27,24 +27,25 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import StarRatings from "react-star-ratings";
 
 
 const ProductDetails = () => {
-   const [mainPhoto, setMainPhoto] = useState(
-  "/assets/kamathenu Images/Design/design_home_1.jpg"
-);
-const [img1, setImg1] = useState(
-  "/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png"
-);
+  const [mainPhoto, setMainPhoto] = useState(
+    "/assets/kamathenu Images/Design/design_home_1.jpg"
+  );
+  const [img1, setImg1] = useState(
+    "/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png"
+  );
 
-const [img2, setImg2] = useState(
-  "/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png"
-);
+  const [img2, setImg2] = useState(
+    "/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png"
+  );
 
-const [img3, setImg3] = useState(
-  "/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png"
-);
-  
+  const [img3, setImg3] = useState(
+    "/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png"
+  );
+
   const { id } = useParams();
   const searchParams = useSearchParams();
   const productName = searchParams.get("name");
@@ -65,22 +66,22 @@ const [img3, setImg3] = useState(
       "product/particularProduct",
       payload
     );
-    var secondImage:any=[]
-    const secondaryImage= await response.data.productData.particularProduct.images[0].imageUrl.map((ele:any)=>{
-      if(ele.isPrimary===false){
+    var secondImage: any = []
+    const secondaryImage = await response.data.productData.particularProduct.images[0].imageUrl.map((ele: any) => {
+      if (ele.isPrimary === false) {
         secondImage.push(ele.imageUrl)
       }
     })
     console.log("🔥🔥🔥🔥🔥🔥secondaryImage🔥🔥🔥🔥🔥🔥", secondImage)
-    setMainPhoto(response.data.productData.particularProduct.images[0].imageUrl.find((ele:any)=>ele.isPrimary===true)?.imageUrl)
-    for(let i=0;i<3;i++){
-      if(i==0){
+    setMainPhoto(response.data.productData.particularProduct.images[0].imageUrl.find((ele: any) => ele.isPrimary === true)?.imageUrl)
+    for (let i = 0; i < 3; i++) {
+      if (i == 0) {
         setImg1(secondImage[i])
       }
-      if(i==1){
+      if (i == 1) {
         setImg2(secondImage[i])
       }
-      if(i==2){
+      if (i == 2) {
         setImg3(secondImage[i])
       }
     }
@@ -99,7 +100,7 @@ const [img3, setImg3] = useState(
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [orderDescription, setOrderDescription] = useState("");
 
- 
+
 
   const changePhoto = (alt: string) => {
     const getMainPhoto = mainPhoto;
@@ -117,8 +118,8 @@ const [img3, setImg3] = useState(
     }
   };
   const handleAddCart = async (productId: string) => {
-    const getUserData=localStorage.getItem("userData-storage")
-    const userData=JSON.parse(getUserData || "{}")
+    const getUserData = localStorage.getItem("userData-storage")
+    const userData = JSON.parse(getUserData || "{}")
     const payload = {
       userId: userData.state.userData.userId,
       productId: productId,
@@ -150,8 +151,8 @@ const [img3, setImg3] = useState(
     amount: number,
     sellerId: string
   ) => {
-    const getUserData=localStorage.getItem("userData-storage")
-    const userData=JSON.parse(getUserData || "{}")
+    const getUserData = localStorage.getItem("userData-storage")
+    const userData = JSON.parse(getUserData || "{}")
     const userOrderData: any = [];
     console.log("🔥🔥🔥🔥🔥🔥productDetails🔥🔥🔥🔥🔥🔥", productDetails)
     userOrderData.push({
@@ -166,7 +167,7 @@ const [img3, setImg3] = useState(
     };
     validation();
     if (!errorValidation) {
-      const response: any = await axiosInstance.post("order/createOrder",payload);
+      const response: any = await axiosInstance.post("order/createOrder", payload);
       console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)
 
       setShowDescription(false);
@@ -185,7 +186,7 @@ const [img3, setImg3] = useState(
         {productDetails !== null && (
           <div className="mt-18  lg:m-20 lg:ml-51 grid grid-cols-6 items-center lg:gap-x-19 p-4 lg:p-10 gap-y-5">
             <div className="col-span-6 md:col-span-1 lg:col-span-1 flex   md:grid  gap-4  p-2   grid-cols-1 grid-rows-3 rounded-lg p-12 px-8 ">
-              {img1&&<div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
+              {img1 && <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
                     img1 || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (1).png'
@@ -198,7 +199,7 @@ const [img3, setImg3] = useState(
                 />
               </div>}
 
-              {img2&&<div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
+              {img2 && <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
                     img2 || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (2).png'
@@ -211,10 +212,10 @@ const [img3, setImg3] = useState(
                 />
               </div>}
 
-              {img3&&<div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
+              {img3 && <div className="col-span-1  rounded-lg shadow-md flex items-center justify-center">
                 <img
                   src={
-                    img3|| '/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png'
+                    img3 || '/assets/kamathenu Images/ParticularProduct/productDetail_1 (3).png'
                   }
                   alt="img1"
                   className="border rounded-[3px] w-[100%] h-[100%]"
@@ -258,13 +259,14 @@ const [img3, setImg3] = useState(
               </div>
 
               <div className="flex px-2 gap-1 items-center">
-                {[
-                  ...Array(
-                    productDetails?.reviews?.[0]?.rating || 0
-                  ),
-                ].map((_, i) => (
-                  <IoIosStar key={i} className="text-[#EACD3C] size-9" />
-                ))}
+                <StarRatings
+                  rating={productDetails?.reviews[0]?.rating}
+                  starRatedColor='#EACD3C'
+                  numberOfStars={5}
+                  name='rating'
+                  starDimension="25px"
+                  starSpacing="1px"
+                />
                 <h1 className="ml-1 text-gray-400 text-[15px]">
                   ({productDetails?.reviews?.[0]?.rating || 0}
                   )
@@ -276,7 +278,7 @@ const [img3, setImg3] = useState(
                   ₹{productDetails?.price}
                 </div>
                 <div className="text-[#D8A526] flex items-center text-[33px] font-semibold">
-                  ₹{productDetails?.price-(productDetails?.price/100*productDetails?.discounts[0]?.discountValue)}
+                  ₹{productDetails?.price - Math.round(productDetails?.price / 100 * productDetails?.discounts[0]?.discountValue)}
                 </div>
               </div>
 
@@ -320,7 +322,7 @@ const [img3, setImg3] = useState(
                         name="orderDescription"
                         onChange={(e) => setData(e)}
                       />
-                      {errorValidation&&<h1 className="text-red-500 text-[16px]">Please Descripe the your design</h1>}
+                      {errorValidation && <h1 className="text-red-500 text-[16px]">Please Descripe the your design</h1>}
                       <DialogFooter>
                         <DialogClose asChild>
                           <Button variant="outline">Cancel</Button>
@@ -329,7 +331,7 @@ const [img3, setImg3] = useState(
                           onClick={() => {
                             handleOrderNow(
                               productDetails?.id,
-                              productDetails?.price-(productDetails?.price/100*productDetails?.discounts[0]?.discountValue),
+                              productDetails?.price - Math.round(productDetails?.price / 100 * productDetails?.discounts[0]?.discountValue),
                               productDetails?.seller?.id
                             );
                           }}
@@ -462,23 +464,23 @@ const [img3, setImg3] = useState(
                           Customer Reviews
                         </h1>
                         <div className="flex items-center space-x-2 mb-4">
-                                                  <div className="flex">
-                          {Array(
-                            productDetails?.reviews?.[0]?.rating || 0
-                          )
-                            .fill(0)
-                            .map((_, i) => (
-                              <IoIosStar
-                                key={i}
-                                className="text-yellow-500 w-5 h-5"
-                              />
-                            ))}
-                        </div>
-                        <span className="text-gray-600">
-                          (
-                          {productDetails?.reviews?.[0]?.rating || 0}{" "}
-                          out of 5)
-                        </span>
+                          <div className="flex">
+                            {Array(
+                              productDetails?.reviews?.[0]?.rating || 0
+                            )
+                              .fill(0)
+                              .map((_, i) => (
+                                <IoIosStar
+                                  key={i}
+                                  className="text-yellow-500 w-5 h-5"
+                                />
+                              ))}
+                          </div>
+                          <span className="text-gray-600">
+                            (
+                            {productDetails?.reviews?.[0]?.rating || 0}{" "}
+                            out of 5)
+                          </span>
                         </div>
                         <p className="text-gray-500 mb-4">
                           {productDetails?.reviews?.length || 0}{" "}
@@ -496,27 +498,27 @@ const [img3, setImg3] = useState(
                                 style={{
                                   width:
                                     score === "5"
-                                      ? "100%"
+                                      ? "0%"
                                       : score === "4"
-                                      ? "0%"
-                                      : score === "3"
-                                      ? "0%"
-                                      : score === "2"
-                                      ? "0%"
-                                      : "0%",
+                                        ? "0%"
+                                        : score === "3"
+                                          ? "0%"
+                                          : score === "2"
+                                            ? "0%"
+                                            : "0%",
                                 }}
                               />
                             </div>
                             <span>
                               {score === "5"
-                                ? "100%"
+                                ? "0%"
                                 : score === "4"
-                                ? "0%"
-                                : score === "3"
-                                ? "0%"
-                                : score === "2"
-                                ? "0%"
-                                : "0%"}
+                                  ? "0%"
+                                  : score === "3"
+                                    ? "0%"
+                                    : score === "2"
+                                      ? "0%"
+                                      : "0%"}
                             </span>
                           </div>
                         ))}
@@ -635,7 +637,7 @@ const [img3, setImg3] = useState(
                     >
                       <div className="flex flex-col  rounded-t-[15px] border border-gray-400 gap-4 relative">
                         <img
-                          src={item.images?.[0]?.imageUrl?.[0] || '/assets/kamathenu Images/Design/design_home_1.jpg'}
+                          src={item?.images[0]?.imageUrl.find((image: any) => image.isPrimary === true)?.imageUrl}
                           alt="image"
                           className="w-full h-[234px] border rounded-t-[11px]"
                         />
@@ -656,12 +658,14 @@ const [img3, setImg3] = useState(
                           </h2>
                         </div>
                         <div className="flex px-2 gap-1 items-center">
-                          {[...Array(item.reviews?.[0]?.rating || 0)].map((_, i) => (
-                            <IoIosStar
-                              key={i}
-                              className="text-[#EACD3C] size-4"
-                            />
-                          ))}
+                          <StarRatings
+                            rating={item?.reviews[0]?.rating}
+                            starRatedColor='#EACD3C'
+                            numberOfStars={5}
+                            name='rating'
+                            starDimension="25px"
+                            starSpacing="1px"
+                          />
                           <h1 className="ml-1 text-gray-400 text-[15px]">
                             ({item.reviews?.[0]?.rating || 0})
                           </h1>
@@ -669,10 +673,10 @@ const [img3, setImg3] = useState(
                         <div className="flex p-2 gap-6 items-center">
                           <div>
                             <div className="text-gray-400 line-through text-[21px] font-semibold">
-                              ₹ {item.variants?.[0]?.price || 0}
+                              ₹ {item?.price || 0}
                             </div>
-                            <div className="text-[#D8A526] text-[28px] font-semibold">
-                              ₹ {item.variants?.[0]?.discountPrice || 0}
+                            <div className="text-[#D8A526] text-[24px] md:text-[28px] font-semibold">
+                              ₹ {(item?.price-Math.round(item?.price/100*item?.discounts[0]?.discountValue)) || 0}
                             </div>
                           </div>
                           <img
