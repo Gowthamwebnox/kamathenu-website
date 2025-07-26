@@ -20,8 +20,16 @@ const categories = [
 
 
 export default function FeaturedProducts() {
-  const localData=localStorage.getItem('userData-storage')
-  const userData=JSON.parse(localData||'{}')
+  const [userData, setUserData] = useState<any>({});
+  
+  useEffect(() => {
+    // Only access localStorage on the client side
+    if (typeof window !== 'undefined') {
+      const localData = localStorage.getItem('userData-storage');
+      const parsedData = JSON.parse(localData || '{}');
+      setUserData(parsedData);
+    }
+  }, []);
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [designCategoryData, setDesignCategoryData] = useState<any>([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -74,8 +82,7 @@ export default function FeaturedProducts() {
   
   const handleWishlist = async (productId: string, wishlistProductId: string, wishlistId: string) => {
     console.log("🔥🔥🔥🔥🔥🔥wishlistId🔥🔥🔥🔥🔥🔥", wishlistId)
-    const localData=localStorage.getItem('userData-storage')
-    const userData=JSON.parse(localData||'{}')
+    // Use the existing userData state instead of accessing localStorage directly
 
     const payload = {
       productId: productId,

@@ -83,18 +83,19 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
   }, [])
 
   const fetchUserData = async () => {
-    var getLoaclData=localStorage.getItem('userData-storage')
-    getLoaclData=JSON.parse(getLoaclData || '{}')
-      setUserData({
-        userId:getLoaclData?.state?.userData?.userId,
-        userName:getLoaclData?.state?.userData?.userName,
-        userEmail:getLoaclData?.state?.userData?.userEmail,
-        userRole:getLoaclData?.state?.userData?.userRole,
-        token:getLoaclData?.state?.userData?.token
-      })
-
+    // Check if we're on the client side before accessing localStorage
     if (typeof window !== 'undefined') {
-      const userId = getUserData.userId
+      var getLoaclData=localStorage.getItem('userData-storage')
+      getLoaclData=JSON.parse(getLoaclData || '{}')
+        setUserData({
+          userId:getLoaclData?.state?.userData?.userId,
+          userName:getLoaclData?.state?.userData?.userName,
+          userEmail:getLoaclData?.state?.userData?.userEmail,
+          userRole:getLoaclData?.state?.userData?.userRole,
+          token:getLoaclData?.state?.userData?.token
+        })
+
+      const userId = getLoaclData?.state?.userData?.userId
       if (userId) {
         const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`)
         console.log("🔥🔥🔥🔥🔥🔥response🔥🔥🔥🔥🔥🔥", response)

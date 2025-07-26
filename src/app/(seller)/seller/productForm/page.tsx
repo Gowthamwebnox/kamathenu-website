@@ -356,14 +356,24 @@ const ProductForm: React.FC = () => {
   );
 
   // const { data, status } = useSession();
-  const getUserData=localStorage.getItem("userData-storage")
-  const userData=JSON.parse(getUserData || "{}")
-  var status="authenticated"
-  const data={
-    user:{
-      sellerId:userData.state.userData.sellerId
+  const [userData, setUserData] = useState<any>({});
+  const [status, setStatus] = useState("loading");
+  const [data, setData] = useState<any>(null);
+  
+  useEffect(() => {
+    // Only access localStorage on the client side
+    if (typeof window !== 'undefined') {
+      const getUserData = localStorage.getItem("userData-storage");
+      const parsedUserData = JSON.parse(getUserData || "{}");
+      setUserData(parsedUserData);
+      setStatus("authenticated");
+      setData({
+        user: {
+          sellerId: parsedUserData?.state?.userData?.sellerId
+        }
+      });
     }
-  }
+  }, []);
   // useEffect(() => {
   //   if (status === "authenticated" && data?.user?.sellerId) {
   //     setFormData((prev) => ({

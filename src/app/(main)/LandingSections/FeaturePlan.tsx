@@ -13,6 +13,14 @@ const FeaturePlan = () => {
   const [limit, setLimit] = useState(1);
   const [showMore, setShowMore] = useState(true);
   const [wishlistStatus, setWishlistStatus] = useState<{ [key: string]: boolean }>({});
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    // Only access localStorage on the client side
+    if (typeof window !== 'undefined') {
+      setCurrentUserId(localStorage.getItem("currentUserId"));
+    }
+  }, []);
 
   const payload: { categoryName: string, limit: number } = {
     categoryName: "Featured Plans",
@@ -33,7 +41,6 @@ const FeaturePlan = () => {
     })
     setWishlistStatus(initialWishlistStatus);
   }
-  console.log("👌👌👌👌💕💕💕")
   console.log(featuredPlans)
 
   const handleWishlist = async (productId: string, wishlistProductId: string, wishlistId: string) => {
@@ -41,7 +48,7 @@ const FeaturePlan = () => {
     const payload = {
       productId: productId,
       wishlistProductId: wishlistProductId,
-      userId: localStorage.getItem("currentUserId"),
+      userId: currentUserId,
       wishlistId: wishlistId
     }
     console.log("🔥🔥🔥🔥🔥🔥payload🔥🔥🔥🔥🔥🔥", payload)
