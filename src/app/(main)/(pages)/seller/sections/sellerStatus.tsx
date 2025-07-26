@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -24,7 +25,7 @@ export function SellerStatus({ isSeller, isSellerApproved }: SellerStatusProps) 
           </h2>
           <p className="text-gray-600 max-w-md">
             Your seller account is currently under review. Our team is verifying your details. 
-            This process usually takes 24-48 hours. We&apos;ll notify you once your account is approved.
+            This process usually takes 24-48 hours. We'll notify you once your account is approved.
           </p>
           <div className="flex items-center gap-2 text-yellow-600">
             <AlertCircle className="w-5 h-5" />
