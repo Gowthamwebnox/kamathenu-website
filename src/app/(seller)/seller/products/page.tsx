@@ -118,7 +118,11 @@ const ProductsPage = () => {
 
     try {
       console.log("fetchProducts🔥🔥🔥");
-      const response: any = await axiosInstance.get(`/seller/fetchSellerProduct/${session.user.sellerId}`);
+      const response: any = await axiosInstance.get(`/seller/fetchSellerProduct/${session.user.sellerId}`,{
+        params:{
+          debouncedSearchTerm:debouncedSearchTerm
+        }
+      });
       console.log("response🔥🔥🔥", response);
       
       if (response?.status === 200) {   
@@ -318,16 +322,16 @@ const ProductsPage = () => {
                     setCurrentPage(1); // Reset to first page when searching
                   }}
                   className="pl-10"
-                  disabled={loading}
+                  disabled={loading}  
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <Button variant="outline" size="sm" disabled={loading}>
                 <Filter className="w-4 h-4 mr-2" />
                 Filter
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* Summary Stats */}

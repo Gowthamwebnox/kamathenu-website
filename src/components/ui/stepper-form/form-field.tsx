@@ -3,6 +3,7 @@
 import type { ReactNode } from "react"
 import { useStepperForm } from "./context"
 import { cn } from "@/lib/utils"
+import { AlertCircle } from "lucide-react"
 
 interface FormFieldProps {
   tabIndex: number
@@ -19,7 +20,15 @@ export function FormField({ tabIndex, fieldName, children, className = "", error
   return (
     <div className={cn("stepper-form-field mb-4", className)}>
       {children}
-      {error && <p className={cn("text-red-500 text-sm mt-1 font-medium", errorClassName)}>{error}</p>}
+      {error && (
+        <div className={cn(
+          "flex items-center gap-1 text-red-600 text-sm mt-2 font-medium animate-in fade-in-0 slide-in-from-top-1 duration-200", 
+          errorClassName
+        )}>
+          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
     </div>
   )
 }

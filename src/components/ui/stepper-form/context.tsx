@@ -40,6 +40,7 @@ interface StepperFormProviderProps {
   onFormStateChange: (state: StepperFormState) => void
   currentTab?: number
   onTabChange?: (tab: number) => void
+  errors?: Record<string, string>
 }
 
 export function StepperFormProvider({ 
@@ -49,10 +50,14 @@ export function StepperFormProvider({
   tabSchemas,
   onFormStateChange,
   currentTab,
-  onTabChange
+  onTabChange,
+  errors: externalErrors = {}
 }: StepperFormProviderProps) {
   const [activeTabIndex, setActiveTabIndex] = useState(currentTab ?? 0)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [localErrors, setLocalErrors] = useState<Record<string, string>>({})
+
+  // Use external errors if provided, otherwise use local errors
+  const errors = Object.keys(externalErrors).length > 0 ? externalErrors : localErrors
 
   useEffect(() => {
     if (currentTab !== undefined) {
@@ -76,8 +81,9 @@ export function StepperFormProvider({
     }
     onFormStateChange(newState)
 
-    if (errors[fieldName]) {
-      setErrors((prev) => {
+    // Only clear local errors if we're not using external errors
+    if (Object.keys(externalErrors).length === 0 && localErrors[fieldName]) {
+      setLocalErrors((prev) => {
         const newErrors = { ...prev }
         delete newErrors[fieldName]
         return newErrors
@@ -92,16 +98,19 @@ export function StepperFormProvider({
       const validationSchema = tabSchemas?.[tabIndex] || schema
       validationSchema.parse(currentTabFields)
 
-      setErrors({})
+      // Only clear local errors if we're not using external errors
+      if (Object.keys(externalErrors).length === 0) {
+        setLocalErrors({})
+      }
       return true
     } catch (error) {
-      if (error instanceof z.ZodError) {
+      if (error instanceof z.ZodError && Object.keys(externalErrors).length === 0) {
         const formattedErrors: Record<string, string> = {}
-        error.errors.forEach((err) => {
+        error.issues.forEach((err: any) => {
           const path = err.path.join(".")
           formattedErrors[path] = err.message
         })
-        setErrors(formattedErrors)
+        setLocalErrors(formattedErrors)
       }
       return false
     }

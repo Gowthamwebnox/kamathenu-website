@@ -206,24 +206,25 @@ const FileUpload: React.FC<FileUploadProps> = ({
     setIsUploading(true);
 
     try {
-      const uploadPromises = filesToUpload.map(async (file) => {
-        const fileBuffer = await file.arrayBuffer();
-        const fileName = `${Date.now()}-${file.name.replace(
-          /[^a-zA-Z0-9.-]/g,
-          ""
-        )}`;
+      // const uploadPromises = filesToUpload.map(async (file) => {
+      //   const fileBuffer = await file.arrayBuffer();
+      //   const fileName = `${Date.now()}-${file.name.replace(
+      //     /[^a-zA-Z0-9.-]/g,
+      //     ""
+      //   )}`;
 
-        const imageUrl = await s3Storage.uploadFile({
-          file: Buffer.from(fileBuffer),
-          fileName,
-          contentType: file.type,
-        });
+        // const imageUrl = await s3Storage.uploadFile({
+        //   file: Buffer.from(fileBuffer),
+        //   fileName,
+        //   contentType: file.type,
+        // });
 
-        return imageUrl;
-      });
+      //   return imageUrl;
+      // });
 
-      const uploadedUrls = await Promise.all(uploadPromises);
-      onFilesUploaded(uploadedUrls);
+      // const uploadedUrls = await Promise.all(uploadPromises);
+      // onFilesUploaded(uploadedUrls);
+      onFilesUploaded(['']);
     } catch (error) {
       console.error("Error uploading files:", error);
     } finally {
@@ -584,9 +585,11 @@ const ProductForm: React.FC = () => {
         setIsLoading(false);
         return;
       }
-
+      const localData=localStorage.getItem("userData-storage")
+      const getLocalData=JSON.parse(localData||'{}')
+      const sellerId=getLocalData.state.userData.sellerId
       const productData = {
-        sellerId: formData.sellerId,
+        sellerId: sellerId,
         categoryId: formData.categoryId,
         name: formData.name,
         description: formData.description,
@@ -614,7 +617,7 @@ const ProductForm: React.FC = () => {
       // router.push("/seller/products");
       toast.success("Product created successfully!");
       // For now, just show success message
-
+      window.location.reload();
 
       setFormData({
         sellerId: "",
@@ -636,6 +639,12 @@ const ProductForm: React.FC = () => {
         productDiscountValue: 0,
         productDiscountStartDate: "",
         productDiscountEndDate: "",
+      });
+      setNewDiscount({
+        discountType: "",
+        discountValue: 0,
+        startDate: "",
+        endDate: "",
       });
       // Removed setNewVariant since we're not using variants anymore
     } catch (error: any) {

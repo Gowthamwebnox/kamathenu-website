@@ -19,7 +19,7 @@ import {
   useStepperForm,
 } from "@/components/ui/stepper-form";
 import { CustomInput } from "@/components/ui/stepper-form/form-input";
-import { useSellerRegistrationStore } from "@/app/(main)/(pages)/seller/sections/sellerRegistrationStore";
+import { useSellerRegistrationStore, tabSchemas } from "@/app/(main)/(pages)/seller/sections/sellerRegistrationStore";
 // import PaymentButton from "@/components/common/Payment/PaymentButton";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -32,8 +32,9 @@ import { AddressInput } from "@/components/Address";
 // import { S3Storage } from "@/app/utils/s3";
 import { Input } from "@/components/ui/input";
 import axiosInstance from "@/app/utils/axiosInstance";
-import userData from "@/app/(main)/StateManagement/userData";
 import { S3Storage } from "@/lib/s3";
+import { TbRotateClockwise2 } from "react-icons/tb";
+import userDataStore from "@/app/(main)/StateManagement/userData";
 
 interface UserData {
   id: string;
@@ -45,13 +46,9 @@ interface UserData {
   sellerId?: string;
 }
 
-const isLoginedSchema = z.object({
-  loginStatus: z.boolean().refine((val) => val === true, {
-    message: "You must Login or Create a New Account",
-  }),
-});
-
-const accountInfoSchema = z.object({
+// Validation schemas are now defined in the seller registration store
+const formSchema = z.object({
+  // Combined schema for final validation
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
   gstn: z.string().min(15, "GSTN must be 15 characters"),
@@ -60,15 +57,12 @@ const accountInfoSchema = z.object({
   storeDescription: z.string().optional(),
   address: z.string().min(1, "Please select an address"),
   pincode: z.string().min(6, "Pincode must be 6 characters"),
-  latitude: z.number(),
-  longitude: z.number(),
-  documents: z.array(z.string()).min(1, "Please upload at least one document"),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  documents: z.array(z.string()).optional(),
   agreeTerms: z.boolean().refine((val) => val === true, {
     message: "You must agree to the terms and conditions",
   }),
-});
-
-const bankDetailsSchema = z.object({
   accountHolderName: z
     .string()
     .min(2, "Account holder name must be at least 2 characters"),
@@ -81,13 +75,6 @@ const bankDetailsSchema = z.object({
   accountType: z.string().optional(),
   upiId: z.string().optional(),
 });
-
-const formSchema = z.object({
-  ...accountInfoSchema.shape,
-  ...bankDetailsSchema.shape,
-});
-
-const tabSchemas = [isLoginedSchema, accountInfoSchema, bankDetailsSchema];
 
 type FormFieldValue = string | number | boolean | string[] | null;
 
@@ -102,70 +89,147 @@ type TabFormState = {
 };
 
 export default function SellerRegistration() {
-  //
-  const userDataStore=userData((state:any)=>state.setUserData)
-  const userIdStore=userData((state:any)=>state.setUserId)
-    const router=useRouter()
-    
-  const[loginData,setloginData]=useState({
-    email:'',
-    password:''
+  // //
+  // const userDataStore=userData((state:any)=>state.setUserData)
+  // const userIdStore=userData((state:any)=>state.setUserId)
+  const router = useRouter()
+
+  const [loginData, setloginData] = useState({
+    email: '',
+    password: ''
   })
-  
-  const setData=(event:React.ChangeEvent<HTMLInputElement>)=>{
-        setloginData({...loginData,[event.target.name]:event.target.value})
+
+  const setData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setloginData({ ...loginData, [event.target.name]: event.target.value })
   }
 
+
+  const{userData,setUserData,clearUserData}=userDataStore()
+  const handleLogin = async () => {
+    console.log(loginData + ">>>>>>>>>>>>>>")
+    
+    const payload: { data: any } = {
+      data: {
+        email: loginData.email,
+        password: loginData.password
+      }
+
+    }
+
+    try {
+      const response: any = await axiosInstance.post('auth/login', payload.data);
+      
+
+      console.log(response.data + ">>>>>>>>>>>>token<<<<<<<<<<<<<<<<<");
+
+      // Check if login was successful (status 200)
+      if (response.status === 200 && response.data !== "Password is incorrect") {
+        // Store token
+        setUserData({
+          userId:response.data.user.id,
+          userName:response.data.user.name,
+          userEmail:response.data.user.email,
+          token:response.data.Token,
+          userRole:response.data.user.roleId,
+          sellerId:response.data.user.sellerProfile?.id||'',
+        })
+        if(response.data.user.sellerProfile.status==='Approved'){
+          console.log("seller")
+          router.push('/seller/products')
+        }
+        else if(response.data.user.sellerProfile.status==='Pending'){
+          setShowSellerWaiting(true)
+        }
+        else{
+          onFormChange({
+            tabIndex: 0,
+            fieldName: "loginStatus",
+            value: true,
+          });
   
-  const handleLogin=async()=>{
-     console.log(loginData+">>>>>>>>>>>>>>")
-     const payload:{data:any}={
-        data:{
-          email:loginData.email,
-          password:loginData.password
+          // Pre-fill user data if available
+          if (response.data.user) {
+            onFormChange({
+              tabIndex: 1,
+              fieldName: "fullName",
+              value: response.data.user.name || "",
+            });
+            onFormChange({
+              tabIndex: 1,
+              fieldName: "email",
+              value: response.data.user.email || "",
+            });
+          }
+  
+          // Move to Account Information step
+          setCurrentTab(1);
+  
+          console.log("✅ Login successful! Moving to Account Information step");
+        }
+        
+        }
+        else if (response.data === "Password is incorrect") {
+          alert("Password is incorrect")
         }
 
-     }
-     const response:any = await axiosInstance.post('auth/login',payload.data);
-     console.log(response.data +">>>>>>>>>>>>token<<<<<<<<<<<<<<<<<");
-     
-     if(response.data=="Password is incorrect"){
-      alert("Password is incorrect")
-     }
-     else{
-      userDataStore(response.data.user.name)
-      userIdStore(response.data.user.id)
-      localStorage.setItem('jwtToken', response.data.Token);
-      router.push('/')
-     }
+
+        // Update login status in the store
+        
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed. Please try again.");
+    }
   }
-  const handleGoogleLogin=async()=>{
-    const url='http://localhost:8000/api/auth/google'
-    
-    window.location.href=url
-    const response:any = await axiosInstance.get('auth/google');
-    const urlParams = new URLSearchParams(window.location.search);
-    const token:string|null = urlParams.get('token');
-    const userId:string|null = urlParams.get('userId');
-    console.log(userId+">>>>>>>>>>>>>>>>>>>>>>>>>USERID<<<<<<<<<<<<<<<<<<<<<<")
-    console.log(token+">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
-    localStorage.setItem('jwtToken', token||'');
-    localStorage.setItem('currentUserId', userId||'');
-    
-    
+  const handleGoogleLogin = async () => {
+    try {
+      const url = 'http://localhost:8000/api/auth/google'
+
+      window.location.href = url
+      const response: any = await axiosInstance.get('auth/google');
+      const urlParams = new URLSearchParams(window.location.search);
+      const token: string | null = urlParams.get('token');
+      const userId: string | null = urlParams.get('userId');
+
+      console.log(userId + ">>>>>>>>>>>>>>>>>>>>>>>>>USERID<<<<<<<<<<<<<<<<<<<<<<")
+      console.log(token + ">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
+
+      if (token && userId) {
+        localStorage.setItem('jwtToken', token);
+        localStorage.setItem('currentUserId', userId);
+
+        // Update login status in the store
+        onFormChange({
+          tabIndex: 0,
+          fieldName: "loginStatus",
+          value: true,
+        });
+
+        // Move to Account Information step
+        setCurrentTab(1);
+
+        console.log("✅ Google login successful! Moving to Account Information step");
+      } else {
+        alert("Google login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      alert("Google login failed. Please try again.");
+    }
   }
   //
   const {
     formState,
     isSubmitted,
     currentTab,
+    errors,
     setFormState,
     onFormChange,
     setIsSubmitted,
     setCurrentTab,
     resetForm,
+    clearErrors,
   } = useSellerRegistrationStore();
-  const [user, setUserData] = useState<UserData | null>(null);
+  const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [shouldCheckAuth, setShouldCheckAuth] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -182,12 +246,13 @@ export default function SellerRegistration() {
       return null;
     }
   };
-
+  
+  const [showSellerWaiting, setShowSellerWaiting] = useState(false)
   const handleSubmit = async (formData: any) => {
     try {
-      const localToken=localStorage.getItem("userData-storage")
-      const getUserData=JSON.parse(localToken||'{}')
-      const token=getUserData.state.userData.token
+      const localToken = localStorage.getItem("userData-storage")
+      const getUserData = JSON.parse(localToken || '{}')
+      const token = getUserData.state.userData.token
       // const token = localStorage.getItem("jwtToken");
       if (!token) {
         setLoading(false);
@@ -215,9 +280,12 @@ export default function SellerRegistration() {
         });
         toast.success("Seller Profile Updated Successfully");
       } else {
-        await AXIOS.post("/seller/registerSeller", {
+        const userData = localStorage.getItem("userData-storage")
+        const getUserData = JSON.parse(userData || '{}')
+        const userId = getUserData.state.userData.userId
+        await axiosInstance.post("/seller/newSellerRegistration", {
           ...formData,
-          userId: user?.id,
+          userId: userId,
           address: formData.address,
           pincode: formData.pincode,
           latitude: formData.latitude,
@@ -227,6 +295,7 @@ export default function SellerRegistration() {
           fcrn: formData.fcrn,
         });
         toast.success("Seller Registration Completed Successfully");
+        setShowSellerWaiting(true)
       }
       resetForm();
     } catch (error) {
@@ -266,58 +335,89 @@ export default function SellerRegistration() {
   };
 
   useEffect(() => {
+   
     const checkAuthentication = async () => {
-      const localToken=localStorage.getItem("userData-storage")
-      const getUserData=JSON.parse(localToken||'{}')
-      const token=getUserData.state.userData.token
-      const userId=getUserData.state.userData.userId
-      console.log("token", token)
-      console.log("userId", userId)
-      if (token) {
-        const data = await validateToken(token);
-        console.log("data", data)
-        
-    const response:any= await axiosInstance.get(`auth/fetchUser/${userId}`)
-    console.log("response", response)
-        console
-        // setUserData({
-        //   ...data.data?.user,
-        //   isSeller: data.data?.hasSellerProfile,
-        //   isSellerApproved: data.data?.isSellerApproved,
-        //   sellerStatus: data.data?.sellerStatus,
-        //   sellerId: data.data?.sellerId
-        // });
-        setLoading(false);
-        if (response.data) {
-          onFormChange({
-            tabIndex: 0,
-            fieldName: "loginStatus",
-            value: true,
-          });
-          onFormChange({
-            tabIndex: 1,
-            fieldName: "fullName",
-            value: response.data.name || "",
-          });
-          onFormChange({
-            tabIndex: 1,
-            fieldName: "email",
-            value: response.data.email || "",
-          });
-          if (currentTab === 0) {
-            setCurrentTab(1);
+      try {
+        const localToken = localStorage.getItem("userData-storage");
+        const getUserData = JSON.parse(localToken || '{}');
+        const token = getUserData.state?.userData?.token;
+        const userId = getUserData.state?.userData?.userId;
+
+        console.log("Checking authentication - token:", token);
+        console.log("Checking authentication - userId:", userId);
+
+        if (token && userId) {
+          const data = await validateToken(token);
+          console.log("Token validation data:", data);
+          checkSellerWaiting(userId)
+          const response: any = await axiosInstance.get(`auth/fetchUser/${userId}`);
+          console.log("User fetch response:", response);
+
+          setLoading(false);
+
+          if (response.data) {
+            // Set user data
+            setUser({
+              id: response.data.id,
+              name: response.data.name,
+              email: response.data.email,
+              isSeller: response.data.isSeller || false,
+              isSellerApproved: response.data.isSellerApproved || false,
+              sellerStatus: response.data.sellerStatus,
+              sellerId: response.data.sellerId
+            });
+
+            // Update form state
+            onFormChange({
+              tabIndex: 0,
+              fieldName: "loginStatus",
+              value: true,
+            });
+            onFormChange({
+              tabIndex: 1,
+              fieldName: "fullName",
+              value: response.data.name || "",
+            });
+            onFormChange({
+              tabIndex: 1,
+              fieldName: "email",
+              value: response.data.email || "",
+            });
+
+            // Move to Account Information step if currently on Login step
+            if (currentTab === 0) {
+              setCurrentTab(1);
+            }
+
+            console.log("✅ User authenticated! Moving to Account Information step");
+          } else {
+            resetForm();
           }
         } else {
+          // No token found, ensure we're on the login step
           resetForm();
+          setCurrentTab(0);
+          setLoading(false);
         }
-      } else {
+      } catch (error) {
+        console.error("Authentication check failed:", error);
         resetForm();
+        setCurrentTab(0);
         setLoading(false);
       }
     };
 
     checkAuthentication();
   }, [shouldCheckAuth]);
+  const checkSellerWaiting=async(userId:string)=>{
+    const response: any = await axiosInstance.post('/seller/newSellerRegistration',{
+      userId:userId
+    });
+    if(response.data.seller==="Seller is already registered"){
+      toast.success("Seller is already registered")
+      setShowSellerWaiting(true)
+    }
+  }
 
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -379,6 +479,24 @@ export default function SellerRegistration() {
   if (loading) {
     return <div className="w-full max-w-7xl mx-auto p-4">Loading...</div>;
   }
+  if (showSellerWaiting) {
+    return <div className="w-full max-w-7xl mx-auto p-4">
+      <div className="flex flex-col items-center justify-center h-[50vh]">
+        <div className="border-2 border-gray-300 p-4 rounded-md w-[50%] h-[50%] flex flex-col items-center justify-center">
+{/* 
+          <h1 className="text-2xl font-bold text-center">Hello {user?.name}</h1> */}
+          <p className="text-2xl text-gray-800 font-semibold  text-center">Your application is under review.</p>
+          <p className="text-md text-gray-600 text-center">It will take 2-3 days to get approved.</p>
+
+          <div className="flex items-center justify-center">
+            <TbRotateClockwise2 className="w-10 h-10 animate-spin text-yellow-500" />
+            <p className="text-sm text-gray-500 text-center">Please wait while we review your application.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    // return <div className="w-full max-w-7xl mx-auto p-4">Seller Waiting for Approval</div>;
+  }
   return (
     <div className="w-full  max-w-7xl mx-2 overflow-hidden rounded-xl bg-white shadow-[0px_2px_8.9px_0px_rgba(0,0,0,0.25)] mb-[3rem]">
       <div className="flex flex-col lg:flex-row">
@@ -400,6 +518,7 @@ export default function SellerRegistration() {
               onFormStateChange={setFormState}
               currentTab={currentTab}
               onTabChange={setCurrentTab}
+              errors={errors}
             >
               <div className="sticky top-0 z-10 bg-white">
                 <div className="p-2 pb-0">
@@ -416,159 +535,159 @@ export default function SellerRegistration() {
 
               <div className="p-[2rem]">
                 <TabContent index={0}>
-                <div className=" p-8 w-full lg: flex flex-col ">
-      <h1 className="text-3xl font-bold mb-8 text-center">
-        Login to your account
-      </h1>
+                  <div className=" p-8 w-full lg: flex flex-col ">
+                    <h1 className="text-3xl font-bold mb-8 text-center">
+                      Login to your account
+                    </h1>
 
-      
 
-      <div className="flex justify-center mb-6 w-[12rem]  mx-auto ">
-        <Button
-          variant="outline" className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50 cursor-pointer" onClick={()=>{handleGoogleLogin()}}>
-            <FcGoogle />
-          <span className="hidden ">Login with google</span>
-        </Button>
 
-        
-      </div>
+                    <div className="flex justify-center mb-6 w-[12rem]  mx-auto ">
+                      <Button
+                        variant="outline" className="py-6 aspect-square rounded-full border-gray-300 hover:bg-gray-50 cursor-pointer" onClick={() => { handleGoogleLogin() }}>
+                        <FcGoogle />
+                        <span className="hidden ">Login with google</span>
+                      </Button>
 
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300"></div>
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">
-            or login with Email
-          </span>
-        </div>
-      </div>
 
-      <div className="space-y-6">
-        <div className="space-y-2">
-          
-          <Input
-            id="email"
-            type="email"
-            name='email'
-            placeholder="john.doe@gmail.com"
-            value={loginData.email}
-            onChange={(e) => setData(e)}
-            required
-            // disabled={isLoading}
-            className="py-6 px-4 rounded-full"
-          />
-        </div>
-        <div className="space-y-2">
-          
-          <div className="relative">
-            <Input
-              id="password"
-              type="password"
-              name='password'
-              placeholder="••••••••••••••••••••••"
-              value={loginData.password}
-              onChange={(e) => setData(e)}
-              required
-            //   disabled={isLoading}
-              className="py-6 px-4 rounded-full"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
-              onClick={() => {
-                const passwordInput = document.getElementById(
-                  "password"
-                ) as HTMLInputElement;
-                if (passwordInput) {
-                  passwordInput.type =
-                    passwordInput.type === "password" ? "text" : "password";
-                }
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            </Button>
-          </div>
-        </div>
+                    </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 cursor-pointer"
-            />
-            <label
-              htmlFor="remember-me"
-              className="ml-2 block text-sm text-gray-700"
-            >
-              Remember me
-            </label>
-          </div>
-          <button
-            type="button"
-            // onClick={handleForgotPassword}
-            className="text-sm font-medium text-red-600 hover:text-red-500 cursor-pointer"
-            disabled={false}  
-          >
-            {false ? (
-              
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              "Forgot Password?"
-            )}
-          </button>
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">
+                          or login with Email
+                        </span>
+                      </div>
+                    </div>
 
-        </div>
+                    <div className="space-y-6">
+                      <div className="space-y-2">
 
-        <Button
-          onClick={() => {
-            handleLogin();
-          }}
-          className="w-full py-6 rounded-full bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-        //   disabled={isLoading}
-        >
-          {false ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Signing in...
-            </>
-          ) : (
-            "Login"
-          )}
-        </Button>
-      </div>
+                        <Input
+                          id="email"
+                          type="email"
+                          name='email'
+                          placeholder="john.doe@gmail.com"
+                          value={loginData.email}
+                          onChange={(e) => setData(e)}
+                          required
+                          // disabled={isLoading}
+                          className="py-6 px-4 rounded-full"
+                        />
+                      </div>
+                      <div className="space-y-2">
 
-      <p className="mt-8 text-center text-sm text-gray-600" onClick={()=>{
-        router.push('/auth/signup')
-      }}>
-        Don't have an account?<span className="ml-2 font-medium text-red-600 hover:text-red-500 cursor-pointer" onClick={()=>{
-          router.push('/auth/signup')
-        }}>
-          create an account
-        </span>
-        {/* <Link
+                        <div className="relative">
+                          <Input
+                            id="password"
+                            type="password"
+                            name='password'
+                            placeholder="••••••••••••••••••••••"
+                            value={loginData.password}
+                            onChange={(e) => setData(e)}
+                            required
+                            //   disabled={isLoading}
+                            className="py-6 px-4 rounded-full"
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                            onClick={() => {
+                              const passwordInput = document.getElementById(
+                                "password"
+                              ) as HTMLInputElement;
+                              if (passwordInput) {
+                                passwordInput.type =
+                                  passwordInput.type === "password" ? "text" : "password";
+                              }
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                              <circle cx="12" cy="12" r="3" />
+                            </svg>
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <input
+                            id="remember-me"
+                            name="remember-me"
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 cursor-pointer"
+                          />
+                          <label
+                            htmlFor="remember-me"
+                            className="ml-2 block text-sm text-gray-700"
+                          >
+                            Remember me
+                          </label>
+                        </div>
+                        <button
+                          type="button"
+                          // onClick={handleForgotPassword}
+                          className="text-sm font-medium text-red-600 hover:text-red-500 cursor-pointer"
+                          disabled={false}
+                        >
+                          {false ? (
+
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            "Forgot Password?"
+                          )}
+                        </button>
+
+                      </div>
+
+                      <Button
+                        onClick={() => {
+                          handleLogin();
+                        }}
+                        className="w-full py-6 rounded-full bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                      //   disabled={isLoading}
+                      >
+                        {false ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Signing in...
+                          </>
+                        ) : (
+                          "Login"
+                        )}
+                      </Button>
+                    </div>
+
+                    <p className="mt-8 text-center text-sm text-gray-600" onClick={() => {
+                      router.push('/auth/signup')
+                    }}>
+                      Don't have an account?<span className="ml-2 font-medium text-red-600 hover:text-red-500 cursor-pointer" onClick={() => {
+                        router.push('/auth/signup')
+                      }}>
+                        create an account
+                      </span>
+                      {/* <Link
           href="/auth/signup"
           className="font-medium text-red-600 hover:text-red-500">
           create an account
         </Link> */}
-      </p>
-    </div>
+                    </p>
+                  </div>
                 </TabContent>
 
                 <TabContent index={1}>
@@ -642,7 +761,7 @@ export default function SellerRegistration() {
                         className="mb-6"
                       >
                         <FormField tabIndex={index} fieldName="address">
-                          <AddressInput
+                          {/* <AddressInput
                             tabIndex={index}
                             fieldName="address"
                             label="Store Address"
@@ -670,6 +789,13 @@ export default function SellerRegistration() {
                                 value: lng,
                               });
                             }}
+                          /> */}
+                          <CustomInput
+                            tabIndex={index}
+                            fieldName="address"
+                            label="Store Address"
+                            placeholder="Enter store address"
+                            type="text"
                           />
                         </FormField>
                       </motion.div>
@@ -694,10 +820,10 @@ export default function SellerRegistration() {
                         className="mb-6"
                       >
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          {/* <label className="block text-sm font-medium text-gray-700">
                             GSTN or FCRN
-                          </label>
-                          <div className="flex gap-4">
+                          </label> */}
+                          <div className="">
                             <CustomInput
                               tabIndex={index}
                               fieldName="gstn"
@@ -705,13 +831,13 @@ export default function SellerRegistration() {
                               placeholder="Enter GSTN No"
                               type="text"
                             />
-                            <CustomInput
+                            {/* <CustomInput
                               tabIndex={index}
                               fieldName="fcrn"
                               label="FCRN Number"
                               placeholder="Enter FCRN No"
                               type="text"
-                            />
+                            /> */}
                           </div>
                         </div>
                       </motion.div>
@@ -721,7 +847,7 @@ export default function SellerRegistration() {
                         transition={{ delay: 0.48 }}
                         className="mb-6"
                       >
-                        <div className="space-y-2">
+                        {/* <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Upload Documents
                           </label>
@@ -742,28 +868,28 @@ export default function SellerRegistration() {
                           />
 
                           {/* Document Previews */}
-                          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {((formState[1].fields.documents as unknown as string[]) || []).map((url: string, index: number) => (
-                              <div key={index} className="relative group">
-                                <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
-                                  <Image
-                                    src={url}
-                                    alt={`Document preview ${index + 1}`}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => handleRemoveDocument(index)}
-                                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                  >
-                                    <X className="w-4 h-4" />
-                                  </button>
-                                </div>
+                        <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                          {((formState[1].fields.documents as unknown as string[]) || []).map((url: string, index: number) => (
+                            <div key={index} className="relative group">
+                              <div className="aspect-square relative rounded-lg overflow-hidden border border-gray-200">
+                                <Image
+                                  src={url}
+                                  alt={`Document preview ${index + 1}`}
+                                  fill
+                                  className="object-cover"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveDocument(index)}
+                                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
                               </div>
-                            ))}
-                          </div>
+                            </div>
+                          ))}
                         </div>
+                        {/* </div> */}
                       </motion.div>
                       <motion.div
                         initial={{ y: 20, opacity: 0 }}
@@ -944,7 +1070,7 @@ export default function SellerRegistration() {
                             {formState[1].fields.gstn || formState[1].fields.fcrn || "Not provided"}
                           </span>
                         </div>
-                        <div className="flex flex-col">
+                        {/* <div className="flex flex-col">
                           <span className="text-sm text-gray-500">Uploaded Documents</span>
                           <div className="mt-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {((formState[1].fields.documents as unknown as string[]) || []).map((url: string, index: number) => (
@@ -958,7 +1084,7 @@ export default function SellerRegistration() {
                               </div>
                             ))}
                           </div>
-                        </div>
+                        </div> */}
                         <div className="flex flex-col">
                           <span className="text-sm text-gray-500">Store Name</span>
                           <span className="font-medium">

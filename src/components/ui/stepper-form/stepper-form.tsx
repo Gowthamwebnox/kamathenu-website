@@ -14,6 +14,7 @@ interface StepperFormProps {
   onFormStateChange: (state: StepperFormState) => void
   currentTab?: number
   onTabChange?: (tab: number) => void
+  errors?: Record<string, string>
 }
 
 export function StepperForm({ 
@@ -25,7 +26,8 @@ export function StepperForm({
   tabSchemas, 
   onFormStateChange,
   currentTab,
-  onTabChange
+  onTabChange,
+  errors = {}
 }: StepperFormProps) {
   return (
     <StepperFormProvider 
@@ -35,6 +37,7 @@ export function StepperForm({
       onFormStateChange={onFormStateChange}
       currentTab={currentTab}
       onTabChange={onTabChange}
+      errors={errors}
     >
       <form
         className={`stepper-form ${className}`}

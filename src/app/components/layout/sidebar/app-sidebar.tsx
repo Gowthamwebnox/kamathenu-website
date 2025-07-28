@@ -11,6 +11,7 @@ import { signOut, useSession } from "next-auth/react"
 
 
 
+
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
+import userDataStore from "@/app/(main)/StateManagement/userData"
 
 const navItems = [
   {
@@ -60,30 +62,30 @@ const navItems = [
     url: "/seller/settings",
     isActive: true
   },
-  {
-    title: "Bulk Upload",
-    icon: FolderUp,
-    url: "/seller/upload",
-    isActive: true
-  },
-  {
-    title: "Helpers",
-    icon: HeartHandshake,
-    url: "/seller/helpers",
-    isActive: true
-  },
-  {
-    title: "Pickup Locations",
-    icon: MapPinned ,
-    url: "/seller/pickup",
-    isActive: true
-  },
-  {
-    title: "Shipments",
-    icon: Truck ,
-    url: "/seller/shipments",
-    isActive: true
-  }, 
+  // {
+  //   title: "Bulk Upload",
+  //   icon: FolderUp,
+  //   url: "/seller/upload",
+  //   isActive: true
+  // },
+  // {
+  //   title: "Helpers",
+  //   icon: HeartHandshake,
+  //   url: "/seller/helpers",
+  //   isActive: true
+  // },
+  // {
+  //   title: "Pickup Locations",
+  //   icon: MapPinned ,
+  //   url: "/seller/pickup",
+  //   isActive: true
+  // },
+  // {
+  //   title: "Shipments",
+  //   icon: Truck ,
+  //   url: "/seller/shipments",
+  //   isActive: true
+  // }, 
 
 ]
 
@@ -91,11 +93,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const router = useRouter()
   const { isMobile, state } = useSidebar();
+  const {clearUserData}=userDataStore()
 
   console.log("AppSidebar rendering, pathname:", pathname);
 
   const handleLogout = () => {
-    signOut({ callbackUrl: "/" })
+    clearUserData()
+    router.push("/")
   }
   return (
     <Sidebar collapsible="icon" className="border-r border-gray-200 bg-white" {...props}>
