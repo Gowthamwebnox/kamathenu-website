@@ -44,8 +44,8 @@ export default function AddCart() {
             console.log("Full response:", response.data)
             console.log("Cart data:", response.data.cart)
             setCartData(response.data.cart || [])
-            setSubTotal(response.data.cart.reduce((acc: any, item: any) => acc + (Number(item.product?.price) || 0), 0))
-            setDiscount(response.data.cart.reduce((acc: any, item: any) => acc + (Number(item.product?.price) || 0), 0) - response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0) - ((Number(item.product?.price) || 0) / 100 * (Number(item.product?.discounts[0]?.discountValue) || 0))), 0))
+            setSubTotal(response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0)), 0))
+            setDiscount(response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0)), 0) - response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0) - ((Number(item.product?.price) || 0) / 100 * (Number(item.product?.discounts[0]?.discountValue) || 0))), 0))
             setPlatformFee(response.data.cart.reduce((acc: any) => acc + 2, 0))
             setTotalAmount(response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0) - ((Number(item.product?.price) || 0) / 100 * (Number(item.product?.discounts[0]?.discountValue) || 0))), 0) + response.data.cart.reduce((acc: any) => acc + 2, 0))
         } catch (error) {
@@ -74,7 +74,7 @@ export default function AddCart() {
         cartData.forEach((item:any)=>{
             userOrderData.push({
                 productId:item.product.id,
-                amount:item.product.discounts[0]?.discountValue,
+                amount:Math.round(item.product.price-(Math.round(item.product.price/100)*(Math.round(item.product.discounts[0]?.discountValue)))),
                 sellerId:item?.product?.sellerId
 
             })
@@ -117,7 +117,7 @@ export default function AddCart() {
                                                                                 <TableRow key={ind}>
                                             <TableCell className="p-2 md:p-4">
                                                 <img
-                                                    src={items?.product?.images[0]?.imageUrl[0]}
+                                                    src={items?.product?.images[0]?.imageUrl.find((image: any) => image.isPrimary === true)?.imageUrl}
                                                     alt="Product"
                                                     className="w-16 h-12 ml-6 md:w-24 md:h-20 lg:w-32 lg:h-26 object-cover rounded"
                                                 />
@@ -144,7 +144,7 @@ export default function AddCart() {
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-sm md:text-lg lg:text-[21px] text-gray-500 font-semibold">
-                                                    ₹ {items?.product?.price-(items?.product?.price/100*items?.product?.discounts[0]?.discountValue)}
+                                                    ₹ {Math.round(items?.product?.price-(items?.product?.price/100*items?.product?.discounts[0]?.discountValue))}
                                             </TableCell>
                                             <TableCell className="cursor-pointer p-2 md:p-4" onClick={() => handleRemove(items?.id)}>
                                                 <TiDelete className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8" />
@@ -170,15 +170,15 @@ export default function AddCart() {
                         <div className="flex mt-2 flex-col gap-3 md:gap-4 p-2">
                             <div className="flex justify-between px-2 text-sm md:text-[16px] font-semibold">
                                 <div><span className="text-gray-500">Sub Total</span></div>
-                                <div><span className="text-gray-500">₹{subTotal}</span></div>
+                                <div><span className="text-gray-500">₹{Math.round(subTotal)}</span></div>
                             </div>
                             <div className="flex justify-between px-2 text-sm md:text-[16px] font-semibold">
                                 <div><span className="text-gray-500">Discount</span></div>
-                                <div><span className="text-gray-500">₹{discount}</span></div>
+                                <div><span className="text-gray-500">₹{Math.round(discount)}</span></div>
                             </div>
                             <div className="flex justify-between mb-3 px-2 text-sm md:text-[16px] font-semibold">
                                 <div><span className="text-gray-500">Platform Fee</span></div>
-                                <div><span className="text-gray-500">₹{platformFee}</span></div>
+                                <div><span className="text-gray-500">₹{Math.round(platformFee)}</span></div>
                             </div>
                         </div>
                         <div className="border-1 w-full h-[1px] bg-gray-300"></div>
@@ -187,7 +187,7 @@ export default function AddCart() {
                                 <span>Total Amount</span>
                             </div>
                             <div>
-                                <span>₹{totalAmount}</span>
+                                <span>₹{Math.round(totalAmount)}</span>
                             </div>
                         </div>
 

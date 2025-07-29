@@ -20,15 +20,15 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
+} from "@/components/ui/heroUi/carousel";
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabHero";
 
 export default function Hero() {
 
-  
 
-  
+
+
   const [userType, setUserType] = useState(['House', 'Villa', 'Flat'])
   const [activeUserType, setActiveUserType] = useState(userType[0])
   const scrollImage = [
@@ -36,7 +36,7 @@ export default function Hero() {
       id: 1,
       image: "/assets/kamathenu Images/Landing_page_Scroll/scroll_1.png",
       alt: "Scroll Design",
-      className: "absolute top-17  rotate-[-90deg] w-[270px] md:w-[270px] lg:w-[330px]  opacity-95 z-10",
+      className: "absolute   rotate-[-90deg]  opacity-105 z-10",
     },
     {
       id: 2,
@@ -87,7 +87,7 @@ export default function Hero() {
             — For Any Budget, Style, or Space.
           </p>
 
-          
+
           <div className="mt-12 w-full flex justify-between items-center ">
             <div className="">
               <Tabs className=""
@@ -105,141 +105,141 @@ export default function Hero() {
 
                 {userType.map((category) => (
                   <TabsContent key={category} value={category}>
-                    {category ==='House'  && (
-                      
-                    <div className="flex flex-col sm:flex-row flex-wrap gap-4 bg-white text-black border border-gray-200 rounded-b-[10px] p-4">
-                    <Select>
-                      <SelectTrigger className="w-full sm:w-[180px] border-0">
-                        <SelectValue placeholder="Property Type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    {category === 'House' && (
 
-                    <Select>
-                      <SelectTrigger className="w-full sm:w-[180px] border-0">
-                        <SelectValue placeholder="Price Range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <Select>
-                      <SelectTrigger className="w-full sm:w-[180px] border-0">
-                        <SelectValue placeholder="Sq ft Range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <Button
-                      className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2"
-                      style={{ borderColor: "#D8A526" }}
-                    >
-                      Search
-                      <IoSearch />
-                    </Button>
-                  </div>
-                    )}
-                    {category ==='Villa'  && (
-                      
                       <div className="flex flex-col sm:flex-row flex-wrap gap-4 bg-white text-black border border-gray-200 rounded-b-[10px] p-4">
-                      <Select>
-                        <SelectTrigger className="w-full sm:w-[180px] border-0">
-                          <SelectValue placeholder="Property Type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-  
-                      <Select>
-                        <SelectTrigger className="w-full sm:w-[180px] border-0">
-                          <SelectValue placeholder="Price Range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-  
-                      <Select>
-                        <SelectTrigger className="w-full sm:w-[180px] border-0">
-                          <SelectValue placeholder="Sq ft Range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-  
-                      <Button
-                        className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2"
-                        style={{ borderColor: "#D8A526" }}
-                      >
-                        Search
-                        <IoSearch />
-                      </Button>
-                    </div>
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Property Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Price Range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Sq ft Range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Button
+                          className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2"
+                          style={{ borderColor: "#D8A526" }}
+                        >
+                          Search
+                          <IoSearch />
+                        </Button>
+                      </div>
                     )}
-                    {category ==='Flat'  && (
-                      
+                    {category === 'Villa' && (
+
                       <div className="flex flex-col sm:flex-row flex-wrap gap-4 bg-white text-black border border-gray-200 rounded-b-[10px] p-4">
-                      <Select>
-                        <SelectTrigger className="w-full sm:w-[180px] border-0">
-                          <SelectValue placeholder="Property Type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-  
-                      <Select>
-                        <SelectTrigger className="w-full sm:w-[180px] border-0">
-                          <SelectValue placeholder="Price Range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-  
-                      <Select>
-                        <SelectTrigger className="w-full sm:w-[180px] border-0">
-                          <SelectValue placeholder="Sq ft Range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
-                        </SelectContent>
-                      </Select>
-  
-                      <Button
-                        className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2"
-                        style={{ borderColor: "#D8A526" }}
-                      >
-                        Search
-                        <IoSearch />
-                      </Button>
-                    </div>
-                      )}
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Property Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Price Range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Sq ft Range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Button
+                          className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2"
+                          style={{ borderColor: "#D8A526" }}
+                        >
+                          Search
+                          <IoSearch />
+                        </Button>
+                      </div>
+                    )}
+                    {category === 'Flat' && (
+
+                      <div className="flex flex-col sm:flex-row flex-wrap gap-4 bg-white text-black border border-gray-200 rounded-b-[10px] p-4">
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Property Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Price Range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select>
+                          <SelectTrigger className="w-full sm:w-[180px] border-0">
+                            <SelectValue placeholder="Sq ft Range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Button
+                          className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] ml-0 sm:ml-2"
+                          style={{ borderColor: "#D8A526" }}
+                        >
+                          Search
+                          <IoSearch />
+                        </Button>
+                      </div>
+                    )}
 
 
 
@@ -249,7 +249,7 @@ export default function Hero() {
                 ))}
               </Tabs>
 
-              
+
 
               <div className="flex flex-col mt-10">
                 <div className="flex gap-16 sm:gap-32 md:gap-[220px]">
@@ -270,66 +270,67 @@ export default function Hero() {
                 </div>
               </div>
             </div>
-            <div className="w-[40%] rounded-lg">
-              
-            <div className="hidden md:block  ">
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: false,
-                  skipSnaps: true,
-                  dragFree: true,
-                }}
-                plugins={[
-                  Autoplay({
-                    delay: 1500, // 3 seconds
-                    stopOnInteraction: false,
-                    stopOnMouseEnter: true,
-                  }),
-                ]}
-                className=""
-                setApi={(api) => {
-                  if (api) {
-                    // Set initial slide
-                    setCurrentSlide(api.selectedScrollSnap())
+            <div className="w-[37%] rounded-lg overflow-hidden">
 
-                    // Listen for slide changes
-                    api.on("select", () => {
+              <div className="hidden md:block  ">
+                <Carousel
+                  opts={{
+                    align: "start",
+                    loop: false, 
+                    skipSnaps: false,
+                    dragFree: true,
+                    containScroll: "trimSnaps",
+                  }}
+                  plugins={[
+                    Autoplay({
+                      delay: 1500,
+                      stopOnInteraction: false,
+                      stopOnMouseEnter: true,
+                    }),
+                  ]}
+                  className="overflow-hidden"
+                  setApi={(api) => {
+                    if (api) {
+                      // Set initial slide
                       setCurrentSlide(api.selectedScrollSnap())
-                    })
-                  }
-                }}
-              >
-                <CarouselContent>
-                  {scrollImage.map((item, index) => {
-                    const isActive = index === currentSlide
-                    return (
-                      <CarouselItem
-                        key={index}
-                        className={`md:basis-1/2 lg:1/2 ml-8 ${isActive ? 'scale-110 z-20 ' : 'scale-90 opacity-60'}`}
-                      >
-                        <div className="">
-                          {/* Card with semi-transparent background */}
-                          <Card className="bg-black/30 backdrop-blur-sm border-gray-400/20 p-0 rounded-lg ">
-                            <CardContent className="flex aspect-square items-center justify-center p-9 rounded-lg bg-white/10">
-                              {/* Semi-transparent background overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-300/20 rounded-lg"></div>
-                              <img
-                                src={item.image || "/placeholder.svg"}
-                                alt={item.alt}
-                                className={item.className}
-                              />
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    )
-                  }
 
-                  )}
-                </CarouselContent>
-              </Carousel>
-            </div>
+                      // Listen for slide changes
+                      api.on("select", () => {
+                        const slideIndex = api.selectedScrollSnap()
+                        setCurrentSlide(slideIndex)
+                      })
+                    }
+                  }}
+                >
+                  <CarouselContent >
+                    {scrollImage.map((item, index) => {
+                      const isActive = index === currentSlide
+                      return (
+                        <CarouselItem
+                          key={index}
+                          className={`md:basis-[50%] lg:basis-[50%] h-[400px] rounded-lg pl-0 transition-all duration-300 ${isActive ? 'scale-100 z-20 opacity-100' : 'scale-90 opacity-60'}`}>
+                          <div className="">
+                            {/* Card with semi-transparent background */}
+                            <Card className={`backdrop-blur-sm border-gray-400/20 p-0 rounded-lg transition-all duration-300 ${isActive ? 'bg-white/50 border-white/60 shadow-xl' : 'bg-white/30'}`}>
+                              <CardContent className="flex aspect-square items-center justify-center p-7 rounded-lg bg-white/10">
+                                {/* Semi-transparent background overlay */}
+                                <div className="w-[180px] h-[280px] xl:w-[180px] xl:h-[300px] object-cover"></div>
+                                <img
+                                  src={item.image || "/placeholder.svg"}
+                                  alt={item.alt}
+                                  className={item.className}
+                                />
+                              </CardContent>
+                            </Card>
+                          </div>
+                        </CarouselItem>
+                      )
+                    }
+
+                    )}
+                  </CarouselContent>
+                </Carousel>
+              </div>
             </div>
           </div>
 

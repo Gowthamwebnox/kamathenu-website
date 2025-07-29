@@ -128,8 +128,10 @@ const ProfileSettings = () => {
 
     useEffect(() => {
         const fetchSellerData = async () => {
+            const localStore=localStorage.getItem('userData-storage')
+            const parse=JSON.parse(localStore || '{}')
             try {
-                const response:any = await axiosInstance.get(`seller/fetchSellerProfile/${"c6fe18bd-0e74-47f9-b8e1-83f1f93b9760"}`);
+                const response:any = await axiosInstance.get(`seller/fetchSellerProfile/${parse.state.userData.sellerId}`);
                 
                 if (response.status === 200) {
                     setSellerData(response.data);
@@ -138,7 +140,7 @@ const ProfileSettings = () => {
                         storeName: response.data.storeName,
                         storeDescription: response.data.storeDescription,
                         upiId: response.data.upiId,
-                        gstNumber: response.data.gstNumber || undefined,
+                        gstNumber: response.data.gstn || undefined,
                         user: {
                             name: response.data.user.name,
                             profile: response.data.user.profile
@@ -262,25 +264,21 @@ const ProfileSettings = () => {
 
     const handleSaveProfile = async () => {
         try {
-            const response = await fetch('/api/seller', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(profileFormData)
-            });
+            const localStore=localStorage.getItem('userData-storage')
+            const parse=JSON.parse(localStore || '{}')
+            const response:any = await axiosInstance.patch(`seller/updateSellerProfile/${parse.state.userData.sellerId}`,profileFormData)
 
-            const data = await response.json();
+            
 
-            if (data.status === "success") {
-                setSellerData(data.data);
+            if (response.status === 200) {
+                setSellerData(response.data);
                 setEditMode(prev => ({
                     ...prev,
                     profile: false
                 }));
                 // Show success message
             } else {
-                console.error("Failed to update profile:", data.message);
+                console.error("Failed to update profile:", response.data.message);
                 // Show error message to user
             }
         } catch (error) {
@@ -291,17 +289,19 @@ const ProfileSettings = () => {
 
     const handleSaveBank = async () => {
         try {
-            const response = await fetch('/api/seller/Bankinfo', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bankFormData)
-            });
+            // const response = await fetch('/api/seller/Bankinfo', {
+            //     method: 'PATCH',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(bankFormData)
+            // });
+            const localStore=localStorage.getItem('userData-storage')
+            const parse=JSON.parse(localStore || '{}')
 
-            const data = await response.json();
+            const response:any = await axiosInstance.patch(`seller/updateSellerBankDetails/${parse.state.userData.sellerId}`,bankFormData)
 
-            if (data.status === "success") {
+            if (response.status === 200) {
                 // Update the seller data with new bank info
                 setSellerData(prev => {
                     if (!prev) return null;
@@ -319,7 +319,7 @@ const ProfileSettings = () => {
                 }));
                 // Show success message
             } else {
-                console.error("Failed to update bank info:", data.message);
+                console.error("Failed to update bank info:", response.data.message);
                 // Show error message to user
             }
         } catch (error) {
@@ -401,9 +401,9 @@ const ProfileSettings = () => {
                             <CreditCard className="w-4 h-4 mr-2" />
                             Bank Account / Payout Settings
                         </TabsTrigger>
-                        <TabsTrigger value="notifications" className="flex items-center">
+                        {/* <TabsTrigger value="notifications" className="flex items-center">
                             <Bell className="w-4 h-4 mr-2" /> Notification Settings
-                        </TabsTrigger>
+                        </TabsTrigger> */}
                         {/* <TabsTrigger value="gst" className="flex items-center">
                             <ReceiptIndianRupee className="w-4 h-4 mr-2" /> GST
                         </TabsTrigger> */}

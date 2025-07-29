@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import loginLogo from '../../../../../../../public/assets/kamathenu Images/login/Group 715.png'
 import Header from '@/app/components/layout/Header';
@@ -16,6 +16,34 @@ const SigninForm = () => {
   // const userIdStore=userData((state:any)=>state.setUserId)
   const { userData, setUserData, clearUserData } = userDataStore();
   const router = useRouter()
+  useEffect(() => {
+    // Check if we're on the client side
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userDataString = urlParams.get('user');
+      
+      if (userDataString) {
+        try {
+          const userData = JSON.parse(decodeURIComponent(userDataString));
+          console.log("Parsed user data:", userData);
+          
+          setUserData({
+            userId: userData.userId,
+            userName: userData.userName,
+            userEmail: userData.userEmail,
+            token: userData.token || '',
+            userRole: userData.userRole,
+            sellerId: userData.userSellerProfile|| '',
+          });
+          router.push('/')
+          
+        } catch (error) {
+          console.error("Error parsing user data:", error);
+          console.log("Raw userDataString:", userDataString);
+        }
+      }
+    }
+  }, []);
 
   const [loginData, setloginData] = useState({
     email: '',
@@ -61,13 +89,7 @@ const SigninForm = () => {
     const url = 'http://localhost:8000/api/auth/google'
     window.location.href = url
     const response: any = await axiosInstance.get('auth/google');
-    const urlParams = new URLSearchParams(window.location.search);
-    const token: string | null = urlParams.get('token');
-    const userId: string | null = urlParams.get('userId');
-    console.log(userId + ">>>>>>>>>>>>>>>>>>>>>>>>>USERID<<<<<<<<<<<<<<<<<<<<<<")
-    console.log(token + ">>>>>>>>>>>>>>>>>>>>>>>>>TOKEN<<<<<<<<<<<<<<<<<<<<<<")
-    localStorage.setItem('jwtToken', token || '');
-    localStorage.setItem('currentUserId', userId || '');
+    
 
 
   }
