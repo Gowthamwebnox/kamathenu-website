@@ -206,25 +206,25 @@ const FileUpload: React.FC<FileUploadProps> = ({
     setIsUploading(true);
 
     try {
-      // const uploadPromises = filesToUpload.map(async (file) => {
-      //   const fileBuffer = await file.arrayBuffer();
-      //   const fileName = `${Date.now()}-${file.name.replace(
-      //     /[^a-zA-Z0-9.-]/g,
-      //     ""
-      //   )}`;
+      const uploadPromises = filesToUpload.map(async (file) => {
+        const fileBuffer = await file.arrayBuffer();
+        const fileName = `${Date.now()}-${file.name.replace(
+          /[^a-zA-Z0-9.-]/g,
+          ""
+        )}`;
 
-        // const imageUrl = await s3Storage.uploadFile({
-        //   file: Buffer.from(fileBuffer),
-        //   fileName,
-        //   contentType: file.type,
-        // });
+        const imageUrl = await s3Storage.uploadFile({
+          file: Buffer.from(fileBuffer),
+          fileName,
+          contentType: file.type,
+        });
 
-      //   return imageUrl;
-      // });
+        return imageUrl;
+      });
 
-      // const uploadedUrls = await Promise.all(uploadPromises);
-      // onFilesUploaded(uploadedUrls);
-      onFilesUploaded(['']);
+      const uploadedUrls = await Promise.all(uploadPromises);
+      onFilesUploaded(uploadedUrls);
+      // onFilesUploaded(['']);
     } catch (error) {
       console.error("Error uploading files:", error);
     } finally {
@@ -1293,7 +1293,7 @@ const ProductForm: React.FC = () => {
         <div className="flex justify-between mt-6 flex-col">
           <Button
             onClick={handleSubmit}
-            className="bg-red-700 hover:bg-red-800 flex-1"
+            className="bg-yellow-600 hover:bg-yellow-700 flex-1"
             disabled={isLoading}
           >
             {isLoading ? "Creating..." : "Create Product"}

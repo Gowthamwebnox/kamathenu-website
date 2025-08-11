@@ -87,6 +87,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
     if (typeof window !== 'undefined') {
       var getLoaclData=localStorage.getItem('userData-storage')
       getLoaclData=JSON.parse(getLoaclData || '{}')
+      console.log("🔥🔥🔥🔥🔥🔥getLoaclData🔥🔥🔥🔥🔥🔥", getLoaclData)
         setUserData({
           userId:getLoaclData?.state?.userData?.userId,
           userName:getLoaclData?.state?.userData?.userName,
@@ -104,6 +105,7 @@ export default function Header({ headerColor = ["", ""] }: HeaderProps) {
       }
     }
   }
+  console.log("🔥🔥🔥🔥🔥🔥getUserData🔥🔥🔥🔥🔥🔥", getUserData)
   const handleBecomeSellerPage = async (userRole:string | null) => {
     if(userRole == "SELLER"){ 
       routers.push('/seller')

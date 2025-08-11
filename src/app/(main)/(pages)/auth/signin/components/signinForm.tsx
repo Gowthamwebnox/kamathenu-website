@@ -32,7 +32,7 @@ const SigninForm = () => {
             userName: userData.userName,
             userEmail: userData.userEmail,
             token: userData.token || '',
-            userRole: userData.userRole,
+            userRole: userData.userSellerProfile?'SELLER':'',
             sellerId: userData.userSellerProfile|| '',
           });
           router.push('/')
@@ -92,6 +92,9 @@ const SigninForm = () => {
     
 
 
+  }
+  const handleForgotPassword = () => {
+    router.push('/auth/forgetPassword')
   }
   return (
 
@@ -205,7 +208,7 @@ const SigninForm = () => {
               </div>
               <button
                 type="button"
-                // onClick={handleForgotPassword}
+                onClick={handleForgotPassword}
                 className="text-sm font-medium text-red-600 hover:text-red-500 cursor-pointer"
                 disabled={false}
               >
