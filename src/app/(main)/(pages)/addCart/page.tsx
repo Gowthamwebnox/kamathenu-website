@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
     
 export default function AddCart() {
     const [currentUser, setCurrentUser] = useState<string | null>(null)
+    const [showCartData, setShowCartData] = useState(true)
     const [cartData, setCartData] = useState<any[]>([])
     const [subTotal, setSubTotal] = useState<number>(0)
     const [discount, setDiscount] = useState<number>(0)
@@ -44,6 +45,9 @@ export default function AddCart() {
             console.log("Full response:", response.data)
             console.log("Cart data:", response.data.cart)
             setCartData(response.data.cart || [])
+            if(response.data.cart.length>0){
+                setShowCartData(false)
+            }
             setSubTotal(response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0)), 0))
             setDiscount(response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0)), 0) - response.data.cart.reduce((acc: any, item: any) => acc + ((Number(item.product?.price) || 0) - ((Number(item.product?.price) || 0) / 100 * (Number(item.product?.discounts[0]?.discountValue) || 0))), 0))
             setPlatformFee(response.data.cart.reduce((acc: any) => acc + 2, 0))
@@ -64,6 +68,7 @@ export default function AddCart() {
             if (currentUser) {
                 getCartData(currentUser)
             }
+            window.location.reload()
         } catch (error) {
             console.error("Error removing item from cart:", error)
         }
@@ -195,7 +200,7 @@ export default function AddCart() {
                         <div className="flex justify-center items-center p-3">
                             <Button
                                 className="bg-[#D8A526] text-white border hover:bg-white hover:text-[#D8A526] text-sm md:text-base font-semibold px-4 py-2 md:px-6 md:py-3 w-full"
-                                style={{ borderColor: "#D8A526" }} onClick={()=>{handleOrderCart()}}>
+                                style={{ borderColor: "#D8A526" }} disabled={showCartData} onClick={()=>{handleOrderCart()}}>
                                 Proceed to Checkout
                             </Button>
                         </div>

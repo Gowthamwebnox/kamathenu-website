@@ -2,6 +2,7 @@
 'use client'
 import Header from "@/app/components/layout/Header";
 import axiosInstance from "@/app/utils/axiosInstance";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
@@ -9,6 +10,7 @@ import StarRatings from "react-star-ratings";
 export default function Wishlist() {
 
   const [wishlistData, setWishlistData] = useState<any[]>([]);
+  const [showWishlistData, setShowWishlistData] = useState(false)
   const router = useRouter()
   useEffect(() => {
     getWishlistData()
@@ -21,8 +23,13 @@ export default function Wishlist() {
         userId: userData?.state.userData.userId
       }
       const response: any = await axiosInstance.post('product/fetchWishlist', payload)
-      setWishlistData(response.data.wishlist)
-      console.log(response.data.wishlist)
+      if(response.data.wishlist.length>0){
+        setWishlistData(response.data.wishlist)
+        console.log(response.data.wishlist)
+      }
+      else{
+        setShowWishlistData(true)
+      }
     }
     catch (err) {
       console.log(err)
@@ -32,7 +39,12 @@ export default function Wishlist() {
 
     <div>
       <Header headerColor={['gray', 'white']} />
-
+      {showWishlistData && (
+        <div className="w-full mt-30  flex justify-center items-center">
+          <Button className="w-[40% ] h-[40px] rounded-lg bg-[#D8A526] text-white cursor-pointer hover:bg-white hover:text-[#D8A526] hover:border-2 hover:border-[#D8A526]" onClick={() => router.push('/')}>View Our Products
+          </Button>
+            </div>
+      )}
       <div className="w-full mt-30 p-34">
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-4 sm:gap-6 lg:gap-8 xl:gap-12 mb-8 ">
